@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:Doors action="RD" >
+        <hid:Door doorName="HID Edge Solo"
+                  doorUnlockScheduleID="0"
+                  doorUnlockGuardTime="5"
+                  guardTimeFlag="set"
+                  tamperAlarmState="unset"
+                  acAlarmState="unset"
+                  batteryAlarmState="unset"
+                  doorHeldAlarmState="unset"
+                  doorForcedAlarmState="unset"
+                  relayState="set"
+                  auxRelayState="unset"
+                  currentDateTime="2015-04-08T20:03:04"
+                  relayAlertState="unset" >
+        </hid:Door>
+    </hid:Doors>
+</VertXMessage>

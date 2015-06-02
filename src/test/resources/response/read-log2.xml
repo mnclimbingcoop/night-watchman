@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:EventMessages action="RL"
+                       historyRecordMarker="2233"
+                       historyTimestamp="1428541357"
+                       currentRecordMarker="2233"
+                       currentTimestamp="1428541357" />
+</VertXMessage>
