@@ -28,9 +28,9 @@ class ObjectMapperBuilder {
         return objectMapper
     }
 
-    ObjectMapper buildXml() {
+    XmlMapper buildXml() {
 
-        ObjectMapper objectMapper = new XmlMapper()
+        XmlMapper objectMapper = new XmlMapper()
                 .registerModule(new JSR310Module())
                 .configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

@@ -45,4 +45,9 @@ class DoorWatchmanApp {
         return new ObjectMapperBuilder().build()
     }
 
+    @Bean
+    XmlMapper xmlObjectMapper() {
+        return new ObjectMapperBuilder().buildXml()
+    }
+
 }

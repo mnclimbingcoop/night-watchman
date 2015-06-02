@@ -8,6 +8,6 @@ interface HidEdgeProApi {
 
     @Headers(['Accept: application/xml'])
     @GET('/cgi-bin/vertx_xml.cgi')
-    VertXMessage poll(@Field("XML") String xml)
+    VertXMessage get(@Field("XML") String xml)
 
 }
