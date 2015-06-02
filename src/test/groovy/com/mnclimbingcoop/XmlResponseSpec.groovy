@@ -1,12 +1,5 @@
 package com.mnclimbingcoop
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module
-
 import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.State
@@ -14,25 +7,7 @@ import com.mnclimbingcoop.domain.VertXMessage
 
 import java.time.LocalDateTime
 
-import spock.lang.Specification
-
-
-class XmlSpec extends Specification {
-
-    ObjectMapper objectMapper
-
-    void setup() {
-
-        objectMapper = new XmlMapper()
-                .registerModule(new JSR310Module())
-                .configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true)
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .configure(SerializationFeature.INDENT_OUTPUT, true)
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS , false)
-                .configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, true)
-
-
-    }
+class XmlResponseSpec extends XmlSpecification {
 
     void 'xml marshalling from read door'() {
         given:
@@ -79,21 +54,5 @@ class XmlSpec extends Specification {
 
         then:
         xml == back
-
     }
-
-    protected String xmlFromFixture(String fixture) {
-        String path = "/${fixture}.xml"
-        return xmlFromResource(path)
-    }
-
-    protected String xmlFromResource(String resourcePath) {
-        InputStream inputStream = this.class.getResourceAsStream(resourcePath)
-        if (inputStream) {
-            return inputStream.text
-        }
-        throw new FileNotFoundException(resourcePath)
-    }
-
-
 }

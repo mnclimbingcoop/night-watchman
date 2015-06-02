@@ -33,6 +33,7 @@ class ClientBuilder {
         RestAdapter.Builder builder = new RestAdapter.Builder()
                                                      .setConverter(converter)
                                                      .setEndpoint(uri)
+                                                     .setLog(new ClientLogger())
                                                      .setLogLevel(logLevel)
 
         RestAdapter restAdapter = builder.build()

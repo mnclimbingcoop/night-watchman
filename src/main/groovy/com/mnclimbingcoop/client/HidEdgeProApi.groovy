@@ -1,5 +1,7 @@
 package com.mnclimbingcoop.client
 
+import com.mnclimbingcoop.domain.VertXMessage
+
 import retrofit.http.*
 
 interface HidEdgeProApi {

@@ -9,6 +9,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include
+
 class ObjectMapperBuilder {
 
     ObjectMapper build() {
@@ -35,5 +37,10 @@ class ObjectMapperBuilder {
                 .configure(SerializationFeature.INDENT_OUTPUT, true)
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS , false)
                 .configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, true)
+
+                objectMapper.setSerializationInclusion(Include.NON_NULL)
+
+        return objectMapper
+
     }
 }
