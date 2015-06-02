@@ -2,10 +2,15 @@ package com.mnclimbingcoop
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module
+
 import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXMessage
+
 
 import java.time.LocalDateTime
 
@@ -18,16 +23,20 @@ class XmlSpec extends Specification {
 
     void setup() {
 
-        // XMLInputFactory input = new WstxInputFactory()
-        // input.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE)
-        // new ObjectMapper(new XmlFactory(input, new WstxOutputFactory()));
+        objectMapper = new XmlMapper()
+                .registerModule(new JSR310Module())
+                .configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(SerializationFeature.INDENT_OUTPUT, true)
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS , false)
+                .configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, true)
 
-        objectMapper = new XmlMapper().configure(SerializationFeature.INDENT_OUTPUT, true)
 
     }
 
     void 'xml marhalling'() {
         given:
+        String expected = xmlFromFixture('response/read-log1')
         VertXMessage message = new VertXMessage(
             eventMessages: new EventMessages(
                 action: 'RL',
@@ -41,22 +50,25 @@ class XmlSpec extends Specification {
                         forename: 'Aaron',
                         surname: 'Zirbes',
                         eventType: 2020,
-                        timestamp: new LocalDateTime('2015-04-08T20:02:37')
+                        timestamp: LocalDateTime.parse('2015-04-08T20:02:37')
                     )
                 ]
 
             )
         )
-        String expected = xmlFromFixture('response/read-log1')
 
         when:
         String xml = objectMapper.writeValueAsString(message)
-        Map data = objectMapper.readValue(expected, Map)
 
-        println data
+        and:
+        VertXMessage parsed = objectMapper.readValue(expected, VertXMessage)
+        String back = objectMapper.writeValueAsString(parsed)
+
+
+
 
         then:
-        xml == expected
+        xml == back
 
     }
 

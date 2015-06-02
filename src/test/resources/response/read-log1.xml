@@ -1,14 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
-    <hid:EventMessages action="RL"
-                       historyRecordMarker="2232"
-                       historyTimestamp="1428535349"
-                       recordCount="1"
-                       moreRecords="false" >
-        <hid:EventMessage cardholderID="2"
-                          forename="Aaron"
-                          surname="Zirbes"
-                          eventType="2020"
-                          timestamp="2015-04-08T20:02:37" />
+<?xml version='1.0' encoding='UTF-8'?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:EventMessages action="RL" historyRecordMarker="2232" historyTimestamp="1428535349" recordCount="1" moreRecords="false" >
+        <hid:EventMessage cardholderID="2" forename="Aaron" surname="Zirbes" eventType="2020" timestamp="2015-04-08T20:02:37" />
     </hid:EventMessages>
 </VertXMessage>

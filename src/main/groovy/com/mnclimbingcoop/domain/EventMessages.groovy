@@ -1,6 +1,7 @@
 package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 
 class EventMessages {
 
@@ -19,7 +20,8 @@ class EventMessages {
     @JacksonXmlProperty(isAttribute=true)
     Boolean moreRecords
 
+    @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='EventMessage')
-    List<EventMessage> eventMessages = []
+    List<EventMessage> eventMessages
 
 }
