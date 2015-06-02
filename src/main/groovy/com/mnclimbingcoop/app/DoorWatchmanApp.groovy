@@ -1,6 +1,9 @@
-package com.mnclimbingcoop
+package com.mnclimbingcoop.app
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mnclimbingcoop.ObjectMapperBuilder
+import com.mnclimbingcoop.client.ClientBuilder
+import com.mnclimbingcoop.client.HidEdgeProApi
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j

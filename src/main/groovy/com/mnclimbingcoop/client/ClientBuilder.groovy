@@ -1,16 +1,11 @@
-package com.mnclimbingcoop
+package com.mnclimbingcoop.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-
-import com.squareup.okhttp.Cache
-import com.squareup.okhttp.OkHttpClient
+import com.mnclimbingcoop.ObjectMapperBuilder
 
 import groovy.transform.CompileStatic
 
-import retrofit.RequestInterceptor
 import retrofit.RestAdapter
-import retrofit.client.OkClient
 import retrofit.converter.Converter
 import retrofit.converter.JacksonConverter
 
@@ -18,7 +13,7 @@ import retrofit.converter.JacksonConverter
 class ClientBuilder {
 
     String uri = 'http://localhost:8080'
-    ObjectMapper objectMapper = new XmlMapper()
+    ObjectMapper objectMapper = new ObjectMapperBuilder().buildXml()
 
     RestAdapter.LogLevel logLevel = RestAdapter.LogLevel.BASIC
 

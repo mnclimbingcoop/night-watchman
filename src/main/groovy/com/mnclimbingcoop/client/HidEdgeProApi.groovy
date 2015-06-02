@@ -1,4 +1,4 @@
-package com.mnclimbingcoop
+package com.mnclimbingcoop.client
 
 import retrofit.http.*
 
@@ -6,6 +6,6 @@ interface HidEdgeProApi {
 
     @Headers(['Accept: application/xml'])
     @GET('/cgi-bin/vertx_xml.cgi')
-    Map poll(@Field("XML") String xml)
+    VertXMessage poll(@Field("XML") String xml)
 
 }

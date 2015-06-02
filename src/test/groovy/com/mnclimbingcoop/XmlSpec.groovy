@@ -1,16 +1,16 @@
 package com.mnclimbingcoop
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module
 
 import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
+import com.mnclimbingcoop.domain.State
 import com.mnclimbingcoop.domain.VertXMessage
-
 
 import java.time.LocalDateTime
 
@@ -34,7 +34,20 @@ class XmlSpec extends Specification {
 
     }
 
-    void 'xml marhalling'() {
+    void 'xml marshalling from read door'() {
+        given:
+        String expected = xmlFromFixture('response/read-door1')
+
+        when:
+        VertXMessage parsed = objectMapper.readValue(expected, VertXMessage)
+
+        then:
+        parsed.doors.action == 'RD'
+        parsed.doors.doors[0].doorName == 'HID Edge Solo'
+        parsed.doors.doors[0].relayState == State.set
+    }
+
+    void 'xml marhalling from read log'() {
         given:
         String expected = xmlFromFixture('response/read-log1')
         VertXMessage message = new VertXMessage(
@@ -63,9 +76,6 @@ class XmlSpec extends Specification {
         and:
         VertXMessage parsed = objectMapper.readValue(expected, VertXMessage)
         String back = objectMapper.writeValueAsString(parsed)
-
-
-
 
         then:
         xml == back

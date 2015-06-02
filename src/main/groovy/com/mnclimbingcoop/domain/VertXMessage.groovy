@@ -10,4 +10,16 @@ class VertXMessage {
     @JacksonXmlProperty(localName='EventMessages')
     EventMessages eventMessages
 
+    @JacksonXmlProperty(localName='Doors')
+    Doors doors
+
+    @JacksonXmlProperty(localName='hid:EventMessages')
+    EventMessages logRequest
+
+    @JacksonXmlProperty(localName='hid:Doors')
+    Doors doorRequest
+
+    @JacksonXmlProperty(localName='hid:Reports')
+    Reports reportRequest
+
 }

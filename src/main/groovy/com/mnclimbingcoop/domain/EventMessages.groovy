@@ -20,6 +20,12 @@ class EventMessages {
     @JacksonXmlProperty(isAttribute=true)
     Boolean moreRecords
 
+    @JacksonXmlProperty(isAttribute=true)
+    Integer currentRecordMarker
+
+    @JacksonXmlProperty(isAttribute=true)
+    Long currentTimestamp
+
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='EventMessage')
     List<EventMessage> eventMessages
