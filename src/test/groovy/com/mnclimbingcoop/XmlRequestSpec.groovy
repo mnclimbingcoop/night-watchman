@@ -8,23 +8,30 @@ import spock.lang.Unroll
 
 class XmlRequestSpec extends XmlSpecification {
 
-    RequestBuilder builder
+    XmlRequestBuilder builder
+    UrlRequestBuilder urlBuilder
 
     void setup() {
-        builder = new RequestBuilder()
+        builder = new XmlRequestBuilder()
+        urlBuilder = new UrlRequestBuilder(objectMapper)
     }
 
     @Unroll
     void 'xml marshal #fixture from #action message'() {
         given:
         String expected = xmlFromFixture("request/${fixture}")
-        VertXMessage message = builder."${action}"()
+
 
         when:
+        VertXMessage message = builder."${action}"()
         String xml = stripWhitespace(objectMapper.writeValueAsString(message))
+
+        and: 'the UrlRequestBuilder wraps the method nicely'
+        String query = stripWhitespace(urlBuilder."${action}"())
 
         then:
         xml == expected
+        xml == query
 
         where:
         fixture              | action

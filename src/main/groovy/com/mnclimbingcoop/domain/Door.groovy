@@ -7,42 +7,42 @@ import java.time.LocalDateTime
 class Door {
 
     @JacksonXmlProperty(isAttribute=true)
-    String doorName="HID Edge Solo"
+    String doorName
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer doorUnlockScheduleID="0"
+    Integer doorUnlockScheduleID
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer doorUnlockGuardTime="5"
+    Integer doorUnlockGuardTime
 
     @JacksonXmlProperty(isAttribute=true)
-    State guardTimeFlag="set"
+    State guardTimeFlag
 
     @JacksonXmlProperty(isAttribute=true)
-    State tamperAlarmState="unset"
+    State tamperAlarmState
 
     @JacksonXmlProperty(isAttribute=true)
-    State acAlarmState="unset"
+    State acAlarmState
 
     @JacksonXmlProperty(isAttribute=true)
-    State batteryAlarmState="unset"
+    State batteryAlarmState
 
     @JacksonXmlProperty(isAttribute=true)
-    State doorHeldAlarmState="unset"
+    State doorHeldAlarmState
 
     @JacksonXmlProperty(isAttribute=true)
-    State doorForcedAlarmState="unset"
+    State doorForcedAlarmState
 
     @JacksonXmlProperty(isAttribute=true)
-    State relayState="set"
+    State relayState
 
     @JacksonXmlProperty(isAttribute=true)
-    State auxRelayState="unset"
+    State auxRelayState
 
     @JacksonXmlProperty(isAttribute=true)
     LocalDateTime currentDateTime
 
     @JacksonXmlProperty(isAttribute=true)
-    State relayAlertState="unset"
+    State relayAlertState
 
 }

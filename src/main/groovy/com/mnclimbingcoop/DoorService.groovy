@@ -1,24 +1,55 @@
 package com.mnclimbingcoop
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.mnclimbingcoop.client.HidEdgeProApi
+import com.mnclimbingcoop.config.DoorConfiguration
+
+import javax.annotation.PostConstruct
 import javax.inject.Inject
 
 class DoorService {
 
-    final RequestBuilder requestBuilder
-    final HidEdgeProApi hidEdgeProApi
-    final ObjectMapper objectMapper
+    final UrlRequestBuilder requestBuilder
+    final XmlMapper objectMapper
+    final DoorConfiguration config
+    Map<String, HidEdgeProApi> doorClients = [:]
 
-    @Inject
-    DoorService(HidEdgeProApi hidEdgeProApi, XmlMapper objectMapper) {
-        this.hidEdgeProApi = hidEdgeProApi
-        this.requestBuilder = new RequestBuilder()
-        this.objectMapper = objectMapper
+    @PostConstruct
+    void setup() {
+
+        log.debug "Initializing doors"
+        config.devices.each{ device ->
+            log.info "Initializing HID EdgePro API fro ${device.name} with endpoint ${device.url}"
+            String username = device.username ?: config.username
+            String password = device.password ?: config.password
+            apis[device.name] = new ClientBuilder().withEndpoint(device.url)
+                                                   .withAuthentication(username, password)
+                                                   .build(HidEdgeProApi)
+        }
+
     }
 
-    VertXMessage displayRecent() {
-        VertXMessage request = requestBuilder.displayRecent()
-        String requestXml = objectMapper.writeValueAsString(request)
-        VertXMessage response = hidEdgeProApi.get(requestXml)
+
+    @Inject
+    DoorService(XmlMapper objectMapper, DoorConfiguration config) {
+        this.requestBuilder = new UrlRequestBuilder()
+        this.objectMapper = objectMapper
+        this.config = config
+    }
+
+    void recentDoorEvents() {
+    }
+
+    void validateDoorState() {
+    }
+
+    void buildUserDatabase() {
+    }
+
+    void buildCredentialDatabase() {
+    }
+
+    void buildScheduleDatabase() {
     }
 
 }

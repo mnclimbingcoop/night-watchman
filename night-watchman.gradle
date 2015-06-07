@@ -7,7 +7,7 @@ targetCompatibility = "1.8"
 
 version = "${version}"
 group = "${group}"
-mainClassName="com.mnclimbingcoop.DoorWatchmanApp"
+mainClassName="com.mnclimbingcoop.app.DoorWatchmanApp"
 
 buildscript {
     ext {

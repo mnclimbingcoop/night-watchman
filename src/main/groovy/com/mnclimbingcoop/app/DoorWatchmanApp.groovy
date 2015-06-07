@@ -1,14 +1,15 @@
 package com.mnclimbingcoop.app
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.mnclimbingcoop.ObjectMapperBuilder
 import com.mnclimbingcoop.client.ClientBuilder
-import com.mnclimbingcoop.client.HidEdgeProApi
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
-import org.springframework.beans.factory.annotation.Value
+import javax.inject.Inject
+
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -28,16 +29,6 @@ class DoorWatchmanApp {
 
     static void main(final String[] args) {
         SpringApplication.run(this, args)
-    }
-
-    @Value('${hidEdgePro.uri}')
-    String hidEdgeProUrl
-
-
-    @Bean
-    HidEdgeProApi hidEdgeProApi() {
-        log.info "Initilizing HID EdgePro API with endpoint ${hidEdgeProUrl}"
-        return new ClientBuilder().withEndpoint(hidEdgeProUrl).build(HidEdgeProApi)
     }
 
     @Bean

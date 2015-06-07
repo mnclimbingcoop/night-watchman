@@ -1,12 +1,21 @@
 package com.mnclimbingcoop.domain
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class EventMessages {
 
     @JacksonXmlProperty(isAttribute=true)
     String action
+
+    @JacksonXmlProperty(isAttribute=true)
+    String eventsInUse
+
+    @JacksonXmlProperty(isAttribute=true)
+    String totalEvents
 
     @JacksonXmlProperty(isAttribute=true)
     Integer historyRecordMarker
