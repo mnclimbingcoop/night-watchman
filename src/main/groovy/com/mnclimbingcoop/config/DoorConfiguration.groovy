@@ -1,12 +1,15 @@
 package com.mnclimbingcoop.config
 
+import groovy.transform.CompileStatic
+
 import javax.inject.Named
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /** Class representation of the YML file */
-@Named
+@CompileStatic
 @ConfigurationProperties(prefix="hidEdgePro")
+@Named
 public class DoorConfiguration {
 
     String url

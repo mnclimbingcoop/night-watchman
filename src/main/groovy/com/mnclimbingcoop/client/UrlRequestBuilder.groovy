@@ -1,53 +1,62 @@
 package com.mnclimbingcoop
 
-import com.mnclimbingcoop.domain.Actions
-import com.mnclimbingcoop.domain.Doors
-import com.mnclimbingcoop.domain.EventMessages
-import com.mnclimbingcoop.domain.Reports
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.mnclimbingcoop.domain.VertXMessage
 
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import groovy.transform.CompileStatic
 
+import java.time.LocalDateTime
+
+import javax.inject.Inject
+import javax.inject.Named
+
+@Named
+@CompileStatic
 class UrlRequestBuilder {
 
     final XmlMapper objectMapper
     final XmlRequestBuilder xmlBuilder
 
+    @Inject
     UrlRequestBuilder(XmlMapper objectMapper) {
         this.objectMapper = objectMapper
         this.xmlBuilder = new XmlRequestBuilder()
     }
 
     String buildReport() {
-        objectMapper.writeValueAsString(super.buildReport())
+        wrap(xmlBuilder.buildReport())
     }
 
     String displayRecent() {
-        objectMapper.writeValueAsString(super.displayRecent())
+        wrap(xmlBuilder.displayRecent())
     }
 
     String listRecent() {
-        objectMapper.writeValueAsString(super.listRecent())
+        wrap(xmlBuilder.listRecent())
     }
 
     String listRecent(LocalDateTime since, Integer marker = 0, Integer records = 0) {
-        objectMapper.writeValueAsString(super.listRecent(since, marker, records))
+        wrap(xmlBuilder.listRecent(since, marker, records))
     }
 
     String doorStatus() {
-        objectMapper.writeValueAsString(super.doorStatus())
+        wrap(xmlBuilder.doorStatus())
     }
 
     String lockDoor() {
-        objectMapper.writeValueAsString(super.lockDoor())
+        wrap(xmlBuilder.lockDoor())
     }
 
     String unlockDoor() {
-        objectMapper.writeValueAsString(super.unlockDoor())
+        wrap(xmlBuilder.unlockDoor())
     }
 
     String grantAccess() {
-        objectMapper.writeValueAsString(super.grantAccess())
+        wrap(xmlBuilder.grantAccess())
     }
+
+    protected String wrap(VertXMessage message) {
+        objectMapper.writeValueAsString(message)
+    }
+
 }

@@ -7,6 +7,7 @@ import com.mnclimbingcoop.config.DoorConfiguration
 import com.mnclimbingcoop.domain.Door
 import com.mnclimbingcoop.domain.VertXMessage
 
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import javax.annotation.PostConstruct
@@ -19,28 +20,30 @@ import org.springframework.scheduling.annotation.Scheduled
 @Slf4j
 class DoorMan {
 
-    @Inject
-    DoorConfiguration config
-
-    @Inject
-    XmlMapper xmlObjectMapper
-
-    RequestBuilder requestBuilder = new RequestBuilder()
+    protected final DoorConfiguration config
+    protected final XmlMapper xmlMapper
+    protected final UrlRequestBuilder requestBuilder
 
     Map<String, HidEdgeProApi> apis = [:]
+
+    @Inject
+    DoorMan(XmlMapper xmlMapper, DoorConfiguration config, UrlRequestBuilder requestBuilder) {
+        this.xmlMapper = xmlMapper
+        this.config = config
+        this.requestBuilder = requestBuilder
+    }
 
     @PostConstruct
     void setup() {
 
         log.info "Initializing Doors!"
-        config.devices.each{ device ->
-            log.info "Initilizing HID EdgePro API fro ${device.name} with endpoint ${device.url}"
+        config.devices.each{ String name, DoorConfiguration.Device device ->
+            log.info "Initilizing HID EdgePro API fro ${name} with endpoint ${device.url}"
             String username = device.username ?: config.username
             String password = device.password ?: config.password
-            apis[device.name] = new ClientBuilder().withEndpoint(device.url)
-                                                   // .withUnsafeSSL()
-                                                   .withAuthentication(username, password)
-                                                   .build(HidEdgeProApi)
+            apis[name] = new ClientBuilder().withEndpoint(device.url)
+                                            .withAuthentication(username, password)
+                                            .build(HidEdgeProApi)
         }
 
     }
@@ -61,6 +64,6 @@ class DoorMan {
 
 
     String getXml(String method) {
-        xmlObjectMapper.writeValueAsString(requestBuilder."${method}"())
+        xmlMapper.writeValueAsString(requestBuilder."${method}"())
     }
 }

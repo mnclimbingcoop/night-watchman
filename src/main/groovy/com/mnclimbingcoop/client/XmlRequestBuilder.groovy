@@ -6,9 +6,12 @@ import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.Reports
 import com.mnclimbingcoop.domain.VertXMessage
 
+import groovy.transform.CompileStatic
+
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+@CompileStatic
 class XmlRequestBuilder {
 
     VertXMessage buildReport() {
@@ -36,7 +39,6 @@ class XmlRequestBuilder {
         return message
     }
 
-
     VertXMessage doorStatus() {
         new VertXMessage(doorRequest: new Doors(action: Actions.LIST_RECENT, responseFormat: 'status'))
     }
@@ -53,39 +55,39 @@ class XmlRequestBuilder {
         new VertXMessage(doorRequest: new Doors(action: Actions.COMMAND_MODE, command: 'grantAccess'))
     }
 
-    VertXMessage stopAlarm() { // TODO }
+    VertXMessage stopAlarm() { /* TODO */ }
 
-    VertXMessage listUsers() { // TODO }
+    VertXMessage listUsers() { /* TODO */ }
 
-    VertXMessage getUser(String id) { // TODO }
+    VertXMessage getUser(String id) { /* TODO */ }
 
-    VertXMessage updateUser() { // TODO }
+    VertXMessage updateUser() { /* TODO */ }
 
-    VertXMessage createUser() { // TODO }
+    VertXMessage createUser() { /* TODO */ }
 
-    VertXMessage removeUser() { // TODO }
-
-
-    VertXMessage listCards() { // TODO }
-
-    VertXMessage getCard(String id) { // TODO }
-
-    VertXMessage bulkAddCards() { // TODO }
-
-    VertXMessage addCard() { // TODO }
-
-    VertXMessage removeCard() { // TODO }
+    VertXMessage removeUser() { /* TODO */ }
 
 
+    VertXMessage listCards() { /* TODO */ }
 
-    VertXMessage listSchedules() { // TODO }
+    VertXMessage getCard(String id) { /* TODO */ }
 
-    VertXMessage getSchedule(String id) { // TODO }
+    VertXMessage bulkAddCards() { /* TODO */ }
 
-    VertXMessage addSchedule() { // TODO }
+    VertXMessage addCard() { /* TODO */ }
 
-    VertXMessage removeSchedule() { // TODO }
+    VertXMessage removeCard() { /* TODO */ }
 
-    VertXMessage setClock() { // TODO }
+
+
+    VertXMessage listSchedules() { /* TODO */ }
+
+    VertXMessage getSchedule(String id) { /* TODO */ }
+
+    VertXMessage addSchedule() { /* TODO */ }
+
+    VertXMessage removeSchedule() { /* TODO */ }
+
+    VertXMessage setClock() { /* TODO */ }
 
 }

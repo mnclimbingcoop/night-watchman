@@ -8,8 +8,6 @@ import com.mnclimbingcoop.client.ClientBuilder
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
-import javax.inject.Inject
-
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
