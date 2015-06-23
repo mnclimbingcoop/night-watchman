@@ -4,7 +4,7 @@ import com.mnclimbingcoop.domain.Actions
 import com.mnclimbingcoop.domain.Doors
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.Reports
-import com.mnclimbingcoop.domain.VertXMessage
+import com.mnclimbingcoop.domain.VertXRequest
 
 import groovy.transform.CompileStatic
 
@@ -14,80 +14,87 @@ import java.time.ZoneOffset
 @CompileStatic
 class XmlRequestBuilder {
 
-    VertXMessage buildReport() {
-        new VertXMessage(reportRequest: new Reports( action: Actions.COMMAND_MODE, type: 'events'))
+    VertXRequest buildReport() {
+        new VertXRequest(reports: new Reports( action: Actions.COMMAND_MODE, type: 'events'))
     }
 
-    VertXMessage displayRecent() {
-        new VertXMessage(logRequest: new EventMessages(action: Actions.DISPLAY_RECENT))
+    VertXRequest displayRecent() {
+        new VertXRequest(messages: new EventMessages(action: Actions.DISPLAY_RECENT))
     }
 
-    VertXMessage listRecent() {
-        new VertXMessage(logRequest: new EventMessages(action: Actions.LIST_RECENT))
+    VertXRequest listRecent() {
+        new VertXRequest(messages: new EventMessages(action: Actions.LIST_RECORDS))
     }
 
-    VertXMessage listRecent(LocalDateTime since, Integer marker = 0, Integer records = 0) {
-        VertXMessage message = new VertXMessage(
-            logRequest: new EventMessages(
-                action: Actions.LIST_RECENT,
+    VertXRequest listRecent(LocalDateTime since, Integer marker = 0, Integer records = 0) {
+        VertXRequest message = new VertXRequest(
+            messages: new EventMessages(
+                action: Actions.LIST_RECORDS,
                 historyTimestamp: since.toEpochSecond(ZoneOffset.UTC)
             )
         )
-        if (marker) { message.logRequest.historyRecordMarker = marker }
-        if (records) { message.logRequest.recordCount = records }
+        if (marker) { message.messages.historyRecordMarker = marker }
+        if (records) { message.messages.recordCount = records }
 
         return message
     }
 
-    VertXMessage doorStatus() {
-        new VertXMessage(doorRequest: new Doors(action: Actions.LIST_RECENT, responseFormat: 'status'))
+    VertXRequest doorStatus() {
+        new VertXRequest(doors: new Doors(action: Actions.LIST_RECORDS, responseFormat: 'status'))
     }
 
-    VertXMessage lockDoor() {
-        new VertXMessage(doorRequest: new Doors(action: Actions.COMMAND_MODE, command: 'lockDoor'))
+    VertXRequest lockDoor() {
+        new VertXRequest(doors: new Doors(action: Actions.COMMAND_MODE, command: 'lockDoor'))
     }
 
-    VertXMessage unlockDoor() {
-        new VertXMessage(doorRequest: new Doors(action: Actions.COMMAND_MODE, command: 'unlockDoor'))
+    VertXRequest unlockDoor() {
+        new VertXRequest(doors: new Doors(action: Actions.COMMAND_MODE, command: 'unlockDoor'))
     }
 
-    VertXMessage grantAccess() {
-        new VertXMessage(doorRequest: new Doors(action: Actions.COMMAND_MODE, command: 'grantAccess'))
+    VertXRequest grantAccess() {
+        new VertXRequest(doors: new Doors(action: Actions.COMMAND_MODE, command: 'grantAccess'))
     }
 
-    VertXMessage stopAlarm() { /* TODO */ }
+    VertXRequest listUsers(Integer offset = 0, Integer count = 10) {
+        new VertXRequest(cardholders: new Cardholders(
+            action: Actions.LIST_RECORDS,
+            responseFormat: 'expanded',
+            recordOffset: offset,
+            recordCount: count
+        ))
+    }
 
-    VertXMessage listUsers() { /* TODO */ }
+    VertXRequest stopAlarm() { /* TODO */ }
 
-    VertXMessage getUser(String id) { /* TODO */ }
+    VertXRequest getUser(String id) { /* TODO */ }
 
-    VertXMessage updateUser() { /* TODO */ }
+    VertXRequest updateUser() { /* TODO */ }
 
-    VertXMessage createUser() { /* TODO */ }
+    VertXRequest createUser() { /* TODO */ }
 
-    VertXMessage removeUser() { /* TODO */ }
-
-
-    VertXMessage listCards() { /* TODO */ }
-
-    VertXMessage getCard(String id) { /* TODO */ }
-
-    VertXMessage bulkAddCards() { /* TODO */ }
-
-    VertXMessage addCard() { /* TODO */ }
-
-    VertXMessage removeCard() { /* TODO */ }
+    VertXRequest removeUser() { /* TODO */ }
 
 
+    VertXRequest listCards() { /* TODO */ }
 
-    VertXMessage listSchedules() { /* TODO */ }
+    VertXRequest getCard(String id) { /* TODO */ }
 
-    VertXMessage getSchedule(String id) { /* TODO */ }
+    VertXRequest bulkAddCards() { /* TODO */ }
 
-    VertXMessage addSchedule() { /* TODO */ }
+    VertXRequest addCard() { /* TODO */ }
 
-    VertXMessage removeSchedule() { /* TODO */ }
+    VertXRequest removeCard() { /* TODO */ }
 
-    VertXMessage setClock() { /* TODO */ }
+
+
+    VertXRequest listSchedules() { /* TODO */ }
+
+    VertXRequest getSchedule(String id) { /* TODO */ }
+
+    VertXRequest addSchedule() { /* TODO */ }
+
+    VertXRequest removeSchedule() { /* TODO */ }
+
+    VertXRequest setClock() { /* TODO */ }
 
 }

@@ -55,6 +55,10 @@ class UrlRequestBuilder {
         wrap(xmlBuilder.grantAccess())
     }
 
+    String listUsers(String offset = 0, String count = 10) {
+        wrap(xmlBuilder.listUsers(offset, count))
+    }
+
     protected String wrap(VertXMessage message) {
         objectMapper.writeValueAsString(message)
     }

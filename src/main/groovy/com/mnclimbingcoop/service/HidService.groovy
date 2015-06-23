@@ -15,48 +15,36 @@ import javax.inject.Named
 @CompileStatic
 @Named
 @Slf4j
-class DoorService {
+class HidService {
 
-    final UrlRequestBuilder requestBuilder
-    final XmlMapper objectMapper
-    final DoorConfiguration config
-    Map<String, HidEdgeProApi> apis = [:]
+    protected final DoorConfiguration config
+    protected final Map<String, HidEdgeProApi> apis = [:]
 
     @Inject
-    DoorService(XmlMapper objectMapper, DoorConfiguration config, UrlRequestBuilder requestBuilder) {
-        this.requestBuilder = requestBuilder
-        this.objectMapper = objectMapper
+    HidService(DoorConfiguration config) {
         this.config = config
     }
 
     @PostConstruct
-    void setup() {
-
+    protected void setup() {
         log.debug "Initializing doors"
         config.devices.each{ String name, DoorConfiguration.Device device ->
             log.info "Initializing HID EdgePro API fro ${name} with endpoint ${device.url}"
             String username = device.username ?: config.username
             String password = device.password ?: config.password
             apis[name] = new ClientBuilder().withEndpoint(device.url)
-                                                   .withAuthentication(username, password)
-                                                   .build(HidEdgeProApi)
+                                            .withAuthentication(username, password)
+                                            .build(HidEdgeProApi)
         }
 
     }
 
-    void recentDoorEvents() {
+    Set<String> getDoors() {
+        apis.keySet()
     }
 
-    void validateDoorState() {
-    }
-
-    void buildUserDatabase() {
-    }
-
-    void buildCredentialDatabase() {
-    }
-
-    void buildScheduleDatabase() {
+    HidEdgeProApi getApi(String name) {
+        return apis[name]
     }
 
 }
