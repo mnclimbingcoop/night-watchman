@@ -1,7 +1,7 @@
 package com.mnclimbingcoop
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.mnclimbingcoop.domain.VertXMessage
+import com.mnclimbingcoop.domain.VertXRequest
 
 import groovy.transform.CompileStatic
 
@@ -55,11 +55,11 @@ class UrlRequestBuilder {
         wrap(xmlBuilder.grantAccess())
     }
 
-    String listUsers(String offset = 0, String count = 10) {
+    String listUsers(Integer offset = 0, Integer count = 10) {
         wrap(xmlBuilder.listUsers(offset, count))
     }
 
-    protected String wrap(VertXMessage message) {
+    protected String wrap(VertXRequest message) {
         objectMapper.writeValueAsString(message)
     }
 

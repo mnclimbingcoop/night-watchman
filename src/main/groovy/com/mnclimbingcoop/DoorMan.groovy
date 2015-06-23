@@ -20,50 +20,24 @@ import org.springframework.scheduling.annotation.Scheduled
 @Slf4j
 class DoorMan {
 
-    protected final DoorConfiguration config
-    protected final XmlMapper xmlMapper
+    protected final HidService hidService
     protected final UrlRequestBuilder requestBuilder
 
-    Map<String, HidEdgeProApi> apis = [:]
-
     @Inject
-    DoorMan(XmlMapper xmlMapper, DoorConfiguration config, UrlRequestBuilder requestBuilder) {
-        this.xmlMapper = xmlMapper
-        this.config = config
+    DoorMan(HidService hidService, UrlRequestBuilder requestBuilder) {
+        this.hidService = hidService
         this.requestBuilder = requestBuilder
-    }
-
-    @PostConstruct
-    void setup() {
-
-        log.info "Initializing Doors!"
-        config.devices.each{ String name, DoorConfiguration.Device device ->
-            log.info "Initilizing HID EdgePro API fro ${name} with endpoint ${device.url}"
-            String username = device.username ?: config.username
-            String password = device.password ?: config.password
-            apis[name] = new ClientBuilder().withEndpoint(device.url)
-                                            .withAuthentication(username, password)
-                                            .build(HidEdgeProApi)
-        }
-
     }
 
     @Scheduled(fixedRate = 5000l)
     void ping() {
-
-        apis.each{ String name, HidEdgeProApi api ->
+        hidService.doors.each{ String name ->
             log.info '>> Getting door status'
-            VertXMessage response = api.get(getXml('doorStatus'))
-
+            HidEdgeProApi api = hidService.getApi(name)
+            VertXMessage response = api.get(requestBuilder.doorStatus())
             Door door = response.doors.door
 
             log.info "Door [${name}]: ${door.doorName} - ${door.relayState}"
         }
-
-    }
-
-
-    String getXml(String method) {
-        xmlMapper.writeValueAsString(requestBuilder."${method}"())
     }
 }

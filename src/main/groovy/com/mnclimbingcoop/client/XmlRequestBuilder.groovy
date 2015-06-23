@@ -1,6 +1,7 @@
 package com.mnclimbingcoop
 
 import com.mnclimbingcoop.domain.Actions
+import com.mnclimbingcoop.domain.Cardholders
 import com.mnclimbingcoop.domain.Doors
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.Reports
