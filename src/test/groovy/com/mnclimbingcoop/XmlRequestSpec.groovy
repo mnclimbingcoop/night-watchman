@@ -1,6 +1,6 @@
 package com.mnclimbingcoop
 
-import com.mnclimbingcoop.domain.VertXMessage
+import com.mnclimbingcoop.domain.VertXRequest
 
 import java.time.LocalDateTime
 
@@ -23,8 +23,8 @@ class XmlRequestSpec extends XmlSpecification {
 
 
         when:
-        VertXMessage message = builder."${action}"()
-        String xml = stripWhitespace(objectMapper.writeValueAsString(message))
+        VertXRequest request = builder."${action}"()
+        String xml = stripWhitespace(objectMapper.writeValueAsString(request))
 
         and: 'the UrlRequestBuilder wraps the method nicely'
         String query = stripWhitespace(urlBuilder."${action}"())
@@ -48,10 +48,10 @@ class XmlRequestSpec extends XmlSpecification {
         given:
         String expected = xmlFromFixture('request/list-recent2')
         LocalDateTime since = LocalDateTime.of(2015, 4, 9, 1, 2, 37)
-        VertXMessage message = builder.listRecent(since, 2233, 1)
+        VertXRequest request = builder.listRecent(since, 2233, 1)
 
         when:
-        String xml = stripWhitespace(objectMapper.writeValueAsString(message))
+        String xml = stripWhitespace(objectMapper.writeValueAsString(request))
 
         then:
         xml == expected

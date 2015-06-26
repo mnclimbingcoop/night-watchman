@@ -20,24 +20,15 @@ import org.springframework.scheduling.annotation.Scheduled
 @Slf4j
 class DoorMan {
 
-    protected final HidService hidService
-    protected final UrlRequestBuilder requestBuilder
+    protected final DoorService doorService
 
     @Inject
-    DoorMan(HidService hidService, UrlRequestBuilder requestBuilder) {
-        this.hidService = hidService
-        this.requestBuilder = requestBuilder
+    DoorMan(DoorService doorService) {
+        this.doorService = doorService
     }
 
-    @Scheduled(fixedRate = 5000l)
+    @Scheduled(fixedRate = 10000l)
     void ping() {
-        hidService.doors.each{ String name ->
-            log.info '>> Getting door status'
-            HidEdgeProApi api = hidService.getApi(name)
-            VertXMessage response = api.get(requestBuilder.doorStatus())
-            Door door = response.doors.door
-
-            log.info "Door [${name}]: ${door.doorName} - ${door.relayState}"
-        }
+        doorService.getDoorStatus()
     }
 }

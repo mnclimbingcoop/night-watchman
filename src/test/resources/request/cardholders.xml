@@ -1,0 +1,48 @@
+
+LIST
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="DR"/></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Cardholders action="RD" cardholdersInUse="549" totalCardholders="1000"/></VertXMessage>
+
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="LR" responseFormat="expanded" recordOffset="0" recordCount="10"/></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Cardholders action="RL" recordOffset="0" recordCount="10" moreRecords="false"><hid:Cardholder cardholderID="483" forename="Peder" surname="Aalgaard" roleSetID="483" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="0165451F" isCard="true" cardNumber="41615" formatID="5" formatName="MNCC" endTime="2015-10-22T23:59:59" cardholderID="483" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="483" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="530" forename="Jordon" surname="Abhold" roleSetID="530" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="0165455D" isCard="true" cardNumber="41646" formatID="5" formatName="MNCC" endTime="2015-11-17T23:59:59" cardholderID="530" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="530" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="577" forename="Zach" surname="Adkinson" roleSetID="577" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="0165463E" isCard="true" cardNumber="41759" formatID="5" formatName="MNCC" endTime="2015-04-26T23:59:59" cardholderID="577" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="577" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="596" forename="Laura" surname="Adrian" roleSetID="596" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="016545F1" isCard="true" cardNumber="41720" formatID="5" formatName="MNCC" endTime="2016-02-16T23:59:59" cardholderID="596" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="596" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="460" forename="Aaron" surname="Altman" roleSetID="460" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="016544F5" isCard="true" cardNumber="41594" formatID="5" formatName="MNCC" endTime="2014-06-19T23:59:59" cardholderID="460" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="460" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="221" forename="Erik" surname="Anderson" roleSetID="221" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="01654319" isCard="true" cardNumber="41356" formatID="5" formatName="MNCC" endTime="2015-09-22T23:59:59" cardholderID="221" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="221" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="340" forename="Jacob" surname="Anderson" roleSetID="340" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="01654403" isCard="true" cardNumber="41473" formatID="5" formatName="MNCC" endTime="2016-03-23T23:59:59" cardholderID="340" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="340" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="45" forename="Keith" surname="Anderson" email="anderskeith@gmail.com" phone="612-703-0098" roleSetID="45" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="04D501E923" isCard="true" cardNumber="04D501E923" endTime="2015-02-28T23:59:59" cardholderID="45" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="45" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="570" forename="Noelle" surname="Andrychowicz" roleSetID="570" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="01654562" isCard="true" cardNumber="41649" formatID="5" formatName="MNCC" endTime="2016-01-14T23:59:59" cardholderID="570" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="570" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder><hid:Cardholder cardholderID="217" forename="Ryan" middleName="r" surname="Angelo" email="rangelo85@gmail.com" phone="715-905-0260" roleSetID="217" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" ><hid:Credential rawCardNumber="01654310" isCard="true" cardNumber="41352" formatID="5" formatName="MNCC" endTime="2013-04-18T23:59:59" cardholderID="217" extendedAccess="false" exemptFromPassback="true" pinCommands="false" confirmingPinExempt="false" /><hid:Role roleID="217" scheduleID="1" scheduleName="24x7" resourceID="0" resourceName="HID Edge Solo" /></hid:Cardholder></hid:Cardholders></VertXMessage>
+
+CREATE
+
+https://10.19.4.130/cgi-bin/vertx_xml.cgi?XML=<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="AD"><hid:Cardholder forename="Test" middleName="M" surname="Aaaaaa" exemptFromPassback="true" extendedAccess="false" confirmingPin="" email="test@zirbes.org" custom1="c1" custom2="c2" phone="612-296-3127" /></hid:Cardholders></VertXMessage>
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Cardholders action="RL"><hid:Cardholder cardholderID="647" forename="Test" middleName="M" surname="Aaaaaa" email="test@zirbes.org" phone="612-296-3127" custom1="c1" custom2="c2" roleSetID="647" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" /></hid:Cardholders></VertXMessage>
+
+ASSIGN CARD
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Credentials action="UD" rawCardNumber="0165423C" isCard="true"><hid:Credential cardholderID="647"/></hid:Credentials></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+
+ASSIGN SCHEDULE
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:RoleSet action="UD" roleSetID="647"><hid:Roles><hid:Role roleID="647" scheduleID="1" resourceID="0"/></hid:Roles></hid:RoleSet></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+REMOVE SCHEDULE
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:RoleSet action="UD" roleSetID="647"><hid:Roles></hid:Roles></hid:RoleSet></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+REMOVE CARD
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Credentials action="UD" rawCardNumber="0165423C" isCard="true"><hid:Credential cardholderID=""/></hid:Credentials></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+UPDATE
+
+https://10.19.4.130/cgi-bin/vertx_xml.cgi?XML=<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="UD" cardholderID="647"><hid:Cardholder forename="Test" middleName="N" surname="Aaaaaa" roleSetID="647" exemptFromPassback="true" extendedAccess="false" confirmingPin="" email="test-new@zirbes.org" custom1="c1-new" custom2="c2-new" phone="612-296-3127" /></hid:Cardholders></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+DELETE
+
+https://10.19.4.130/cgi-bin/vertx_xml.cgi?XML=<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="DD" cardholderID="647"/></VertXMessage>
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+

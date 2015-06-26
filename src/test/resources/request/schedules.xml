@@ -1,0 +1,76 @@
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Schedules action="DR"/></VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Schedules action="RD" schedulesInUse="2" totalSchedules="8" /></VertXMessage>
+
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Schedules action="LR"  recordOffset="0" recordCount="10"/></VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+        <hid:Schedules action="RL" >
+            <hid:Schedule scheduleID="1" scheduleName="24x7" />
+            <hid:Schedule scheduleID="2" scheduleName="Banned" />
+        </hid:Schedules>
+    </VertXMessage>
+
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Schedules action="LR" responseFormat="customized"/></VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Schedules action="RL" responseFormat="customized"><hid:Schedule scheduleID="1" scheduleName="24x7" specialDaysInUse="0" peopleAssigned="543" ><hid:DaysWithAccess dayOfWeek="0" /><hid:DaysWithAccess dayOfWeek="1" /><hid:DaysWithAccess dayOfWeek="2" /><hid:DaysWithAccess dayOfWeek="3" /><hid:DaysWithAccess dayOfWeek="4" /><hid:DaysWithAccess dayOfWeek="5" /><hid:DaysWithAccess dayOfWeek="6" /></hid:Schedule><hid:Schedule scheduleID="2" scheduleName="Banned" specialDaysInUse="0" peopleAssigned="1" ></hid:Schedule><hid:Schedule scheduleID="0" scheduleName="GuardTime" specialDaysInUse="0" peopleAssigned="0" ></hid:Schedule></hid:Schedules></VertXMessage>
+
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Doors action="LR" responseFormat="status" /></VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Doors action="RD" ><hid:Door doorName="HID Edge Solo" doorUnlockScheduleID="0" doorUnlockGuardTime="5" guardTimeFlag="set" tamperAlarmState="unset" acAlarmState="unset" batteryAlarmState="unset" doorHeldAlarmState="unset" doorForcedAlarmState="unset" relayState="unset" auxRelayState="unset" currentDateTime="2015-06-26T18:44:17" relayAlertState="unset" ></hid:Door></hid:Doors></VertXMessage>
+
+ADD
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Schedules action="AD"><hid:Schedule scheduleName="Testing - zirbes"><hid:DayOfWeekInterval dayOfWeek="1" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval><hid:DayOfWeekInterval dayOfWeek="2" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval><hid:DayOfWeekInterval dayOfWeek="3" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval><hid:DayOfWeekInterval dayOfWeek="4" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval><hid:DayOfWeekInterval dayOfWeek="5" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval><hid:DayOfWeekInterval dayOfWeek="6" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval><hid:DayOfWeekInterval dayOfWeek="0" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval></hid:Schedule></hid:Schedules></VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Schedules action="RL"><hid:Schedule scheduleID="3" scheduleName="Testing - zirbes" /></hid:Schedules></VertXMessage>
+
+DELETE
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Schedules action="DD" scheduleID="3"/></VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+EDIT
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Schedules action="LR" scheduleID="1"/></VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+        <hid:Schedules action="RL" >
+            <hid:Schedule scheduleID="1" scheduleName="24x7" >
+                <hid:DayOfWeekInterval dayOfWeek="0" startTime="00:00:00" endTime="23:59:59" />
+                <hid:DayOfWeekInterval dayOfWeek="1" startTime="00:00:00" endTime="23:59:59" />
+                <hid:DayOfWeekInterval dayOfWeek="2" startTime="00:00:00" endTime="23:59:59" />
+                <hid:DayOfWeekInterval dayOfWeek="3" startTime="00:00:00" endTime="23:59:59" />
+                <hid:DayOfWeekInterval dayOfWeek="4" startTime="00:00:00" endTime="23:59:59" />
+                <hid:DayOfWeekInterval dayOfWeek="5" startTime="00:00:00" endTime="23:59:59" />
+                <hid:DayOfWeekInterval dayOfWeek="6" startTime="00:00:00" endTime="23:59:59" />
+            </hid:Schedule>
+        </hid:Schedules>
+    </VertXMessage>
+
+UPDATE
+
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage>
+    <hid:Schedules action="UD" scheduleID="3">
+        <hid:Schedule scheduleName="testing">
+            <hid:DayOfWeekInterval dayOfWeek="1" startTime="08:00:00" endTime="17:00:00" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="2" startTime="08:00:00" endTime="17:00:00" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="3" startTime="08:00:00" endTime="17:00:00" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="4" startTime="08:00:00" endTime="17:00:00" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="5" startTime="08:00:00" endTime="17:00:00" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="6" startTime="00:00:00" endTime="00:00:00" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="0" startTime="00:00:00" endTime="00:00:00" ></hid:DayOfWeekInterval>
+        </hid:Schedule>
+    </hid:Schedules>
+</VertXMessage>
+
+    <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+

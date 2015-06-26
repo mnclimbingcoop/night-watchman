@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
-@JacksonXmlRootElement()
+@JacksonXmlRootElement(localName='VertXMessage')
 class VertXRequest {
 
     @JacksonXmlProperty(localName='hid:EventMessages')
