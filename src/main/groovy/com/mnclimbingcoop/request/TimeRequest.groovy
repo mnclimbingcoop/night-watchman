@@ -14,7 +14,6 @@ class TimeRequest extends VertXRequest {
 
     TimeRequest() {
         time = new Time(action: Action.DESCRIBE_RECORDS)
-        return this
     }
 
     TimeRequest get() {

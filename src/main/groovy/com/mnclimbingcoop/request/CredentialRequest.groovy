@@ -6,11 +6,12 @@ import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
+import org.joda.time.LocalDateTime
+
 class CredentialRequest extends VertXRequest {
 
     CredentialRequest() {
         credentials = new Credentials(action: Action.DESCRIBE_RECORDS)
-        return this
     }
 
     CredentialRequest overview() {
@@ -39,6 +40,11 @@ class CredentialRequest extends VertXRequest {
             isCard: true,
             rawCardNumber: rawCardNumber
         )
+        return this
+    }
+
+    CredentialRequest bulkCreate() {
+        // TODO
         return this
     }
 

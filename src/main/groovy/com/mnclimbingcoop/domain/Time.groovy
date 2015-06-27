@@ -30,11 +30,11 @@ class Time {
     Integer second
 
     // "CST6CDT,M3.2.0/2,M11.1.0/2"
-    @JacksonXmlProperty(localName='TZ' isAttribute=true)
+    @JacksonXmlProperty(localName='TZ', isAttribute=true)
     String tz
 
     // 062
-    @JacksonXmlProperty(localName='TZCode' isAttribute=true)
+    @JacksonXmlProperty(localName='TZCode', isAttribute=true)
     String tzCode
 
 }

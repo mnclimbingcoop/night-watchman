@@ -10,7 +10,6 @@ class ReaderRequest extends VertXRequest {
 
     ReaderRequest() {
         readers = new Readers(action: Action.LIST_RECORDS)
-        return this
     }
 
     ReaderRequest show() {

@@ -4,11 +4,12 @@ import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
+import org.joda.time.LocalDateTime
+
 class EventRequest extends VertXRequest {
 
     EventRequest() {
         eventMessages = new EventMessages(action: Action.LIST_RECORDS)
-        return this
     }
 
     EventRequest overview() {
@@ -21,16 +22,33 @@ class EventRequest extends VertXRequest {
         return this
     }
 
-    EventRequest list(Integer historyRecordMarker,
-                      Integer historyTimestamp
-                      Integer count = 10) {
+    EventRequest listSince(LocalDateTime historyTimestamp, Integer count = 10) {
+
+        Long timestamp = toTimestamp(historyTimestamp)
+
         eventMessages = new EventMessages(
             action: Action.LIST_RECORDS,
-            historyRecordMarker: historyRecordMarker,
-            historyTimestamp: historyTimestamp,
+            historyTimestamp: timestamp,
             recordCount: count
         )
         return this
     }
 
+    EventRequest list(Integer historyRecordMarker,
+                      LocalDateTime historyTimestamp,
+                      Integer count = 10) {
+
+        Long timestamp = toTimestamp(historyTimestamp)
+        eventMessages = new EventMessages(
+            action: Action.LIST_RECORDS,
+            historyRecordMarker: historyRecordMarker,
+            historyTimestamp: timestamp,
+            recordCount: count
+        )
+        return this
+    }
+
+    Long toTimestamp(LocalDateTime time) {
+        return time.toDate().time / 1000
+    }
 }

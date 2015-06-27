@@ -10,7 +10,7 @@ import java.time.LocalTime
 class DayOfWeekInterval {
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer dayOfWeek="1"
+    Integer dayOfWeek
 
     @JacksonXmlProperty(isAttribute=true)
     LocalTime startTime

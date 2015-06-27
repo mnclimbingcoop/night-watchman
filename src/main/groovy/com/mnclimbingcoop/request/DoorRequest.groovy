@@ -10,7 +10,6 @@ class DoorRequest extends VertXRequest {
 
     DoorRequest() {
         doors = new Doors(action: Action.LIST_RECORDS, responseFormat: ResponseFormat.STATUS)
-        return this
     }
 
     DoorRequest status() {
@@ -30,6 +29,12 @@ class DoorRequest extends VertXRequest {
 
     DoorRequest grantAccess() {
         doors = new Doors(action: Action.COMMAND_MODE, command: DoorCommand.GRANT)
+        return this
+    }
+
+    DoorRequest stopAlarm() {
+        // TODO
+        // doors = new Doors(action: Action.COMMAND_MODE, command: DoorCommand.GRANT)
         return this
     }
 

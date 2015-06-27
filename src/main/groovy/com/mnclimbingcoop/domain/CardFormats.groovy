@@ -1,5 +1,6 @@
 package com.mnclimbingcoop.domain
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ResponseFormat
@@ -13,10 +14,10 @@ class CardFormats extends AbstractEntityCollection {
     Integer cardFormatID
 
     @JacksonXmlProperty(isAttribute=true)
-    String cardFormatsInUse
+    Integer cardFormatsInUse
 
     @JacksonXmlProperty(isAttribute=true)
-    String totalCardFormats
+    Integer totalCardFormats
 
     @Override
     Integer getInUse() { cardFormatsInUse }

@@ -1,60 +1,52 @@
 package com.mnclimbingcoop
 
-import com.mnclimbingcoop.domain.VertXRequest
+import com.mnclimbingcoop.request.DoorRequest
+import com.mnclimbingcoop.request.EventRequest
 
-import java.time.LocalDateTime
-
-import spock.lang.Unroll
+import org.joda.time.LocalDateTime
 
 class XmlRequestSpec extends XmlSpecification {
 
-    XmlRequestBuilder builder
     UrlRequestBuilder urlBuilder
 
     void setup() {
-        builder = new XmlRequestBuilder()
         urlBuilder = new UrlRequestBuilder(objectMapper)
     }
 
-    @Unroll
-    void 'xml marshal #fixture from #action message'() {
-        given:
-        String expected = xmlFromFixture("request/${fixture}")
-
-
-        when:
-        VertXRequest request = builder."${action}"()
-        String xml = stripWhitespace(objectMapper.writeValueAsString(request))
-
-        and: 'the UrlRequestBuilder wraps the method nicely'
-        String query = stripWhitespace(urlBuilder."${action}"())
-
-        then:
-        xml == expected
-        xml == query
-
-        where:
-        fixture              | action
-        'create-events-file' | 'buildReport'
-        'display-recent'     | 'displayRecent'
-        'list-recent1'       | 'listRecent'
-        'lock-door'          | 'lockDoor'
-        'open-door'          | 'grantAccess'
-        'unlock-door'        | 'unlockDoor'
+    void 'event overview'() {
+        expect:
+        xmlFromFixture('request/event/list-overview-events') == toXML(new EventRequest().overview())
     }
 
-
-    void 'xml marshal list recent message'() {
+    void 'event list single'() {
         given:
-        String expected = xmlFromFixture('request/list-recent2')
-        LocalDateTime since = LocalDateTime.of(2015, 4, 9, 1, 2, 37)
-        VertXRequest request = builder.listRecent(since, 2233, 1)
+        LocalDateTime time = new LocalDateTime(2015, 4, 8, 20, 2, 37)
 
-        when:
-        String xml = stripWhitespace(objectMapper.writeValueAsString(request))
+        expect:
+        xmlFromFixture('request/event/list-events1') == toXML(new EventRequest().list(2233, time, 1))
+    }
 
-        then:
-        xml == expected
+    void 'event list multi'() {
+        given:
+        LocalDateTime time = new LocalDateTime(2015, 6, 26, 18, 21, 14)
+
+        expect:
+        xmlFromFixture('request/event/list-events2') == toXML(new EventRequest().list(4327, time, 100))
+    }
+
+    void 'lock door'() {
+        expect:
+        xmlFromFixture('request/door/lock-door') == toXML(new DoorRequest().lock())
+    }
+
+    void 'unlock door'() {
+        expect:
+        xmlFromFixture('request/door/unlock-door') == toXML(new DoorRequest().unlock())
+    }
+
+    void 'grant access to door'() {
+        expect:
+        xmlFromFixture('request/door/open-door') == toXML(new DoorRequest().grantAccess())
     }
 
 }

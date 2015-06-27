@@ -13,12 +13,16 @@ class XmlSpecification extends Specification {
     }
 
     protected String stripWhitespace(String str) {
-        return str.replaceAll(/\n */, '').replaceFirst(/^ */, '')
+        return str.replaceAll(/\n */, ' ').replaceFirst(/^ */, '')
     }
 
     protected String xmlFromFixture(String fixture) {
         String path = "/${fixture}.xml"
         return xmlFromResource(path)
+    }
+
+    protected String toXML(Object obj) {
+        stripWhitespace(objectMapper.writeValueAsString(obj))
     }
 
     protected String xmlFromResource(String resourcePath) {

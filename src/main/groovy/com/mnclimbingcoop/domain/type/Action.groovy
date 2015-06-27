@@ -1,5 +1,8 @@
 package com.mnclimbingcoop.domain.type
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonValue
+
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -9,6 +12,7 @@ enum Action {
     COMMAND_MODE('CM', 'Command Mode'),
     DELETE_DATA('DD', 'Delete Data'),
     DESCRIBE_RECORDS('DR', 'Describe Records'),
+    RESPONSE_DATA('RD', 'Response Data'),
     LIST_RECORDS('LR', 'List Records'),
     RESPONSE_LIST('RL', 'Response List'),
     UPDATE_DATA('UD', 'Update Data')
