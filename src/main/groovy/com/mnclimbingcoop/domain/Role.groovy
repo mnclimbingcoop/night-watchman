@@ -2,8 +2,9 @@ package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
-import java.time.LocalDateTime
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class Role {
 
     @JacksonXmlProperty(isAttribute=true)

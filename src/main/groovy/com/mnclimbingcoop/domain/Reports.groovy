@@ -1,14 +1,16 @@
 package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class Reports {
 
     @JacksonXmlProperty(isAttribute=true)
-    String action
+    Action action
 
     @JacksonXmlProperty(isAttribute=true)
-    String type
+    ReportType type
 
 }

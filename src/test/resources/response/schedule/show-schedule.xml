@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:Schedules action="RL" >
+        <hid:Schedule scheduleID="1" scheduleName="24x7" >
+            <hid:DayOfWeekInterval dayOfWeek="0" startTime="00:00:00" endTime="23:59:59" />
+            <hid:DayOfWeekInterval dayOfWeek="1" startTime="00:00:00" endTime="23:59:59" />
+            <hid:DayOfWeekInterval dayOfWeek="2" startTime="00:00:00" endTime="23:59:59" />
+            <hid:DayOfWeekInterval dayOfWeek="3" startTime="00:00:00" endTime="23:59:59" />
+            <hid:DayOfWeekInterval dayOfWeek="4" startTime="00:00:00" endTime="23:59:59" />
+            <hid:DayOfWeekInterval dayOfWeek="5" startTime="00:00:00" endTime="23:59:59" />
+            <hid:DayOfWeekInterval dayOfWeek="6" startTime="00:00:00" endTime="23:59:59" />
+        </hid:Schedule>
+    </hid:Schedules>
+</VertXMessage>

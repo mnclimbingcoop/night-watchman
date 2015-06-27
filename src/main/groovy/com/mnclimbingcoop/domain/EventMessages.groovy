@@ -9,7 +9,7 @@ import groovy.transform.CompileStatic
 class EventMessages {
 
     @JacksonXmlProperty(isAttribute=true)
-    String action
+    Action action
 
     @JacksonXmlProperty(isAttribute=true)
     String eventsInUse

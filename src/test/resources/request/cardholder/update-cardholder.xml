@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage>
+    <hid:Cardholders action="UD" cardholderID="647">
+        <hid:Cardholder forename="Test"
+                        middleName="N"
+                        surname="Aaaaaa"
+                        roleSetID="647"
+                        exemptFromPassback="true"
+                        extendedAccess="false"
+                        confirmingPin=""
+                        email="test-new@zirbes.org"
+                        custom1="c1-new"
+                        custom2="c2-new"
+                        phone="612-296-3127" />
+    </hid:Cardholders>
+</VertXMessage>

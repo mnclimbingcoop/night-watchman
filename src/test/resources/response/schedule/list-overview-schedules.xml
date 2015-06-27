@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:Schedules action="RD" schedulesInUse="2" totalSchedules="8" />
+</VertXMessage>

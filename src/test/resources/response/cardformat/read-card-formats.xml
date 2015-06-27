@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:CardFormats action="RL" >
+        <hid:CardFormat formatID="1" formatName="H10301 26-Bit" isTemplate="true" templateID="1" />
+        <hid:CardFormat formatID="2" formatName="H10302 Open 37-Bit" isTemplate="true" templateID="2" />
+        <hid:CardFormat formatID="3" formatName="HID Corporate 1000" isTemplate="true" templateID="3" />
+        <hid:CardFormat formatID="4" formatName="H10304 Managed 37-Bit" isTemplate="true" templateID="4" />
+        <hid:CardFormat formatID="5" formatName="MNCC" isTemplate="false" templateID="1" >
+            <hid:FixedField value="178" />
+        </hid:CardFormat>
+    </hid:CardFormats>
+</VertXMessage>

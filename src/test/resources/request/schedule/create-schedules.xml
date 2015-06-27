@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage>
+    <hid:Schedules action="AD">
+        <hid:Schedule scheduleName="Testing - zirbes">
+            <hid:DayOfWeekInterval dayOfWeek="1" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="2" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="3" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="4" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="5" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="6" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval>
+            <hid:DayOfWeekInterval dayOfWeek="0" startTime="00:00:00" endTime="23:59:59" ></hid:DayOfWeekInterval>
+        </hid:Schedule>
+    </hid:Schedules>
+</VertXMessage>

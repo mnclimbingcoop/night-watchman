@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:Time action="RD"
+              dayOfMonth="26"
+              month="6"
+              year="2015"
+              hour="19"
+              minute="34"
+              second="59"
+              timeZone="CDT"
+              TZ="CST6CDT,M3.2.0/2,M11.1.0/2"
+              TZCode="062" />
+</VertXMessage>

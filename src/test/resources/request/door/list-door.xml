@@ -2,6 +2,3 @@
 <VertXMessage>
     <hid:Doors action="LR" responseFormat="status" />
 </VertXMessage>
-
-
-<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Doors action="RD" ><hid:Door doorName="HID Edge Solo" doorUnlockScheduleID="0" doorUnlockGuardTime="5" guardTimeFlag="set" tamperAlarmState="unset" acAlarmState="unset" batteryAlarmState="unset" doorHeldAlarmState="unset" doorForcedAlarmState="unset" relayState="unset" auxRelayState="unset" currentDateTime="2015-06-26T18:34:08" relayAlertState="unset" ></hid:Door></hid:Doors></VertXMessage>

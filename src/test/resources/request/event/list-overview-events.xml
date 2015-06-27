@@ -2,5 +2,3 @@
 <VertXMessage>
     <hid:EventMessages action="LR"/>
 </VertXMessage>
-
-<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:EventMessages action="RL" historyRecordMarker="4327" historyTimestamp="1435360874" currentRecordMarker="4327" currentTimestamp="1435360874" /></VertXMessage>
