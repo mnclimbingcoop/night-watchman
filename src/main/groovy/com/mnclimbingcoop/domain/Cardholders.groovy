@@ -1,15 +1,21 @@
 package com.mnclimbingcoop.domain
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class Cardholders {
 
     @JacksonXmlProperty(isAttribute=true)
-    String action
+    Action action
 
     @JacksonXmlProperty(isAttribute=true)
-    String responseFormat
+    Integer cardholderID
+
+    @JacksonXmlProperty(isAttribute=true)
+    ResponseFormat responseFormat
 
     @JacksonXmlProperty(isAttribute=true)
     Integer recordOffset
@@ -20,8 +26,18 @@ class Cardholders {
     @JacksonXmlProperty(isAttribute=true)
     Boolean moreRecords
 
+    @JacksonXmlProperty(isAttribute=true)
+    String cardholdersInUse
+
+    @JacksonXmlProperty(isAttribute=true)
+    String totalCardholders
+
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='Cardholder')
     List<Cardholder> cardholders
+
+    @JacksonXmlElementWrapper(useWrapping=false)
+    @JacksonXmlProperty(localName='hid:Cardholder')
+    Cardholder cardholder
 
 }

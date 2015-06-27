@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage>
+    <hid:Credentials action="UD" rawCardNumber="0165423C" isCard="true">
+        <hid:Credential cardholderID=""/>
+    </hid:Credentials>
+</VertXMessage>

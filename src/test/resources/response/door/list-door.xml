@@ -10,10 +10,11 @@
                   batteryAlarmState="unset"
                   doorHeldAlarmState="unset"
                   doorForcedAlarmState="unset"
-                  relayState="set"
+                  relayState="unset"
                   auxRelayState="unset"
-                  currentDateTime="2015-04-08T20:02:59"
+                  currentDateTime="2015-06-26T18:34:08"
                   relayAlertState="unset" >
         </hid:Door>
     </hid:Doors>
 </VertXMessage>
+

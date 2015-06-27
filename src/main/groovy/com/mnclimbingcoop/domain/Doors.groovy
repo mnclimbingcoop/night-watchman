@@ -4,16 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class Doors {
 
     @JacksonXmlProperty(isAttribute=true)
-    String action
+    Action action
 
     @JacksonXmlProperty(isAttribute=true)
-    String command
+    DoorCommand command
 
     @JacksonXmlProperty(isAttribute=true)
-    String responseFormat
+    ResponseFormat responseFormat
 
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='Door')

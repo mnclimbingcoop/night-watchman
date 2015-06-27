@@ -10,15 +10,32 @@ LIST
 
 CREATE
 
-https://10.19.4.130/cgi-bin/vertx_xml.cgi?XML=<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="AD"><hid:Cardholder forename="Test" middleName="M" surname="Aaaaaa" exemptFromPassback="true" extendedAccess="false" confirmingPin="" email="test@zirbes.org" custom1="c1" custom2="c2" phone="612-296-3127" /></hid:Cardholders></VertXMessage>
-
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="AD"><hid:Cardholder forename="Test" middleName="M" surname="Aaaaaa" exemptFromPassback="true" extendedAccess="false" confirmingPin="" email="test@zirbes.org" custom1="c1" custom2="c2" phone="612-296-3127" /></hid:Cardholders></VertXMessage>
 <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"><hid:Cardholders action="RL"><hid:Cardholder cardholderID="647" forename="Test" middleName="M" surname="Aaaaaa" email="test@zirbes.org" phone="612-296-3127" custom1="c1" custom2="c2" roleSetID="647" pinCommands="false" confirmingPinExempt="false" exemptFromPassback="true" extendedAccess="false" /></hid:Cardholders></VertXMessage>
+
+UPDATE
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="UD" cardholderID="647"><hid:Cardholder forename="Test" middleName="N" surname="Aaaaaa" roleSetID="647" exemptFromPassback="true" extendedAccess="false" confirmingPin="" email="test-new@zirbes.org" custom1="c1-new" custom2="c2-new" phone="612-296-3127" /></hid:Cardholders></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+DELETE
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="DD" cardholderID="647"/></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+--------------
 
 ASSIGN CARD
 
 <?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Credentials action="UD" rawCardNumber="0165423C" isCard="true"><hid:Credential cardholderID="647"/></hid:Credentials></VertXMessage>
 <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
 
+REMOVE CARD
+
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Credentials action="UD" rawCardNumber="0165423C" isCard="true"><hid:Credential cardholderID=""/></hid:Credentials></VertXMessage>
+<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
+
+--------------
 
 ASSIGN SCHEDULE
 
@@ -28,21 +45,5 @@ ASSIGN SCHEDULE
 REMOVE SCHEDULE
 
 <?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:RoleSet action="UD" roleSetID="647"><hid:Roles></hid:Roles></hid:RoleSet></VertXMessage>
-<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
-
-REMOVE CARD
-
-<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Credentials action="UD" rawCardNumber="0165423C" isCard="true"><hid:Credential cardholderID=""/></hid:Credentials></VertXMessage>
-<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
-
-UPDATE
-
-https://10.19.4.130/cgi-bin/vertx_xml.cgi?XML=<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="UD" cardholderID="647"><hid:Cardholder forename="Test" middleName="N" surname="Aaaaaa" roleSetID="647" exemptFromPassback="true" extendedAccess="false" confirmingPin="" email="test-new@zirbes.org" custom1="c1-new" custom2="c2-new" phone="612-296-3127" /></hid:Cardholders></VertXMessage>
-<?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
-
-DELETE
-
-https://10.19.4.130/cgi-bin/vertx_xml.cgi?XML=<?xml version="1.0" encoding="UTF-8"?><VertXMessage><hid:Cardholders action="DD" cardholderID="647"/></VertXMessage>
-
 <?xml version="1.0" encoding="UTF-8"?><VertXMessage xmlns:hid="http://www.hidcorp.com/VertX"></VertXMessage>
 

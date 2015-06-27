@@ -1,8 +1,8 @@
 package com.mnclimbingcoop.domain
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonValue
+import groovy.transform.CompileStatic
 
+@CompileStatic
 enum State {
 
     set(true),

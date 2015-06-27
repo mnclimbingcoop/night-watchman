@@ -1,10 +1,11 @@
 package com.mnclimbingcoop.domain
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
-import java.time.LocalDateTime
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class Cardholder {
 
     @JacksonXmlProperty(isAttribute=true)
@@ -14,13 +15,31 @@ class Cardholder {
     String forename
 
     @JacksonXmlProperty(isAttribute=true)
+    String middleName
+
+    @JacksonXmlProperty(isAttribute=true)
     String surname
+
+    @JacksonXmlProperty(isAttribute=true)
+    String email
+
+    @JacksonXmlProperty(isAttribute=true)
+    String phone
+
+    @JacksonXmlProperty(isAttribute=true)
+    String custom1
+
+    @JacksonXmlProperty(isAttribute=true)
+    String custom2
 
     @JacksonXmlProperty(isAttribute=true)
     Integer roleSetID
 
     @JacksonXmlProperty(isAttribute=true)
     Boolean pinCommands
+
+    @JacksonXmlProperty(isAttribute=true)
+    String confirmingPin
 
     @JacksonXmlProperty(isAttribute=true)
     Boolean confirmingPinExempt

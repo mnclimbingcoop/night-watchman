@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:Schedules action="RL" responseFormat="customized">
+        <hid:Schedule scheduleID="1" scheduleName="24x7" specialDaysInUse="0" peopleAssigned="543" >
+            <hid:DaysWithAccess dayOfWeek="0" />
+            <hid:DaysWithAccess dayOfWeek="1" />
+            <hid:DaysWithAccess dayOfWeek="2" />
+            <hid:DaysWithAccess dayOfWeek="3" />
+            <hid:DaysWithAccess dayOfWeek="4" />
+            <hid:DaysWithAccess dayOfWeek="5" />
+            <hid:DaysWithAccess dayOfWeek="6" />
+        </hid:Schedule>
+        <hid:Schedule scheduleID="2" scheduleName="Banned" specialDaysInUse="0" peopleAssigned="1" >
+        </hid:Schedule>
+        <hid:Schedule scheduleID="0" scheduleName="GuardTime" specialDaysInUse="0" peopleAssigned="0" >
+        </hid:Schedule>
+    </hid:Schedules>
+</VertXMessage>
+
