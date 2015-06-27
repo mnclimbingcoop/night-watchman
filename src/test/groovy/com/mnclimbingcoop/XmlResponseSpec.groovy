@@ -3,7 +3,8 @@ package com.mnclimbingcoop
 import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.State
-import com.mnclimbingcoop.domain.VertXMessage
+import com.mnclimbingcoop.domain.VertXResponse
+import com.mnclimbingcoop.domain.type.State
 
 import java.time.LocalDateTime
 
@@ -14,7 +15,7 @@ class XmlResponseSpec extends XmlSpecification {
         String expected = xmlFromFixture('response/read-door1')
 
         when:
-        VertXMessage parsed = objectMapper.readValue(expected, VertXMessage)
+        VertXResponse parsed = objectMapper.readValue(expected, VertXResponse)
 
         then:
         parsed.doors.action == 'RD'
@@ -25,7 +26,7 @@ class XmlResponseSpec extends XmlSpecification {
     void 'xml marhalling from read log'() {
         given:
         String expected = xmlFromFixture('response/read-log1')
-        VertXMessage message = new VertXMessage(
+        VertXResponse message = new VertXResponse(
             eventMessages: new EventMessages(
                 action: 'RL',
                 historyRecordMarker: 2232,
@@ -49,7 +50,7 @@ class XmlResponseSpec extends XmlSpecification {
         String xml = objectMapper.writeValueAsString(message)
 
         and:
-        VertXMessage parsed = objectMapper.readValue(expected, VertXMessage)
+        VertXResponse parsed = objectMapper.readValue(expected, VertXResponse)
         String back = objectMapper.writeValueAsString(parsed)
 
         then:

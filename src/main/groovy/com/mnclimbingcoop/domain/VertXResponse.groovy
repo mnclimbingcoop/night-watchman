@@ -7,7 +7,8 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 @JacksonXmlRootElement()
-class VertXMessage {
+@JacksonXmlRootElement(localName='VertXMessage')
+class VertXResponse {
 
     @JacksonXmlProperty(localName='AlertActions')
     AlertActions alerts

@@ -1,6 +1,7 @@
 package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.mnclimbingcoop.domain.type.State
 
 import groovy.transform.CompileStatic
 

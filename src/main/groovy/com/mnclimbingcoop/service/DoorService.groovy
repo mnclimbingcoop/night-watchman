@@ -2,7 +2,7 @@ package com.mnclimbingcoop
 
 import com.mnclimbingcoop.client.HidEdgeProApi
 import com.mnclimbingcoop.domain.Door
-import com.mnclimbingcoop.domain.VertXMessage
+import com.mnclimbingcoop.domain.VertXResponse
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -28,7 +28,7 @@ class DoorService {
         hidService.doors.each{ String name ->
             HidEdgeProApi api = hidService.getApi(name)
             String request = requestBuilder.doorStatus()
-            VertXMessage response = api.get(request)
+            VertXResponse response = api.get(request)
             Door door = response.doors?.door
             if (door) {
                 log.info "Door [${name}]: ${door.doorName} - ${door.relayState}"

@@ -1,28 +1,30 @@
-package com.mnclimbingcoop.domain
+package com.mnclimbingcoop.domain.type
 
 import groovy.transform.CompileStatic
 
 @CompileStatic
 enum ResponseFormat {
 
-    EXPANDED('expanded')
+    EXPANDED('expanded'),
+    STATUS('status'),
+    CUSTOMIZED('customized')
 
-    final String xmlValue
+    final String displayValue
 
-    ResponseFormat(String xmlValue) {
-        this.xmlValue = xmlValue
+    ResponseFormat(String displayValue) {
+        this.displayValue = displayValue
     }
 
     @JsonValue
     String toString() {
-        xmlValue
+        displayValue
     }
 
     @JsonCreator
     static ResponseFormat fromString(String value) {
         if (value == null) { return null }
         ResponseFormat type = values().find {
-            it.xmlValue.equalsIgnoreCase(value) || it.name().equalsIgnoreCase(value)
+            it.displayValue.equalsIgnoreCase(value) || it.name().equalsIgnoreCase(value)
         }
         if (!type && (value != 'null')) {
             String errorMessage = "No matching '${ResponseFormat}' found for '${value}' expected one of ${values()}"
