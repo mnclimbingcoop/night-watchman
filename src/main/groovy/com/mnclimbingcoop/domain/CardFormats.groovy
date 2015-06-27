@@ -7,16 +7,29 @@ import com.mnclimbingcoop.domain.type.ResponseFormat
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class CardFormats {
+class CardFormats extends AbstractEntityCollection {
 
     @JacksonXmlProperty(isAttribute=true)
-    Action action
+    Integer cardFormatID
 
     @JacksonXmlProperty(isAttribute=true)
-    ResponseFormat responseFormat
+    String cardFormatsInUse
+
+    @JacksonXmlProperty(isAttribute=true)
+    String totalCardFormats
+
+    @Override
+    Integer getInUse() { cardFormatsInUse }
+
+    @Override
+    Integer getTotal() { totalCardFormats }
 
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='CardFormat')
     List<CardFormat> cardFormats
+
+    @JacksonXmlElementWrapper(useWrapping=false)
+    @JacksonXmlProperty(localName='hid:CardFormat')
+    CardFormat cardFormat
 
 }

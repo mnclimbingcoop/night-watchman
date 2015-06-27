@@ -6,10 +6,13 @@ import com.mnclimbingcoop.domain.type.Action
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class AlertActions {
+class AlertActions extends AbstractEntityCollection {
 
-    @JacksonXmlProperty(isAttribute=true)
-    Action action
+    @Override
+    Integer getInUse() { 0 }
+
+    @Override
+    Integer getTotal() { 0 }
 
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='AlertAction')

@@ -8,28 +8,13 @@ import com.mnclimbingcoop.domain.type.ResponseFormat
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class Credentials {
-
-    @JacksonXmlProperty(isAttribute=true)
-    Action action
-
-    @JacksonXmlProperty(isAttribute=true)
-    ResponseFormat responseFormat
+class Credentials extends AbstractEntityCollection {
 
     @JacksonXmlProperty(isAttribute=true)
     String rawCardNumber
 
     @JacksonXmlProperty(isAttribute=true)
     Boolean isCard
-
-    @JacksonXmlProperty(isAttribute=true)
-    Integer recordOffset
-
-    @JacksonXmlProperty(isAttribute=true)
-    Integer recordCount
-
-    @JacksonXmlProperty(isAttribute=true)
-    Boolean moreRecords
 
     @JacksonXmlProperty(isAttribute=true)
     Integer credentialsInUse
@@ -39,6 +24,12 @@ class Credentials {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer unassignedCredentials
+
+    @Override
+    Integer getInUse() { credentialsInUse }
+
+    @Override
+    Integer getTotal() { totalCredentials }
 
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='Credential')

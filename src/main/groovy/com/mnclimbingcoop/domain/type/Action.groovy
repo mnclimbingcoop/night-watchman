@@ -5,9 +5,10 @@ import groovy.transform.CompileStatic
 @CompileStatic
 enum Action {
 
+    ADD_DATA('AD', 'Add Data'),
     COMMAND_MODE('CM', 'Command Mode'),
     DELETE_DATA('DD', 'Delete Data'),
-    DISPLAY_RECENT('DR', 'Display Recent'),
+    DESCRIBE_RECORDS('DR', 'Describe Records'),
     LIST_RECORDS('LR', 'List Records'),
     RESPONSE_LIST('RL', 'Response List'),
     UPDATE_DATA('UD', 'Update Data')
