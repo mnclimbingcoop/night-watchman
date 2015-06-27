@@ -1,8 +1,8 @@
 package com.mnclimbingcoop.domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.mnclimbingcoop.domain.type.Action
 
 import groovy.transform.CompileStatic
 

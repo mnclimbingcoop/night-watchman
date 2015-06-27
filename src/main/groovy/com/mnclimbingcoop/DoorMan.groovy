@@ -5,7 +5,6 @@ import com.mnclimbingcoop.client.ClientBuilder
 import com.mnclimbingcoop.client.HidEdgeProApi
 import com.mnclimbingcoop.config.DoorConfiguration
 import com.mnclimbingcoop.domain.Door
-import com.mnclimbingcoop.domain.VertXMessage
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j

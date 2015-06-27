@@ -1,4 +1,4 @@
-package com.mnclimbingcoop.domain
+package com.mnclimbingcoop.domain.type
 
 import groovy.transform.CompileStatic
 
