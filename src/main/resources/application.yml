@@ -2,16 +2,19 @@ management.port: 8080
 hidEdgePro:
   url: https://10.19.4.130
   username: admin
-  password: S3cret
+  password: bub3z133b!
   devices:
     coop:
       description: Coop Door
       url: http://10.19.4.130
-      password: otherPassw0rd
+    external:
+      description: External Door
+      url: http://10.19.4.129
+      # username: user
+      # password: otherPassw0rd
+application:
   cloud:
+    sync:
+      server: 12.34.56.78
+      apiKey: ASDFGHJKLQWERTYUIOPZXCVBNM1234567890
 
-#   - description: Coop Door
-#     url: https://10.19.4.130
-#   external
-#   - description: External Door
-#     url: https://10.19.4.129
