@@ -10,7 +10,6 @@ class CardholderRequest extends VertXRequest {
 
     CardholderRequest() {
         cardholders = new Cardholders(action: Action.DESCRIBE_RECORDS)
-        return this
     }
 
     CardholderRequest overview() {

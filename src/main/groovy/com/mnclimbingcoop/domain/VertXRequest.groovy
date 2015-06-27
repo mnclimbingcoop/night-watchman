@@ -40,7 +40,7 @@ class VertXRequest {
     Schedules schedules
 
     @JacksonXmlProperty(localName='hid:System')
-    System schedules
+    System system
 
     @JacksonXmlProperty(localName='hid:Time')
     Time time

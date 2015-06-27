@@ -37,6 +37,8 @@ dependencies {
     compile "com.squareup.okhttp:okhttp-urlconnection:${okhttpVersion}"
     compile "com.squareup.okhttp:okhttp:${okhttpVersion}"
 
+    compile 'joda-time:joda-time:2.4'
+
 
     //compile "com.squareup.retrofit:retrofit-converters:${retrofitVersion}"
     compile "com.squareup.retrofit:converter-jackson:${retrofitVersion}"

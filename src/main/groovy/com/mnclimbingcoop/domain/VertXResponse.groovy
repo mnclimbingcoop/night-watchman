@@ -6,7 +6,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import groovy.transform.CompileStatic
 
 @CompileStatic
-@JacksonXmlRootElement()
 @JacksonXmlRootElement(localName='VertXMessage')
 class VertXResponse {
 

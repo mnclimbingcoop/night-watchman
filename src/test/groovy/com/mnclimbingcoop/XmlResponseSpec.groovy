@@ -4,6 +4,7 @@ import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.State
 import com.mnclimbingcoop.domain.VertXResponse
+import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.State
 
 import java.time.LocalDateTime
@@ -12,23 +13,24 @@ class XmlResponseSpec extends XmlSpecification {
 
     void 'xml marshalling from read door'() {
         given:
-        String expected = xmlFromFixture('response/read-door1')
+        String expected = xmlFromFixture('response/door/list-door')
+        println expected
 
         when:
         VertXResponse parsed = objectMapper.readValue(expected, VertXResponse)
 
         then:
-        parsed.doors.action == 'RD'
+        parsed.doors.action == Action.RESPONSE_DATA
         parsed.doors.doors[0].doorName == 'HID Edge Solo'
-        parsed.doors.doors[0].relayState == State.set
+        parsed.doors.doors[0].relayState == State.UNSET
     }
 
     void 'xml marhalling from read log'() {
         given:
-        String expected = xmlFromFixture('response/read-log1')
+        String expected = xmlFromFixture('response/event/list-events1')
         VertXResponse message = new VertXResponse(
             eventMessages: new EventMessages(
-                action: 'RL',
+                action: Action.RESPONSE_LIST,
                 historyRecordMarker: 2232,
                 historyTimestamp:  1428535349,
                 recordCount: 1,

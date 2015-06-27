@@ -10,7 +10,6 @@ class ScheduleRequest extends VertXRequest {
 
     ScheduleRequest() {
         schedules = new Schedules(action: Action.DESCRIBE_RECORDS)
-        return this
     }
 
     ScheduleRequest overview() {

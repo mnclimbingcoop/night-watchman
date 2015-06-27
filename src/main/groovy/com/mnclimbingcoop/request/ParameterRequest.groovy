@@ -8,7 +8,6 @@ class ParameterRequest extends VertXRequest {
 
     ParameterRequest() {
         parameters = new EdgeSoloParameters(action: Action.DESCRIBE_RECORDS)
-        return this
     }
 
     ParameterRequest get() {

@@ -10,10 +10,10 @@ import groovy.transform.CompileStatic
 class EventMessages extends AbstractEntityCollection {
 
     @JacksonXmlProperty(isAttribute=true)
-    String eventsInUse
+    Integer eventsInUse
 
     @JacksonXmlProperty(isAttribute=true)
-    String totalEvents
+    Integer totalEvents
 
     @JacksonXmlProperty(isAttribute=true)
     Integer currentRecordMarker

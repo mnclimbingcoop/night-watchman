@@ -1,8 +1,9 @@
 package com.mnclimbingcoop
 
-import com.mnclimbingcoop.client.HidEdgeProApi
 import com.mnclimbingcoop.domain.Door
+import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
+import com.mnclimbingcoop.request.DoorRequest
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -24,24 +25,25 @@ class DoorService {
         this.requestBuilder = requestBuilder
     }
 
-    void getDoorStatus() {
+    Map<String, Door> getDoors() {
+        Map<String, Door> doors = [:]
+
         hidService.doors.each{ String name ->
-            HidEdgeProApi api = hidService.getApi(name)
-            String request = requestBuilder.doorStatus()
-            VertXResponse response = api.get(request)
+
+            VertXRequest xml = new DoorRequest().status()
+            String request = requestBuilder.wrap(xml)
+
+            VertXResponse response = hidService.get(name, request)
+
             Door door = response.doors?.door
             if (door) {
-                log.info "Door [${name}]: ${door.doorName} - ${door.relayState}"
+                doors.name = door
             } else {
-                log.error "NO DOOR! ${name}"
+                log.error "No door named '${name}' found!"
             }
         }
+        return doors
     }
 
-    void recentDoorEvents() {
-    }
-
-    void validateDoorState() {
-    }
 
 }

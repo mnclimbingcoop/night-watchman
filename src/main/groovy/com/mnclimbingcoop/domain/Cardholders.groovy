@@ -14,10 +14,10 @@ class Cardholders extends AbstractEntityCollection {
     Integer cardholderID
 
     @JacksonXmlProperty(isAttribute=true)
-    String cardholdersInUse
+    Integer cardholdersInUse
 
     @JacksonXmlProperty(isAttribute=true)
-    String totalCardholders
+    Integer totalCardholders
 
     @Override
     Integer getInUse() { cardholdersInUse }

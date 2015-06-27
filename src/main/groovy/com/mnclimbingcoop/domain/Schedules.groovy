@@ -14,10 +14,10 @@ class Schedules extends AbstractEntityCollection {
     Integer scheduleID
 
     @JacksonXmlProperty(isAttribute=true)
-    String schedulesInUse
+    Integer schedulesInUse
 
     @JacksonXmlProperty(isAttribute=true)
-    String totalSchedules
+    Integer totalSchedules
 
     @Override
     Integer getInUse() { schedulesInUse }

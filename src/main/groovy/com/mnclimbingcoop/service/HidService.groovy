@@ -1,9 +1,10 @@
 package com.mnclimbingcoop
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.mnclimbingcoop.client.ClientBuilder
 import com.mnclimbingcoop.client.HidEdgeProApi
 import com.mnclimbingcoop.config.DoorConfiguration
+import com.mnclimbingcoop.domain.VertXRequest
+import com.mnclimbingcoop.domain.VertXResponse
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -43,8 +44,12 @@ class HidService {
         apis.keySet()
     }
 
-    HidEdgeProApi getApi(String name) {
-        return apis[name]
+    VertXResponse get(String name, String xml) {
+        return apis[name].get(xml)
+    }
+
+    VertXResponse get(String name, VertXRequest xml) {
+        return apis[name].get(xml)
     }
 
 }

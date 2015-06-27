@@ -8,7 +8,6 @@ class SystemRequest extends VertXRequest {
 
     SystemRequest() {
         system = new System(action: Action.DESCRIBE_RECORDS)
-        return this
     }
 
     SystemRequest get() {

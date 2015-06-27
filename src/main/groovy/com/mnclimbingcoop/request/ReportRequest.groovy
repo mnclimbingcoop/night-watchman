@@ -11,7 +11,6 @@ class ReportRequest extends VertXRequest {
 
     ReportRequest() {
         reports = new Reports(action: Action.COMMAND_MODE, type: ReportType.EVENTS)
-        return this
     }
 
     ReportRequest events() {
