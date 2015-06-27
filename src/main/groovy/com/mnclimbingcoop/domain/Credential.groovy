@@ -28,7 +28,7 @@ class Credential {
     LocalDateTime endTime
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer cardholderID
+    String cardholderID
 
     @JacksonXmlProperty(isAttribute=true)
     Boolean extendedAccess

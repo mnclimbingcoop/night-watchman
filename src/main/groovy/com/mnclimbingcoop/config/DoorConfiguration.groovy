@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 /** Class representation of the YML file */
 @CompileStatic
-@ConfigurationProperties(prefix="hidEdgePro")
+@ConfigurationProperties(prefix='hidEdgePro')
 @Named
 public class DoorConfiguration {
 

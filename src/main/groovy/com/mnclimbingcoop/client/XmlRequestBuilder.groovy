@@ -20,7 +20,7 @@ class XmlRequestBuilder {
     }
 
     VertXRequest displayRecent() {
-        new VertXRequest(messages: new EventMessages(action: Actions.DISPLAY_RECENT))
+        new VertXRequest(messages: new EventMessages(action: Actions.DESCRIBE_RECORDS))
     }
 
     VertXRequest listRecent() {

@@ -8,31 +8,22 @@ import com.mnclimbingcoop.domain.type.ResponseFormat
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class Cardholders {
-
-    @JacksonXmlProperty(isAttribute=true)
-    Action action
+class Cardholders extends AbstractEntityCollection {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer cardholderID
-
-    @JacksonXmlProperty(isAttribute=true)
-    ResponseFormat responseFormat
-
-    @JacksonXmlProperty(isAttribute=true)
-    Integer recordOffset
-
-    @JacksonXmlProperty(isAttribute=true)
-    Integer recordCount
-
-    @JacksonXmlProperty(isAttribute=true)
-    Boolean moreRecords
 
     @JacksonXmlProperty(isAttribute=true)
     String cardholdersInUse
 
     @JacksonXmlProperty(isAttribute=true)
     String totalCardholders
+
+    @Override
+    Integer getInUse() { cardholdersInUse }
+
+    @Override
+    Integer getTotal() { totalCardholders }
 
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='Cardholder')

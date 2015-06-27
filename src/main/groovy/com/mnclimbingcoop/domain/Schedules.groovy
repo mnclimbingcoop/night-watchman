@@ -8,31 +8,22 @@ import com.mnclimbingcoop.domain.type.ResponseFormat
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class Schedules {
-
-    @JacksonXmlProperty(isAttribute=true)
-    Action action
-
-    @JacksonXmlProperty(isAttribute=true)
-    ResponseFormat responseFormat
+class Schedules extends AbstractEntityCollection {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer scheduleID
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer recordOffset
+    String schedulesInUse
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer recordCount
+    String totalSchedules
 
-    @JacksonXmlProperty(isAttribute=true)
-    Boolean moreRecords
+    @Override
+    Integer getInUse() { schedulesInUse }
 
-    @JacksonXmlProperty(isAttribute=true)
-    String schedulesInUse="2"
-
-    @JacksonXmlProperty(isAttribute=true)
-    String totalSchedules="8"
+    @Override
+    Integer getTotal() { totalSchedules }
 
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='Schedule')

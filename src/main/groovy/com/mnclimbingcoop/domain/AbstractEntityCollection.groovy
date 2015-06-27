@@ -3,38 +3,30 @@ package com.mnclimbingcoop.domain
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.mnclimbingcoop.domain.type.Action
+import com.mnclimbingcoop.domain.type.ResponseFormat
 
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class EventMessages extends AbstractEntityCollection {
+abstract class AbstractEntityCollection {
 
     @JacksonXmlProperty(isAttribute=true)
-    String eventsInUse
+    Action action
 
     @JacksonXmlProperty(isAttribute=true)
-    String totalEvents
+    ResponseFormat responseFormat
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer currentRecordMarker
+    Integer recordOffset
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer historyRecordMarker
+    Integer recordCount
 
     @JacksonXmlProperty(isAttribute=true)
-    Long currentTimestamp
+    Boolean moreRecords
 
-    @JacksonXmlProperty(isAttribute=true)
-    Long historyTimestamp
+    abstract Integer getInUse()
 
-    @Override
-    Integer getInUse() { eventsInUse }
-
-    @Override
-    Integer getTotal() { totalEvents }
-
-    @JacksonXmlElementWrapper(useWrapping=false)
-    @JacksonXmlProperty(localName='EventMessage')
-    List<EventMessage> eventMessages
+    abstract Integer getTotal()
 
 }
