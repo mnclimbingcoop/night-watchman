@@ -13,7 +13,10 @@ class XmlSpecification extends Specification {
     }
 
     protected String stripWhitespace(String str) {
-        return str.replaceAll(/\n */, ' ').replaceFirst(/^ */, '')
+        return str.replaceAll(/\n */, ' ')
+                  .replaceAll('> <', '><')
+                  .replaceAll(/ *$/, '')
+                  .replaceFirst(/^ */, '')
     }
 
     protected String xmlFromFixture(String fixture) {

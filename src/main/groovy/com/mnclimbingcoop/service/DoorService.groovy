@@ -17,12 +17,10 @@ import javax.inject.Named
 class DoorService {
 
     protected final HidService hidService
-    protected final UrlRequestBuilder requestBuilder
 
     @Inject
-    DoorService(HidService hidService, UrlRequestBuilder requestBuilder) {
+    DoorService(HidService hidService) {
         this.hidService = hidService
-        this.requestBuilder = requestBuilder
     }
 
     Map<String, Door> getDoors() {
@@ -30,9 +28,7 @@ class DoorService {
 
         hidService.doors.each{ String name ->
 
-            VertXRequest xml = new DoorRequest().status()
-            String request = requestBuilder.wrap(xml)
-
+            VertXRequest request = new DoorRequest().status()
             VertXResponse response = hidService.get(name, request)
 
             Door door = response.doors?.door

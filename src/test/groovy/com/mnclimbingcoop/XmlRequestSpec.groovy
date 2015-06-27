@@ -7,12 +7,6 @@ import org.joda.time.LocalDateTime
 
 class XmlRequestSpec extends XmlSpecification {
 
-    UrlRequestBuilder urlBuilder
-
-    void setup() {
-        urlBuilder = new UrlRequestBuilder(objectMapper)
-    }
-
     void 'event overview'() {
         expect:
         xmlFromFixture('request/event/list-overview-events') == toXML(new EventRequest().overview())
