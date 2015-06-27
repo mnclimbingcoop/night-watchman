@@ -6,6 +6,8 @@ import com.mnclimbingcoop.config.DoorConfiguration
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
@@ -20,10 +22,12 @@ class HidService {
 
     protected final DoorConfiguration config
     protected final Map<String, HidEdgeProApi> apis = [:]
+    protected final XmlMapper objectMapper
 
     @Inject
-    HidService(DoorConfiguration config) {
+    HidService(DoorConfiguration config, XmlMapper objectMapper) {
         this.config = config
+        this.objectMapper = objectMapper
     }
 
     @PostConstruct
@@ -48,8 +52,12 @@ class HidService {
         return apis[name].get(xml)
     }
 
-    VertXResponse get(String name, VertXRequest xml) {
-        return apis[name].get(xml)
+    VertXResponse get(String name, VertXRequest request) {
+        return apis[name].get(wrap(request))
+    }
+
+    protected String wrap(VertXRequest request) {
+        objectMapper.writeValueAsString(request)
     }
 
 }
