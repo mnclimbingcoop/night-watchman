@@ -1,4 +1,4 @@
-package com.mnclimbingcoop
+package com.mnclimbingcoop.service
 
 import com.mnclimbingcoop.domain.Door
 import com.mnclimbingcoop.domain.VertXRequest
@@ -24,21 +24,30 @@ class DoorService {
     }
 
     Map<String, Door> getDoors() {
-        Map<String, Door> doors = [:]
-
-        hidService.doors.each{ String name ->
-
-            VertXRequest request = new DoorRequest().status()
-            VertXResponse response = hidService.get(name, request)
-
-            Door door = response.doors?.door
-            if (door) {
-                doors.name = door
-            } else {
-                log.error "No door named '${name}' found!"
-            }
+        VertXRequest request = new DoorRequest().status()
+        return hidService.getAll(request) { String name, VertXResponse resp ->
+            return [name, resp.doors?.door ]
         }
-        return doors
+    }
+
+    Door getDoor(String name) {
+        VertXRequest request = new DoorRequest().status()
+        return hidService.get(name, request)?.doors?.door
+    }
+
+    void unlockDoor(String name) {
+        VertXRequest request = new DoorRequest().unlock()
+        hidService.get(name, request)
+    }
+
+    void lockDoor(String name) {
+        VertXRequest request = new DoorRequest().lock()
+        hidService.get(name, request)
+    }
+
+    void openDoor(String name) {
+        VertXRequest request = new DoorRequest().grantAccess()
+        hidService.get(name, request)
     }
 
 

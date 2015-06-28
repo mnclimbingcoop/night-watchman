@@ -1,15 +1,11 @@
 package com.mnclimbingcoop
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.mnclimbingcoop.client.ClientBuilder
-import com.mnclimbingcoop.client.HidEdgeProApi
-import com.mnclimbingcoop.config.DoorConfiguration
 import com.mnclimbingcoop.domain.Door
+import com.mnclimbingcoop.service.DoorService
+import com.mnclimbingcoop.service.DoorSurveyService
 
-import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
-import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -20,14 +16,17 @@ import org.springframework.scheduling.annotation.Scheduled
 class DoorMan {
 
     protected final DoorService doorService
+    protected final DoorSurveyService doorSurveyService
 
     @Inject
-    DoorMan(DoorService doorService) {
+    DoorMan(DoorService doorService, DoorSurveyService doorSurveyService) {
         this.doorService = doorService
+        this.doorSurveyService = doorSurveyService
     }
 
-    @Scheduled(fixedRate = 10000l)
-    void ping() {
-        doorService.getDoorStatus()
+    @Scheduled(fixedRate = 300000l)
+    void survey() {
+        doorSurveyService.survey()
     }
+
 }
