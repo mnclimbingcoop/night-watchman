@@ -16,7 +16,7 @@ class Credential {
     Boolean isCard
 
     @JacksonXmlProperty(isAttribute=true)
-    Integer cardNumber
+    String cardNumber
 
     @JacksonXmlProperty(isAttribute=true)
     Integer formatID

@@ -1,4 +1,4 @@
-package com.mnclimbingcoop
+package com.mnclimbingcoop.service
 
 import com.mnclimbingcoop.client.ClientBuilder
 import com.mnclimbingcoop.client.HidEdgeProApi
@@ -48,12 +48,24 @@ class HidService {
         apis.keySet()
     }
 
-    VertXResponse get(String name, String xml) {
-        return apis[name].get(xml)
+    Map<String, Object> getAll(VertXRequest request, Closure closure) {
+        return getAll(request).collectEntries(closure)
+    }
+
+    Map<String, VertXResponse> getAll(VertXRequest request) {
+        Map<String, VertXResponse> responses = [:]
+        doors.each{ String name ->
+            responses[name] = get(name, request)
+        }
+        return responses
     }
 
     VertXResponse get(String name, VertXRequest request) {
-        return apis[name].get(wrap(request))
+        return get(name, wrap(request))
+    }
+
+    VertXResponse get(String name, String xml) {
+        return apis[name].get(xml)
     }
 
     protected String wrap(VertXRequest request) {

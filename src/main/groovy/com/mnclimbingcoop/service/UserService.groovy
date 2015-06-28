@@ -1,4 +1,4 @@
-package com.mnclimbingcoop
+package com.mnclimbingcoop.service
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
