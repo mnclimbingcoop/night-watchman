@@ -45,14 +45,14 @@ class DoorSurveyService {
             Integer offset = 0
             // initialize list
             cardholderMap[doorName] = []
-            while (offset < (inUse - (PAGE_SIZE + 1))) {
+            while (offset <= inUse) {
                 Cardholders cardholders = cardholderService.listCardholders(doorName, offset, PAGE_SIZE)
                 cardholders.cardholders.each{ Cardholder cardholder ->
                     log.info " + adding [#${cardholder.cardholderID}]: ${cardholder.forename} ${cardholder.surname}"
                     cardholderMap[doorName] << cardholder
                 }
                 offset += PAGE_SIZE
-                    log.info " ? retrieved ${offset} out of ${inUse} card holders for door ${doorName}."
+                log.info " ? retrieved ${offset} out of ${inUse} card holders for door ${doorName}."
             }
             log.info "Done retrieving ${cardholderMap[doorName].size()} cardholders for ${doorName} door."
         }
