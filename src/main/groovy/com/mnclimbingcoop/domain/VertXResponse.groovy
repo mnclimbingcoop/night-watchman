@@ -27,12 +27,19 @@ class VertXResponse {
     @JacksonXmlProperty(localName='EventMessages')
     EventMessages eventMessages
 
+    @JacksonXmlProperty(localName='EdgeSoloParameters')
+    EdgeSoloParameters parameters
+
     @JacksonXmlProperty(localName='Readers')
     Readers readers
 
     @JacksonXmlProperty(localName='Schedules')
     Schedules schedules
 
-    @JacksonXmlProperty(localName='hid:Time')
+    @JacksonXmlProperty(localName='System')
+    System system
+
+    @JacksonXmlProperty(localName='Time')
     Time time
+
 }

@@ -1,1 +1,15 @@
-???
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:System action="RD"
+                buildDate="09/10/2010"
+                internalID="1"
+                vertXModel="ES400"
+                buildNumber="51"
+                OEMModel="ES400"
+                vertXRelease="1.2.0"
+                acVersion="2.2.8.87"
+                isUserPasswordSet="true"
+                isAdminPasswordSet="true"
+                languages="de_DE en_EN es_ES fr_FR it_IT nl_NL pt_BR ru_RU tr_TR " />
+</VertXMessage>
+

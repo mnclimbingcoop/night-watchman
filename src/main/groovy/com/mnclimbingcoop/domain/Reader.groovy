@@ -7,7 +7,7 @@ import groovy.transform.CompileStatic
 import java.time.LocalDateTime
 
 @CompileStatic
-class Reader {
+class Reader implements Comparable<Reader> {
 
     @JacksonXmlProperty(isAttribute=true)
     String readerName
@@ -57,4 +57,8 @@ class Reader {
     @JacksonXmlProperty(isAttribute=true)
     Integer keypadType
 
+    @Override
+    int compareTo(Reader other) {
+        return this.interfaceID <=> other.interfaceID
+    }
 }

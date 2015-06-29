@@ -8,7 +8,7 @@ import groovy.transform.CompileStatic
 import java.time.LocalDateTime
 
 @CompileStatic
-class Door {
+class Door implements Comparable<Door> {
 
     @JacksonXmlProperty(isAttribute=true)
     String doorName
@@ -49,4 +49,8 @@ class Door {
     @JacksonXmlProperty(isAttribute=true)
     State relayAlertState
 
+    @Override
+    int compareTo(Door other) {
+        return this.doorName <=> other.doorName
+    }
 }

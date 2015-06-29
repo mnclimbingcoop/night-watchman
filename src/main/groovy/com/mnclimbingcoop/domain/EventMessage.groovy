@@ -7,7 +7,7 @@ import groovy.transform.CompileStatic
 import java.time.LocalDateTime
 
 @CompileStatic
-class EventMessage {
+class EventMessage implements Comparable<EventMessage> {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer cardholderID
@@ -24,4 +24,8 @@ class EventMessage {
     @JacksonXmlProperty(isAttribute=true)
     LocalDateTime timestamp
 
+    @Override
+    int compareTo(EventMessage other) {
+        return this.cardholderID <=> other.cardholderID
+    }
 }

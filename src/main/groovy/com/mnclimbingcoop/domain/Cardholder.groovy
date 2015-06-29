@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class Cardholder {
+class Cardholder implements Comparable<Cardholder> {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer cardholderID
@@ -58,4 +58,8 @@ class Cardholder {
     @JacksonXmlProperty(localName='Role')
     List<Role> roles
 
+    @Override
+    int compareTo(Cardholder other) {
+        return this.cardholderID <=> other.cardholderID
+    }
 }
