@@ -1,15 +1,17 @@
 package com.mnclimbingcoop.service
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.mnclimbingcoop.client.ClientBuilder
 import com.mnclimbingcoop.client.HidEdgeProApi
 import com.mnclimbingcoop.config.DoorConfiguration
+import com.mnclimbingcoop.domain.EdgeSoloState
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
+
+import java.util.concurrent.ConcurrentHashMap
 
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -21,8 +23,11 @@ import javax.inject.Named
 class HidService {
 
     protected final DoorConfiguration config
-    protected final Map<String, HidEdgeProApi> apis = [:]
+    protected final Map<String, HidEdgeProApi> apis = new ConcurrentHashMap<String, HidEdgeProApi>()
     protected final XmlMapper objectMapper
+
+    // Stores the state of all HID edge units
+    Map<String, EdgeSoloState> hidStates = new ConcurrentHashMap<String, EdgeSoloState>()
 
     @Inject
     HidService(DoorConfiguration config, XmlMapper objectMapper) {
@@ -40,6 +45,7 @@ class HidService {
             apis[name] = new ClientBuilder().withEndpoint(device.url)
                                             .withAuthentication(username, password)
                                             .build(HidEdgeProApi)
+            hidStates[name] = new EdgeSoloState()
         }
 
     }

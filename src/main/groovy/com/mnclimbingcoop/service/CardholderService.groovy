@@ -24,27 +24,35 @@ class CardholderService {
         this.hidService = hidService
     }
 
-    Map<String, Cardholders> getMetaData() {
+    Map<String, Cardholders> overview() {
         VertXRequest request = new CardholderRequest().overview()
         return hidService.getAll(request) { String name, VertXResponse resp ->
             return [ name, resp.cardholders ]
         }
     }
 
-    Cardholders getMetaData(String name) {
+    Cardholders overview(String name) {
         VertXRequest request = new CardholderRequest().overview()
         return hidService.get(name, request)?.cardholders
 
     }
 
-    Cardholders listCardholders(String name, Integer offset, Integer count) {
+    Cardholders list(String name, Integer offset, Integer count) {
         VertXRequest request = new CardholderRequest().list(offset, count)
-        return hidService.get(name, request)?.cardholders
+        Cardholders cardholders = hidService.get(name, request)?.cardholders
+        if (cardholders) {
+            hidService.hidStates[name].cardholders.addAll(cardholders.cardholders)
+        }
+        return cardholders
     }
 
-    Cardholder getCardholder(String name, Integer cardholderID) {
-        VertXRequest request = new CardholderRequest().show(cardholderID)
-        return hidService.get(name, request)?.cardholders?.cardholder
+    Cardholder show(String name, Integer id) {
+        VertXRequest request = new CardholderRequest().show(id)
+        Cardholder cardholder =  hidService.get(name, request)?.cardholders?.cardholder
+        if (cardholder) {
+            hidService.hidStates[name].cardholders << cardholder
+        }
+        return cardholder
     }
 
 }

@@ -6,7 +6,7 @@ import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
-class ScheduleRequest extends VertXRequest {
+class ScheduleRequest extends VertXRequest implements SimpleEntityRequest<ScheduleRequest> {
 
     ScheduleRequest() {
         schedules = new Schedules(action: Action.DESCRIBE_RECORDS)
@@ -17,18 +17,18 @@ class ScheduleRequest extends VertXRequest {
         return this
     }
 
-    ScheduleRequest list(Integer offset = 0,
-                         Integer count = 10) {
+    @Override
+    ScheduleRequest list() {
+        schedules = new Schedules(action: Action.LIST_RECORDS, responseFormat: ResponseFormat.CUSTOMIZED)
+        return this
+    }
+
+    ScheduleRequest list(Integer offset, Integer count) {
         schedules = new Schedules(
             action: Action.LIST_RECORDS,
             recordOffset: offset,
             recordCount: count
         )
-        return this
-    }
-
-    ScheduleRequest listFull() {
-        schedules = new Schedules(action: Action.LIST_RECORDS, responseFormat: ResponseFormat.CUSTOMIZED)
         return this
     }
 

@@ -4,7 +4,7 @@ import com.mnclimbingcoop.domain.Readers
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
-class ReaderRequest extends VertXRequest {
+class ReaderRequest extends VertXRequest implements SimpleEntityRequest<ReaderRequest> {
 
     static final Integer readerID = 1
 
@@ -12,7 +12,8 @@ class ReaderRequest extends VertXRequest {
         readers = new Readers(action: Action.LIST_RECORDS)
     }
 
-    ReaderRequest show() {
+    @Override
+    ReaderRequest list() {
         readers = new Readers(action: Action.LIST_RECORDS)
         return this
     }

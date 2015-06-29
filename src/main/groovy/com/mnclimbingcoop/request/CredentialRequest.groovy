@@ -8,20 +8,26 @@ import com.mnclimbingcoop.domain.type.ResponseFormat
 
 import org.joda.time.LocalDateTime
 
-class CredentialRequest extends VertXRequest {
+class CredentialRequest extends VertXRequest implements EntityCollectionRequest<CredentialRequest, Credential> {
 
     CredentialRequest() {
         credentials = new Credentials(action: Action.DESCRIBE_RECORDS)
     }
 
+    @Override
     CredentialRequest overview() {
         credentials = new Credentials(action: Action.DESCRIBE_RECORDS)
         return this
     }
 
-    CredentialRequest list(Integer offset = 0,
-                            Integer count = 10,
-                            ResponseFormat responseFormat = ResponseFormat.EXPANDED) {
+    @Override
+    CredentialRequest list(Integer offset, Integer count) {
+        return list(offset, count, ResponseFormat.EXPANDED)
+    }
+
+    CredentialRequest list(Integer offset,
+                            Integer count,
+                            ResponseFormat responseFormat) {
         credentials = new Credentials(
             action: Action.LIST_RECORDS,
             responseFormat: responseFormat,
@@ -31,9 +37,12 @@ class CredentialRequest extends VertXRequest {
         return this
     }
 
+    CredentialRequest show(Integer rawCardNumber) {
+        return show(rawCardNumber, ResponseFormat.EXPANDED)
+    }
 
-    CredentialRequest show(Integer rawCardNumber,
-                           ResponseFormat responseFormat = ResponseFormat.EXPANDED) {
+    @Override
+    CredentialRequest show(Integer rawCardNumber, ResponseFormat responseFormat) {
         credentials = new Credentials(
             action: Action.LIST_RECORDS,
             responseFormat: responseFormat,
@@ -43,13 +52,35 @@ class CredentialRequest extends VertXRequest {
         return this
     }
 
-    CredentialRequest bulkCreate() {
-        // TODO
+    @Override
+    CredentialRequest create(Credential credential) {
+        credentials = new Credentials(action: Action.ADD_DATA, credential: credential)
         return this
     }
 
-    CredentialRequest create(Credential credential) {
-        credentials = new Credentials(action: Action.ADD_DATA, credential: credential)
+    @Override
+    CredentialRequest update(Credential credential) {
+        credentials = new Credentials(
+            action: Action.UPDATE_DATA,
+            rawCardNumber: credential.rawCardNumber,
+            isCard: true,
+            credential: credential
+        )
+        return this
+    }
+
+    @Override
+    CredentialRequest delete(String rawCardNumber) {
+        credentials = new Credentials(
+            action: Action.DELETE_DATA,
+            rawCardNumber: rawCardNumber,
+            isCard: true
+        )
+        return this
+    }
+
+    CredentialRequest bulkCreate() {
+        // TODO
         return this
     }
 
@@ -81,16 +112,6 @@ class CredentialRequest extends VertXRequest {
             credential: new Credential(
                 cardholderID: ''
             )
-        )
-        return this
-    }
-
-
-    CredentialRequest delete(String rawCardNumber) {
-        credentials = new Credentials(
-            action: Action.DELETE_DATA,
-            rawCardNumber: rawCardNumber,
-            isCard: true
         )
         return this
     }
