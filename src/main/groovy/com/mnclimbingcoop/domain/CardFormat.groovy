@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class CardFormat {
+class CardFormat implements Comparable<CardFormat> {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer formatID
@@ -24,4 +24,8 @@ class CardFormat {
     @JacksonXmlProperty(localName='FixedField')
     List<FixedField> cardFormats
 
+    @Override
+    int compareTo(CardFormat other) {
+        return this.formatID <=> other.formatID
+    }
 }

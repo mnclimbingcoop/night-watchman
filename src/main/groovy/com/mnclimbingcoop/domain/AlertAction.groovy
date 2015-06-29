@@ -7,7 +7,7 @@ import groovy.transform.CompileStatic
 import java.time.LocalDateTime
 
 @CompileStatic
-class AlertAction {
+class AlertAction implements Comparable<AlertAction> {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer eventCode
@@ -17,5 +17,9 @@ class AlertAction {
 
     @JacksonXmlProperty(isAttribute=true)
     String value
+
+    int compareTo(AlertAction other) {
+        return this.eventCode <=> other.eventCode
+    }
 
 }

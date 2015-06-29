@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class Schedule {
+class Schedule implements Comparable<Schedule> {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer scheduleID
@@ -29,4 +29,8 @@ class Schedule {
     @JacksonXmlProperty(localName='hid:DayOfWeekInterval')
     List<DayOfWeekInterval> dayIntervals
 
+    @Override
+    int compareTo(Schedule other) {
+        return this.scheduleID <=> other.scheduleID
+    }
 }

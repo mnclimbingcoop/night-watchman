@@ -7,7 +7,7 @@ import groovy.transform.CompileStatic
 import java.time.LocalDateTime
 
 @CompileStatic
-class Credential {
+class Credential implements Comparable<Credential> {
 
     @JacksonXmlProperty(isAttribute=true)
     String rawCardNumber
@@ -42,4 +42,8 @@ class Credential {
     @JacksonXmlProperty(isAttribute=true)
     Boolean confirmingPinExempt
 
+    @Override
+    int compareTo(Credential other) {
+        return this.rawCardNumber <=> other.rawCardNumber
+    }
 }
