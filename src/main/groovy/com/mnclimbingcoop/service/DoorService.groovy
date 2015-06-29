@@ -1,6 +1,7 @@
 package com.mnclimbingcoop.service
 
 import com.mnclimbingcoop.domain.Door
+import com.mnclimbingcoop.domain.Doors
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
 import com.mnclimbingcoop.request.DoorRequest
@@ -23,16 +24,27 @@ class DoorService {
         this.hidService = hidService
     }
 
-    Map<String, Door> getDoors() {
-        VertXRequest request = new DoorRequest().status()
+    Map<String, Doors> list() {
+        VertXRequest request = new DoorRequest().list()
         return hidService.getAll(request) { String name, VertXResponse resp ->
-            return [name, resp.doors?.door ]
+            if (resp.doors) {
+                hidService.hidStates[name].doors.addAll(resp.doors.doors)
+            }
+            return [ name, resp.doors ]
         }
     }
 
+    Doors list(String name) {
+        VertXRequest request = new DoorRequest().list()
+        Doors doors = hidService.get(name, request)?.doors
+        if (doors) {
+            hidService.hidStates[name].doors.addAll(doors.doors)
+        }
+        return doors
+    }
+
     Door getDoor(String name) {
-        VertXRequest request = new DoorRequest().status()
-        return hidService.get(name, request)?.doors?.door
+        list(name)?.door
     }
 
     void unlockDoor(String name) {

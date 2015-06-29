@@ -6,13 +6,14 @@ import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.DoorCommand
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
-class DoorRequest extends VertXRequest {
+class DoorRequest extends VertXRequest implements SimpleEntityRequest<DoorRequest> {
 
     DoorRequest() {
         doors = new Doors(action: Action.LIST_RECORDS, responseFormat: ResponseFormat.STATUS)
     }
 
-    DoorRequest status() {
+    @Override
+    DoorRequest list() {
         doors = new Doors(action: Action.LIST_RECORDS, responseFormat: ResponseFormat.STATUS)
         return this
     }

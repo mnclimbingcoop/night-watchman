@@ -16,7 +16,7 @@ class EdgeSoloState {
 
     Set<Door> doors = new ConcurrentSkipListSet<Door>()
 
-    Set<EventMessage> eventMessages = new ConcurrentSkipListSet<EventMessage>()
+    Set<EventMessage> events = new ConcurrentSkipListSet<EventMessage>()
 
     EdgeSoloParameters parameters
 
