@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage>
+    <hid:Cardholders action="AD">
+        <hid:Cardholder forename="Test"
+                        middleName="M"
+                        surname="Aaaaaa"
+                        exemptFromPassback="true"
+                        extendedAccess="false"
+                        confirmingPin=""
+                        email="test@example.com"
+                        custom1="c1"
+                        custom2="c2"
+                        phone="800-555-1212" />
+    </hid:Cardholders>
+</VertXMessage>

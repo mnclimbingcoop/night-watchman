@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:EdgeSoloParameters action="RD"
+        companyName="Mandatory Fun Corp"
+        companyAddress="160 Hennepin Ave S"
+        companyCity="Minneapolis"
+        companyState="MN"
+        companyCountry="United States"
+        companyEmail="self@example.com"
+        companyTelephone="800-555-1234"
+        customHeading1="Custom1"
+        customHeading2="Custom2"
+        language="en_EN"
+        dateFormat="1"
+        timeFormat="12"
+        nameFormat="1"
+        weekFormat="0"
+        edgeSoloVersion="1.2.0.51"
+        doorName="HID Edge Solo"
+        encryptTLS="1"
+        acceptEULA="1"
+        installerLock="0"
+        currentDateTime="2015-06-28T18:03:16" />
+</VertXMessage>
