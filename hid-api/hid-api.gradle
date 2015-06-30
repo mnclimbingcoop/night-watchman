@@ -1,0 +1,40 @@
+apply plugin: "groovy"
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+version = "${version}"
+group = "${group}"
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+jar {
+    baseName = 'hid-api'
+    version =  '1.0.0'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+
+    compile 'joda-time:joda-time:2.4'
+
+    compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    compile "org.codehaus.woodstox:woodstox-core-asl:${woodstoxVersion}"
+
+    testCompile "org.spockframework:spock-core:${spockVersion}"
+    testCompile 'cglib:cglib-nodep:3.1'
+    testCompile 'org.objenesis:objenesis:2.1'
+}
+

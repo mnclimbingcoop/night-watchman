@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:Cardholders action="RD" cardholdersInUse="50" totalCardholders="1000"/>
+</VertXMessage>
