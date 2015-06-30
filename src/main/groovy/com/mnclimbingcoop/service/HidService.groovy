@@ -37,15 +37,17 @@ class HidService {
 
     @PostConstruct
     protected void setup() {
-        log.debug "Initializing doors"
+        log.info "Initializing doors"
         config.devices.each{ String name, DoorConfiguration.Device device ->
-            log.info "Initializing HID EdgePro API fro ${name} with endpoint ${device.url}"
-            String username = device.username ?: config.username
-            String password = device.password ?: config.password
-            apis[name] = new ClientBuilder().withEndpoint(device.url)
-                                            .withAuthentication(username, password)
-                                            .build(HidEdgeProApi)
-            hidStates[name] = new EdgeSoloState()
+            if (device.enabled) {
+                log.info "Initializing HID EdgePro API for ${name} with endpoint ${device.url}"
+                String username = device.username ?: config.username
+                String password = device.password ?: config.password
+                apis[name] = new ClientBuilder().withEndpoint(device.url)
+                                                .withAuthentication(username, password)
+                                                .build(HidEdgeProApi)
+                hidStates[name] = new EdgeSoloState()
+            }
         }
 
     }
