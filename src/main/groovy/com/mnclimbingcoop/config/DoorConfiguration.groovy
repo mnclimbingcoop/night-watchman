@@ -12,13 +12,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @Named
 public class DoorConfiguration {
 
-    String url
     String username
     String password
 
     Map<String, Device> devices
 
     static class Device {
+        Boolean enabled = true
         String description
         String url
         String username

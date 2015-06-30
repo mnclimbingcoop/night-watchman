@@ -13,6 +13,7 @@ class AlertRequest extends VertXRequest implements SimpleEntityRequest<AlertRequ
     @Override
     AlertRequest list() {
         alerts = new AlertActions(action: Action.LIST_RECORDS)
+        return this
     }
 
 }
