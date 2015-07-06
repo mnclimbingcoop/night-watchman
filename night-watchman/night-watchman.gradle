@@ -1,5 +1,10 @@
 import org.gradle.api.publish.maven.MavenPublication
 
+run {
+    // support passing system properties via command line to override -Dspring.profiles.active=deployed
+    jvmArgs = ["-Dspring.profiles.active=${System.properties['spring.profiles.active'] ?: 'dev'}"]
+}
+
 buildscript {
     ext {
         springBootVersion = '1.2.3.RELEASE'
@@ -36,6 +41,7 @@ dependencies {
 
     compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'javax.inject:javax.inject:1'
+    compile 'com.amazonaws:aws-java-sdk-sqs:1.10.2'
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }

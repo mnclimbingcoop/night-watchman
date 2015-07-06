@@ -1,5 +1,11 @@
 .gradle/
-.java-version
 build/
+.java-version
 application.properties
 application.yml.local
+*.swp
+.idea/
+*.iml
+*.ipr
+*.iws
+data/
