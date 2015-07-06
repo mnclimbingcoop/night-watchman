@@ -1,5 +1,10 @@
-server.port: 8080
-management.port: 8099
+spring:
+  groovy.template.check-template-location: false
+server:
+  context-path: ''
+  port: 8080
+management:
+  port: 8099
 hidEdgePro:
   username: admin
   password: S3cret?
@@ -10,9 +15,34 @@ hidEdgePro:
 aws:
   region: us-east-1
   sqs:
-    state:
-      push: hiddoorstate
-    control:
-      push: hidcmdresponse
-      pull: hidcmdrequest
-
+    queue: mncc-state
+---
+spring:
+  profiles: deployed
+hidEdgePro:
+  password: S3cret?
+  devices:
+    main:
+      description: Coop Door
+      url: http://192.169.0.1
+    dock:
+      description: Loading Dock
+      url: http://192.169.0.2
+---
+spring:
+  profiles: dev
+hidEdgePro:
+  password: Password1
+  devices:
+    coop:
+      description: Coop Door
+      url: http://localhost
+    external:
+      description: Loading Bay
+      url: http://localhost
+aws.sqs:
+  state:
+    push: testdoorstate
+  control:
+    push: testcmdresponse
+    pull: testcmdrequest

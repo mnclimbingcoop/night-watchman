@@ -15,6 +15,7 @@ subprojects {
         jcenter()
     }
 
+    apply plugin: "idea"
     apply plugin: "groovy"
 
     sourceCompatibility = "1.8"
