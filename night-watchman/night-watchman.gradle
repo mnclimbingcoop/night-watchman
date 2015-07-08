@@ -1,7 +1,9 @@
+import org.gradle.api.publish.maven.MavenPublication
+
 buildscript {
     ext {
         springBootVersion = '1.2.3.RELEASE'
-    }    
+    }
     repositories {
         jcenter()
     }
@@ -12,6 +14,7 @@ buildscript {
 
 apply plugin: "spring-boot"
 apply plugin: "application"
+apply plugin: "maven-publish"
 
 mainClassName="com.mnclimbingcoop.app.DoorWatchmanApp"
 
@@ -34,3 +37,32 @@ dependencies {
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    description "An archive of the source code for Maven Central"
+    classifier "sources"
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    description "An archive of the JavaDocs for Maven Central"
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar, javadocJar
+}
+
+publish.dependsOn assemble
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
