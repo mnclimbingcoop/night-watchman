@@ -9,12 +9,14 @@ buildscript {
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
     }
 }
 
 apply plugin: "spring-boot"
 apply plugin: "application"
 apply plugin: "maven-publish"
+apply plugin: "com.jfrog.bintray"
 
 mainClassName="com.mnclimbingcoop.app.DoorWatchmanApp"
 
@@ -66,3 +68,30 @@ publishing {
     }
 }
 
+bintray {
+
+    user = project.hasProperty('bintrayUsername') ? project.getProperty('bintrayUsername') : ''
+    key = project.hasProperty('bintrayApiKey') ? project.getProperty('bintrayApiKey') : ''
+
+    publications = [ 'mavenJava' ]
+
+    dryRun = false
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        name = 'night-watchman'
+        userOrg = 'mnclimbingcoop'
+        desc = 'An app to gather and publish information about HID EdgePro / EVO units.'
+        websiteUrl = 'https://github.com/mnclimbingcoop/night-watchman'
+        issueTrackerUrl = 'https://github.com/mnclimbingcoop/night-watchman/issues'
+        vcsUrl = 'https://github.com/mnclimbingcoop/night-watchman.git'
+        licenses = [ 'Apache-2.0' ]
+        labels = [ 'hid', 'edge', 'evo' ]
+        publicDownloadNumbers = true
+        version {
+            name = "${project.version}"
+            vcsTag = "${version}"
+        }
+    }
+}
