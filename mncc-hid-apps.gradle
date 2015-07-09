@@ -1,7 +1,46 @@
+import org.ajoberstar.grgit.Grgit
+import org.ajoberstar.gradle.git.release.opinion.Strategies
+
+plugins {
+    id 'org.ajoberstar.release-opinion' version '1.2.0'
+}
+
 repositories {
     jcenter()
+}
+
+subprojects {
+
+    repositories {
+        jcenter()
+    }
+
+    apply plugin: "groovy"
+
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+
+    dependencies {
+        testCompile "org.spockframework:spock-core:${spockVersion}"
+        testCompile 'cglib:cglib-nodep:3.1'
+        testCompile 'org.objenesis:objenesis:2.1'
+    }
+}
+
+release {
+    // need to specify the repository to interact with
+    grgit = Grgit.open(project.file('.'))
+
+    defaultVersionStrategy = Strategies.SNAPSHOT
+
+    // the approach to creating tags can also be modified
+    tagStrategy {
+        prefixNameWithV = false // defaults to true
+        generateMessage = { version -> "My new version $version.version" }
+    }
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
 }
+
