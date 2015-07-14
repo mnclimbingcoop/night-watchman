@@ -1,0 +1,54 @@
+#!/bin/bash
+
+REPO=https://bintray.com/artifact/download/mnclimbingcoop/maven
+
+ARTIFACT=night-watchman
+GROUP=com.mnclimbingcoop
+VERSION=1.0.0
+
+GROUP_PATH=${GROUP/\./\/}
+JAR=${ARTIFACT}-${VERSION}.jar
+
+LOCAL_FOLDER=${HOME}/.${ARTIFACT}
+INSTALL_PATH=${LOCAL_FOLDER}/${JAR}
+
+LOG_FOLDER=/var/log
+LOG_FILE="${LOG_FOLDER}/${ARTIFACT}.log"
+
+if [ -w ${LOG_FOLDER} ] || [ -w ${LOG_FILE} ] ; then
+    touch ${LOG_FILE}
+else
+    LOG_FILE="&1"
+fi
+
+if [ ! -d ${LOCAL_FOLDER} ]; then
+    mkdir -p ${LOCAL_FOLDER}
+fi
+
+if [ ! -r ${INSTALL_PATH} ]; then
+    echo "Downloading ${REPO}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} to ${INSTALL_PATH}"
+    curl -L ${REPO}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} > ${INSTALL_PATH}
+fi
+
+if [ ! -f application.properties ]; then
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 1>&2
+    echo "!! application.properties not found. !!" 1>&2
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 1>&2
+    echo "" 1>&2
+    echo "Running application with DEFAULTS. (This will probably not work)" 1>&2
+    echo "" 1>&2
+fi
+
+if [ -r ${INSTALL_PATH} ]; then
+    echo "Executing: java -jar ${INSTALL_PATH}"
+    if [ "${LOG_FILE}" == "&1" ]; then
+        java -jar ${INSTALL_PATH}
+    else
+        echo "Logging output to $LOG_FILE"
+        java -jar ${INSTALL_PATH} > ${LOG_FILE}
+    fi
+    echo $?
+else
+    echo "Unable to find ${INSTALL_PATH}" 1>&2
+fi
+
