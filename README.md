@@ -5,7 +5,7 @@
 
 ### First:
 
-Create an application.properties file based on the `application.properties.sample` in this project.
+Create an `application.properties` file based on the [sample file](application.properties.sample) in this project.
 
 ### Then:
 
