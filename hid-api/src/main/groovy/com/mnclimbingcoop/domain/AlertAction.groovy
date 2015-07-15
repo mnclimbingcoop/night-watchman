@@ -4,8 +4,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 import groovy.transform.CompileStatic
 
-import java.time.LocalDateTime
-
 @CompileStatic
 class AlertAction implements Comparable<AlertAction> {
 

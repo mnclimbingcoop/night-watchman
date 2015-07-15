@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 import groovy.transform.CompileStatic
 
-import java.time.LocalDateTime
+import org.joda.time.LocalDateTime
 
 @CompileStatic
 class EventMessage implements Comparable<EventMessage> {
