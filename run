@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -d .git ]; then
+    git pull
+fi
+
 REPO=https://bintray.com/artifact/download/mnclimbingcoop/maven
 
 ARTIFACT=night-watchman
@@ -11,6 +15,8 @@ JAR=${ARTIFACT}-${VERSION}.jar
 
 LOCAL_FOLDER=${HOME}/.${ARTIFACT}
 INSTALL_PATH=${LOCAL_FOLDER}/${JAR}
+
+JAVA_OPTS='-server -Xms512m -Xmx512m'
 
 LOG_FOLDER=/var/log
 LOG_FILE="${LOG_FOLDER}/${ARTIFACT}.log"
@@ -42,10 +48,10 @@ fi
 if [ -r ${INSTALL_PATH} ]; then
     echo "Executing: java -jar ${INSTALL_PATH}"
     if [ "${LOG_FILE}" == "&1" ]; then
-        java -jar ${INSTALL_PATH}
+        java ${JAVA_OPTS} -jar ${INSTALL_PATH}
     else
         echo "Logging output to $LOG_FILE"
-        java -jar ${INSTALL_PATH} > ${LOG_FILE}
+        java ${JAVA_OPTS} -jar ${INSTALL_PATH} >> ${LOG_FILE} 2>&1
     fi
     echo $?
 else
