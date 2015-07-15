@@ -36,10 +36,10 @@ if [ ! -r ${INSTALL_PATH} ]; then
     curl -L ${REPO}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} > ${INSTALL_PATH}
 fi
 
-if [ ! -f application.properties ]; then
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 1>&2
-    echo "!! application.properties not found. !!" 1>&2
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 1>&2
+if [ ! -f ${LOCAL_FOLDER}/application.properties ]; then
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 1>&2
+    echo "!! ${LOCAL_FOLDER}/application.properties not found. !!" 1>&2
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 1>&2
     echo "" 1>&2
     echo "Running application with DEFAULTS. (This will probably not work)" 1>&2
     echo "" 1>&2
@@ -47,12 +47,14 @@ fi
 
 if [ -r ${INSTALL_PATH} ]; then
     echo "Executing: java -jar ${INSTALL_PATH}"
+    pushd ${LOCAL_FOLDER}
     if [ "${LOG_FILE}" == "&1" ]; then
         java ${JAVA_OPTS} -jar ${INSTALL_PATH}
     else
         echo "Logging output to $LOG_FILE"
         java ${JAVA_OPTS} -jar ${INSTALL_PATH} >> ${LOG_FILE} 2>&1
     fi
+    popd
     echo $?
 else
     echo "Unable to find ${INSTALL_PATH}" 1>&2
