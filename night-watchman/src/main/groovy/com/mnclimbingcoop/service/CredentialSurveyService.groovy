@@ -48,6 +48,7 @@ class CredentialSurveyService {
         metaData.each{ String doorName, Credentials credentials ->
             counts[doorName] = credentials.inUse
         }
+        return counts
     }
 
 }

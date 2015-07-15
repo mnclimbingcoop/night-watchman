@@ -2,3 +2,4 @@
 .java-version
 build/
 application.properties
+application.yml.local
