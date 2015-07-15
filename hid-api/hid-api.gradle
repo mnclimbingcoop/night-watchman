@@ -6,7 +6,7 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonVersion}"
 
     compile "org.codehaus.woodstox:woodstox-core-asl:${woodstoxVersion}"
 }

@@ -48,6 +48,7 @@ class CardholderSurveyService {
         metaData.each{ String doorName, Cardholders cardholders ->
             counts[doorName] = cardholders.inUse
         }
+        return counts
     }
 
 }

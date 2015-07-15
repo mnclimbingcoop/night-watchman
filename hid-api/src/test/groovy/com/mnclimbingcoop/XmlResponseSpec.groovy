@@ -7,7 +7,7 @@ import com.mnclimbingcoop.domain.VertXResponse
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.State
 
-import java.time.LocalDateTime
+import org.joda.time.LocalDateTime
 
 class XmlResponseSpec extends XmlSpecification {
 

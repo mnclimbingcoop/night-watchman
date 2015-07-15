@@ -5,7 +5,7 @@ import com.mnclimbingcoop.domain.type.State
 
 import groovy.transform.CompileStatic
 
-import java.time.LocalDateTime
+import org.joda.time.LocalDateTime
 
 @CompileStatic
 class Door implements Comparable<Door> {
