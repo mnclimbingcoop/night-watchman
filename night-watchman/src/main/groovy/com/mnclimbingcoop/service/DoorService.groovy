@@ -30,6 +30,7 @@ class DoorService {
             if (resp.doors) {
                 hidService.hidStates[name].doors.addAll(resp.doors.doors)
             }
+            sync()
             return [ name, resp.doors ]
         }
     }
@@ -62,5 +63,8 @@ class DoorService {
         hidService.get(name, request)
     }
 
+    void sync() {
+        hidService.sync()
+    }
 
 }

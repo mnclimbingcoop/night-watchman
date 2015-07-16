@@ -55,4 +55,8 @@ class CredentialService {
         return credential
     }
 
+    void sync() {
+        hidService.sync()
+    }
+
 }
