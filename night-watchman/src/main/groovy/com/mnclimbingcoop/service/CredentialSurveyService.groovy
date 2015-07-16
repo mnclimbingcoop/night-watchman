@@ -18,8 +18,8 @@ class CredentialSurveyService {
     protected final CredentialService service
 
     @Inject
-    CredentialSurveyService(CredentialService cardholderService) {
-        this.service = cardholderService
+    CredentialSurveyService(CredentialService credentialService) {
+        this.service = credentialService
     }
 
     void survey() {
@@ -40,6 +40,7 @@ class CredentialSurveyService {
             }
             log.info "Done retrieving ${added} credentials for ${doorName} door."
         }
+        service.sync()
     }
 
     protected Map<String, Integer> getCounts() {

@@ -42,4 +42,7 @@ class CardFormatService {
         return cardFormats
     }
 
+    void sync() {
+        hidService.sync()
+    }
 }

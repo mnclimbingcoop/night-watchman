@@ -55,4 +55,8 @@ class CardholderService {
         return cardholder
     }
 
+    void sync() {
+        hidService.sync()
+    }
+
 }

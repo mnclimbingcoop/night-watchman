@@ -40,6 +40,7 @@ class CardholderSurveyService {
             }
             log.info "Done retrieving ${added} cardholders for ${doorName} door."
         }
+        service.sync()
     }
 
     protected Map<String, Integer> getCounts() {

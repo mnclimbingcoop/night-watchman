@@ -25,12 +25,17 @@ class HidService {
     protected final DoorConfiguration config
     protected final Map<String, HidEdgeProApi> apis = new ConcurrentHashMap<String, HidEdgeProApi>()
     protected final XmlMapper objectMapper
+    protected final CloudSyncService cloudSyncService
 
     // Stores the state of all HID edge units
     Map<String, EdgeSoloState> hidStates = new ConcurrentHashMap<String, EdgeSoloState>()
 
     @Inject
-    HidService(DoorConfiguration config, XmlMapper objectMapper) {
+    HidService(DoorConfiguration config,
+               CloudSyncService cloudSyncService,
+               XmlMapper objectMapper) {
+
+        this.cloudSyncService = cloudSyncService
         this.config = config
         this.objectMapper = objectMapper
     }
@@ -51,6 +56,20 @@ class HidService {
         }
 
     }
+
+    void sync() {
+        hidStates.each{ String name, EdgeSoloState state ->
+            cloudSyncService.sendSqsMessage(state)
+        }
+    }
+
+    void pull() {
+        List<VertXRequest> requests = cloudSyncService.receiveSqsMessages()
+        requests.each{ VertXRequest request ->
+            getAll(request)
+        }
+    }
+
 
     Set<String> getDoors() {
         apis.keySet()

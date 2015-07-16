@@ -18,6 +18,10 @@ class EdgeSoloState {
 
     Set<Door> doors = new ConcurrentSkipListSet<Door>()
 
+    // to store historyRecordMarker and historyTimestamp?
+    //    maybe currentRecordMarker and currentTimestamp?
+    EventMessages eventOverview
+
     Set<EventMessage> events = new ConcurrentSkipListSet<EventMessage>()
 
     EdgeSoloParameters parameters
