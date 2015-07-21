@@ -1,6 +1,7 @@
 package com.mnclimbingcoop.service
 
 import com.mnclimbingcoop.domain.EventMessage
+import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
 import com.mnclimbingcoop.request.EventRequest
@@ -23,25 +24,51 @@ class EventService {
         this.hidService = hidService
     }
 
-    Map<String, EventMessage> poll() {
-        log.warn "TODO: Implement"
-    }
+    Map<String, EventMessages> poll() {
 
-    Map<String, EventMessage> getlatest() {
+        // Check the overview status for each door
         VertXRequest request = new EventRequest().overview()
-        return hidService.getAll(request) { String name, VertXResponse resp ->
+        hidService.getAll(request) { String name, VertXResponse resp ->
             if (resp.eventMessages) {
-                hidService.hidStates[name].eventOverview = resp.eventMessages
-                hidService.hidStates[name].events.addAll(resp.eventMessages.eventMessages)
+                EventMessages overview = resp.eventMessages
+                EventMessages last = hidService.hidStates[name].eventOverview
+
+                // If the overview has changed since last we checked...
+                if (overview != last) {
+                    log.debug 'Events not up to date, requesting latest events.'
+                    VertXRequest latestEvents = new EventRequest().fromOverview(overview).since(last)
+                    VertXResponse response = hidService.get(name, latestEvents)
+                    if (response.eventMessages?.eventMessages) {
+
+                        assert response.eventMessages.
+                        // Add new events
+                        hidService.hidStates[name].events.addAll(response.eventMessages.eventMessages)
+                        // Push events to the cloud
+                        sync(name, overview, response.eventMessages.eventMessages)
+                    }
+                }
+
+                // Update the state so it knows that we have the latest overview info now
+                hidService.hidStates[name].eventOverview = overview
+
+                return [ name, overview ]
+            } else {
+                return [ name, null ]
             }
-            sync()
-            return [ name, resp.doors ]
         }
     }
 
+    // add inventory builder, or only keep last 100 events?
+
+    void sync(String door, EventMessages overview, List<EventMessage> messages) {
+        EdgeSoloState state = new EdgeSoloState(doorName: door, eventOverview: overview, events: messages)
+        state.events.addAll(messages)
+        hidService.sync(state)
+    }
 
     void sync() {
         hidService.sync()
     }
 
 }
+

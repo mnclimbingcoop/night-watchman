@@ -7,7 +7,7 @@ import com.mnclimbingcoop.domain.type.Action
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class EventMessages extends AbstractEntityCollection {
+class EventMessages extends AbstractEntityCollection implements Comparable<EventMessage> {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer eventsInUse
@@ -28,6 +28,18 @@ class EventMessages extends AbstractEntityCollection {
     Long historyTimestamp
 
     @Override
+    String toString() {
+        String str = ''
+        if (eventsInUse) { str += "eventsInUse=${eventsInUse} " }
+        if (totalEvents) { str += "totalEvents=${totalEvents} " }
+        if (currentRecordMarker) { str += "currentRecordMarker=${currentRecordMarker} " }
+        if (historyRecordMarker) { str += "historyRecordMarker=${historyRecordMarker} " }
+        if (currentTimestamp) { str += "currentTimestamp=${currentTimestamp} " }
+        if (historyTimestamp) { str += "historyTimestamp=${historyTimestamp} " }
+        return str
+    }
+
+    @Override
     Integer getInUse() { eventsInUse }
 
     @Override
@@ -36,5 +48,13 @@ class EventMessages extends AbstractEntityCollection {
     @JacksonXmlElementWrapper(useWrapping=false)
     @JacksonXmlProperty(localName='EventMessage')
     List<EventMessage> eventMessages
+
+    @Override
+    int compareTo(EventMessages other) {
+        if (this.historyTimestamp != other.historyTimestamp) {
+            return this.historyTimestamp <=> other.historyTimestamp
+        }
+        return this.historyRecordMarker <=> other.historyRecordMarker
+    }
 
 }

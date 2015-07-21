@@ -8,28 +8,21 @@ class EdgeSoloState {
 
     String doorName
 
+    // Inventory
     Set<AlertAction> alerts = new ConcurrentSkipListSet<AlertAction>()
-
     Set<CardFormat> cardFormats = new ConcurrentSkipListSet<CardFormat>()
-
     Set<Cardholder> cardholders = new ConcurrentSkipListSet<Cardholder>()
-
     Set<Credential> credentials = new ConcurrentSkipListSet<Credential>()
+    EdgeSoloParameters parameters
+    Set<Reader> readers = new ConcurrentSkipListSet<Reader>()
+    Set<Schedule> schedules = new ConcurrentSkipListSet<Schedule>()
+    System system
 
+    // Door State
     Set<Door> doors = new ConcurrentSkipListSet<Door>()
 
-    // to store historyRecordMarker and historyTimestamp?
-    //    maybe currentRecordMarker and currentTimestamp?
+    // Event Audits
     EventMessages eventOverview
-
     Set<EventMessage> events = new ConcurrentSkipListSet<EventMessage>()
-
-    EdgeSoloParameters parameters
-
-    Set<Reader> readers = new ConcurrentSkipListSet<Reader>()
-
-    Set<Schedule> schedules = new ConcurrentSkipListSet<Schedule>()
-
-    System system
 
 }

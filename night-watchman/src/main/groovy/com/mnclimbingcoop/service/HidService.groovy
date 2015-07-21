@@ -58,9 +58,11 @@ class HidService {
     }
 
     void sync() {
-        hidStates.each{ String name, EdgeSoloState state ->
-            cloudSyncService.sendSqsMessage(state)
-        }
+        hidStates.each{ String name, EdgeSoloState state -> sync(state) }
+    }
+
+    void sync(EdgeSoloState state) {
+        cloudSyncService.sendSqsMessage(state)
     }
 
     void pull() {
