@@ -49,6 +49,18 @@ class Door implements Comparable<Door> {
     @JacksonXmlProperty(isAttribute=true)
     State relayAlertState
 
+    boolean changed(Door other) {
+        return (!other ||
+                this.acAlarmState         != other.acAlarmState ||
+                this.auxRelayState        != other.auxRelayState ||
+                this.batteryAlarmState    != other.batteryAlarmState ||
+                this.doorForcedAlarmState != other.doorForcedAlarmState ||
+                this.doorHeldAlarmState   != other.doorHeldAlarmState ||
+                this.relayAlertState      != other.relayAlertState ||
+                this.relayState           != other.relayState ||
+                this.tamperAlarmState     != other.tamperAlarmState)
+    }
+
     @Override
     int compareTo(Door other) {
         return this.doorName <=> other.doorName

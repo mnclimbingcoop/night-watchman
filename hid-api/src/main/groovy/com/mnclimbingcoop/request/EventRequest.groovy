@@ -22,15 +22,38 @@ class EventRequest extends VertXRequest {
         return this
     }
 
-    EventRequest listSince(LocalDateTime historyTimestamp, Integer count = 10) {
+    EventRequest fromOverview(EventMessages overview) {
+        if (overview) {
+            return listSince(overview.currentTimestamp, overview.currentRecordMarker)
+        }
+        return this
+    }
 
-        Long timestamp = toTimestamp(historyTimestamp)
+    EventRequest listSince(LocalDateTime timestamp, Integer recordMarker,  Integer count = 100) {
+
+        Long timestampInt = toTimestamp(timestamp)
 
         eventMessages = new EventMessages(
             action: Action.LIST_RECORDS,
-            historyTimestamp: timestamp,
+            historyTimestamp: timestampInt,
+            historyRecordMarker: recordMarker,
             recordCount: count
         )
+        return this
+    }
+
+    EventRequest since(EventMessages lastOverview) {
+        if (lastOverview) {
+            int count = overview.historyRecordMarker - last.historyRecordMarker
+            return withCount(count)
+        }
+        return this
+    }
+
+    EventRequest withCount(Integer count) {
+        if (count > 0) {
+            eventMessages.recordCount = count
+        }
         return this
     }
 

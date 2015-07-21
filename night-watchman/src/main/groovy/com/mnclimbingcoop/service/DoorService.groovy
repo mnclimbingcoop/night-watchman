@@ -28,9 +28,8 @@ class DoorService {
         VertXRequest request = new DoorRequest().list()
         return hidService.getAll(request) { String name, VertXResponse resp ->
             if (resp.doors) {
-                hidService.hidStates[name].doors.addAll(resp.doors.doors)
+                updateState(name, resp.doors)
             }
-            sync()
             return [ name, resp.doors ]
         }
     }
@@ -39,13 +38,23 @@ class DoorService {
         VertXRequest request = new DoorRequest().list()
         Doors doors = hidService.get(name, request)?.doors
         if (doors) {
-            hidService.hidStates[name].doors.addAll(doors.doors)
+            updateState(name, doors)
         }
         return doors
     }
 
-    Door getDoor(String name) {
-        list(name)?.door
+    void updateState(String name, Doors doors) {
+        // Only 1 door to support
+        Door current = doors.doors[0]
+        Door last = hidService.hidStates[name].doors[0]
+        if (current.changed(last)) { sync(name, current) }
+        hidService.hidStates[name].doors.addAll(current)
+    }
+
+    void sync(String name, Door door) {
+        EdgeSoloState state = new EdgeSoloState(doorName: name)
+        state.doors << door
+        hidService.sync(state)
     }
 
     void unlockDoor(String name) {
@@ -61,10 +70,6 @@ class DoorService {
     void openDoor(String name) {
         VertXRequest request = new DoorRequest().grantAccess()
         hidService.get(name, request)
-    }
-
-    void sync() {
-        hidService.sync()
     }
 
 }

@@ -64,8 +64,13 @@ class CloudSyncService {
     void sendSqsMessage(EdgeSoloState state) {
         String payload = objectMapper.writeValueAsString(state)
         String gzipped = StringCompressor.compress(payload)
+        String payloadSize = gzipped.size()
+        if (payloadSize >= MAX_DATA_BYTES) {
+            log.warn "payload size=${payloadSize} exceeds the ${MAX_DATA_BYTES} byte maximum " +
+                     "size for an SQS message! (it will probably fail)"
+        }
         SendMessageResult result = sqs.sendMessage(new SendMessageRequest(queueUrl, gzipped))
-        log.info "sent message=${result.messageId} state data to SQS queue"
+        log.info "sent ${payloadSize} byte message=${result.messageId} state data to SQS queue"
     }
 
     List<VertXRequest> receiveSqsMessages() {
@@ -75,7 +80,7 @@ class CloudSyncService {
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl)
         sqs.receiveMessage(receiveMessageRequest).messages.each{ Message message ->
 
-            println "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
+            log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
             String json = StringCompressor.decompress(message.body)
             requests << objectMapper.readValue(json, VertXRequest)
 
