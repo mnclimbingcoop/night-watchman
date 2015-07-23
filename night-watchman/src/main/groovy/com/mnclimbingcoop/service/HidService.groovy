@@ -89,6 +89,10 @@ class HidService {
         return responses
     }
 
+    VertXResponse get(VertXRequest request) {
+        return get(request.doorName, request)
+    }
+
     VertXResponse get(String name, VertXRequest request) {
         return get(name, wrap(request))
     }

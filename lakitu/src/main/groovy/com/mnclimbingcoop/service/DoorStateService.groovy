@@ -40,4 +40,8 @@ class DoorStateService {
         return doorState
     }
 
+    List<String> getDoorNames() {
+        hidStates.collect{ String name, EdgeSoloState state -> name }
+    }
+
 }

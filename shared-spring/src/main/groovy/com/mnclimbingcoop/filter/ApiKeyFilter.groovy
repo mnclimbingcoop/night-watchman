@@ -41,9 +41,9 @@ class ApiKeyFilter implements Filter {
         if (headerToken != apiKey && requestToken != apiKey) {
             response.setContentLength(0)
             response.sendError(403, 'Invalid API Token')
+        } else {
+            chain.doFilter(req, res)
         }
-
-        //chain.doFilter(req, res)
     }
 
     void init(FilterConfig filterConfig) {}
