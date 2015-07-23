@@ -5,9 +5,10 @@ import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ReportType
 
-class ReportRequest extends VertXRequest {
+import groovy.transform.CompileStatic
 
-    static final Integer readerID = 1
+@CompileStatic
+class ReportRequest extends VertXRequest {
 
     ReportRequest() {
         reports = new Reports(action: Action.COMMAND_MODE, type: ReportType.EVENTS)

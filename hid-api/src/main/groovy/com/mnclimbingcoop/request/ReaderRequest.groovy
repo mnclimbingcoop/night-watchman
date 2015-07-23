@@ -1,12 +1,16 @@
 package com.mnclimbingcoop.request
 
+import com.mnclimbingcoop.domain.Reader
 import com.mnclimbingcoop.domain.Readers
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class ReaderRequest extends VertXRequest implements SimpleEntityRequest<ReaderRequest> {
 
-    static final Integer readerID = 1
+    static final Integer READER_ID = 1
 
     ReaderRequest() {
         readers = new Readers(action: Action.LIST_RECORDS)
@@ -23,7 +27,7 @@ class ReaderRequest extends VertXRequest implements SimpleEntityRequest<ReaderRe
         readers = new Readers(
             action: Action.UPDATE_DATA,
             readerID: READER_ID,
-            reader: reader
+            readers: [ reader ]
         )
         return this
     }

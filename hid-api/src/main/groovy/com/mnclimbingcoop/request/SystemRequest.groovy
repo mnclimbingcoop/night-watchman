@@ -4,6 +4,9 @@ import com.mnclimbingcoop.domain.System
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class SystemRequest extends VertXRequest {
 
     SystemRequest() {

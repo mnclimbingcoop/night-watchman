@@ -20,8 +20,7 @@ class StateSlurper {
         this.doorStateService = doorStateService
     }
 
-    /** Check the queue every 20 seconds */
-    @Scheduled(cron = '*/20 * * * * *')
+    @Scheduled(fixedDelayString = '${schedule.state.rate}', initialDelayString = '${schedule.state.initialDelay}')
     void secure() {
         doorStateService.buildState()
     }

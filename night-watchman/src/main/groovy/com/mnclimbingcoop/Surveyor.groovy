@@ -2,6 +2,7 @@ package com.mnclimbingcoop
 
 import com.mnclimbingcoop.service.*
 
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
@@ -9,6 +10,7 @@ import javax.inject.Named
 
 import org.springframework.scheduling.annotation.Scheduled
 
+@CompileStatic
 @Named
 @Slf4j
 class Surveyor {
@@ -18,6 +20,7 @@ class Surveyor {
     protected final CardholderSurveyService cardholderSurveyService
     protected final CredentialSurveyService credentialSurveyService
     protected final DoorService doorService
+    protected final HidService hidService
     protected final ParameterService parameterService
     protected final ReaderService readerService
     protected final ScheduleService scheduleService
@@ -29,6 +32,7 @@ class Surveyor {
              CardholderSurveyService cardholderSurveyService,
              CredentialSurveyService credentialSurveyService,
              DoorService doorService,
+             HidService hidService,
              ParameterService parameterService,
              ReaderService readerService,
              ScheduleService scheduleService,
@@ -39,6 +43,7 @@ class Surveyor {
         this.cardholderSurveyService = cardholderSurveyService
         this.credentialSurveyService = credentialSurveyService
         this.doorService = doorService
+        this.hidService = hidService
         this.parameterService = parameterService
         this.readerService = readerService
         this.scheduleService = scheduleService
@@ -46,26 +51,36 @@ class Surveyor {
 
     }
 
-    /** Wait 12 hours before each execution */
-    @Scheduled(cron = '0 0 */12 * * *')
+    @Scheduled(fixedDelayString = '${schedule.survey.rate}', initialDelayString = '${schedule.survey.initialDelay}')
     void survey() {
 
         // Really only update these once...
+        log.info "discovering alert info"
         alertService.list()
+        log.info "discovering card format info"
         cardFormatService.list()
+        log.info "discovering parameter info"
         parameterService.get()
 
+        log.info "discovering door info"
         doorService.list()
+        log.info "discovering reader info"
         readerService.list()
+        log.info "discovering schedule info"
         scheduleService.list()
+        log.info "discovering system info"
         systemService.get()
-
-        // Update user inventory.  Once? Daily?
-        cardholderSurveyService.survey()
-        credentialSurveyService.survey()
 
         // Send via SQS
         hidService.sync()
+
+        // Update user inventory.  Once? Daily?
+        log.info "discovering cardholder info"
+        cardholderSurveyService.survey()
+
+        log.info "discovering credential info"
+        credentialSurveyService.survey()
+
     }
 
 }

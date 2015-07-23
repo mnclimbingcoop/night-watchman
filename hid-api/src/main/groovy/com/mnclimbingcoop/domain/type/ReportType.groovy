@@ -8,7 +8,7 @@ import groovy.transform.CompileStatic
 @CompileStatic
 enum ReportType {
 
-    LOCK('events')
+    EVENTS('events')
 
     final String xmlValue
 

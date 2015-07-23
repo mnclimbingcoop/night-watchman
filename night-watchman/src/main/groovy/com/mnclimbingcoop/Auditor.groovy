@@ -21,7 +21,7 @@ class Auditor {
     }
 
     /** Check for events every 3 seconds */
-    @Scheduled(cron = '*/3 * * * * *')
+    @Scheduled(fixedDelayString = '${schedule.events.rate}', initialDelayString = '${schedule.events.initialDelay}')
     void monitor() {
         eventService.poll()
     }

@@ -28,7 +28,7 @@ class CommandRelayService {
     void processCommands() {
         List<VertXRequest> requests = cloudSyncService.receiveSqsMessages()
         requests.each { VertXRequest request ->
-            requests.each { VertXRequest request -> hidService.get(request) }
+            hidService.get(request)
             log.debug('processed command: {}', objectMapper.writeValueAsString(request))
         }
     }

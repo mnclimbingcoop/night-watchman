@@ -40,7 +40,7 @@ class CardholderService {
     Cardholders list(String name, Integer offset, Integer count) {
         VertXRequest request = new CardholderRequest().list(offset, count)
         Cardholders cardholders = hidService.get(name, request)?.cardholders
-        if (cardholders) {
+        if (cardholders?.cardholders) {
             hidService.hidStates[name].cardholders.addAll(cardholders.cardholders)
         }
         return cardholders

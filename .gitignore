@@ -2,7 +2,7 @@
 build/
 .java-version
 application.properties
-application.yml.local
+application.local.yml
 *.swp
 .idea/
 *.iml

@@ -4,8 +4,11 @@ import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
+import groovy.transform.CompileStatic
+
 import org.joda.time.LocalDateTime
 
+@CompileStatic
 class EventRequest extends VertXRequest {
 
     EventRequest() {
@@ -30,12 +33,14 @@ class EventRequest extends VertXRequest {
     }
 
     EventRequest listSince(LocalDateTime timestamp, Integer recordMarker,  Integer count = 100) {
-
         Long timestampInt = toTimestamp(timestamp)
+        return listSince(timestampInt, recordMarker, count)
+    }
 
+    EventRequest listSince(Long timestamp, Integer recordMarker,  Integer count = 100) {
         eventMessages = new EventMessages(
             action: Action.LIST_RECORDS,
-            historyTimestamp: timestampInt,
+            historyTimestamp: timestamp,
             historyRecordMarker: recordMarker,
             recordCount: count
         )
@@ -44,7 +49,7 @@ class EventRequest extends VertXRequest {
 
     EventRequest since(EventMessages lastOverview) {
         if (lastOverview) {
-            int count = overview.historyRecordMarker - last.historyRecordMarker
+            int count = eventMessages.historyRecordMarker - lastOverview.historyRecordMarker
             return withCount(count)
         }
         return this
@@ -73,6 +78,6 @@ class EventRequest extends VertXRequest {
     }
 
     Long toTimestamp(LocalDateTime time) {
-        return time.toDate().time / 1000
+        return (time.toDate().time / 1000).longValue()
     }
 }

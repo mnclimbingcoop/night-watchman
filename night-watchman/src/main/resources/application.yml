@@ -16,8 +16,24 @@ hidEdgePro:
     loadingbay:
       description: Loading Bay Door
       url: http://192.169.0.2
+schedule:
+  survey:
+    rate: 21600000 # 6 hours in MS.
+    initialDelay: 20000 # 20 seconds
+  door:
+    rate: 10000 # 10 seconds in MS.
+    initialDelay: 3000 # 3 seconds
+  events:
+    rate: 2000 # 2 seconds in MS.
+    initialDelay: 10000 # 5 seconds
+  commands:
+    rate: 5000 # 5 seconds in MS.
+    initialDelay: 7000 # 7 seconds
 aws:
   region: us-east-1
   sqs:
     pushQueue: mncc-state
     pullQueue: mncc-commands
+logging:
+  level:
+    com.mnclimbingcoop.service: DEBUG

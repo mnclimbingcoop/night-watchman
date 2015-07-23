@@ -31,7 +31,7 @@ class CardholderSurveyService {
             // initialize list
             while (offset <= inUse) {
                 Cardholders cardholders = service.list(doorName, offset, PAGE_SIZE)
-                cardholders.cardholders.each{ Cardholder cardholder ->
+                cardholders?.cardholders?.each{ Cardholder cardholder ->
                     log.debug " + adding [#${cardholder.cardholderID}]: ${cardholder.forename} ${cardholder.surname}"
                     added++
                 }

@@ -21,7 +21,7 @@ class CommandSlurper {
     }
 
     /** Check the queue every 3 seconds */
-    @Scheduled(cron = '*/2 * * * * *')
+    @Scheduled(fixedDelayString = '${schedule.commands.rate}', initialDelayString = '${schedule.commands.initialDelay}')
     void relay() {
         commandRelayService.processCommands()
     }

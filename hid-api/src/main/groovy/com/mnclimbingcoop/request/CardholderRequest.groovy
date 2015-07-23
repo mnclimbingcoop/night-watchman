@@ -6,6 +6,9 @@ import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class CardholderRequest extends VertXRequest implements EntityCollectionRequest<CardholderRequest, Cardholder> {
 
     CardholderRequest() {
@@ -40,6 +43,10 @@ class CardholderRequest extends VertXRequest implements EntityCollectionRequest<
     }
 
     @Override
+    CardholderRequest show(String cardholderID, ResponseFormat responseFormat) {
+        return show(cardholderID as Integer, responseFormat)
+    }
+
     CardholderRequest show(Integer cardholderID, ResponseFormat responseFormat) {
         cardholders = new Cardholders(
             action: Action.LIST_RECORDS,
@@ -67,6 +74,10 @@ class CardholderRequest extends VertXRequest implements EntityCollectionRequest<
 
     @Override
     CardholderRequest delete(String cardholderID) {
+        delete(cardholderID as Integer)
+    }
+
+    CardholderRequest delete(Integer cardholderID) {
         cardholders = new Cardholders(
             action: Action.DELETE_DATA,
             cardholderID: cardholderID

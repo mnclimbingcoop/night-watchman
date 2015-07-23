@@ -98,7 +98,12 @@ class HidService {
     }
 
     VertXResponse get(String name, String xml) {
-        return apis[name].get(xml)
+        VertXResponse response = apis[name].get(xml)
+        if (response?.error) {
+            log.error "Error requesting XML: ${xml}"
+            log.error "Error details: ${response.error}"
+        }
+        return response
     }
 
     protected String wrap(VertXRequest request) {
