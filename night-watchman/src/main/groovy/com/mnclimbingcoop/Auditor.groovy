@@ -25,7 +25,6 @@ class Auditor {
     void monitor() {
         // This should probably be checked more often (every 3 sec?)
         eventService.poll()
-        // Send via SQS
     }
 
 }

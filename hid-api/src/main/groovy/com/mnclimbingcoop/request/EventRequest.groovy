@@ -57,6 +57,7 @@ class EventRequest extends VertXRequest {
         return this
     }
 
+    // Is this needed?
     EventRequest list(Integer historyRecordMarker,
                       LocalDateTime historyTimestamp,
                       Integer count = 10) {

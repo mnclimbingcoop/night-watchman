@@ -17,6 +17,7 @@ public class AwsConfiguration {
 
     static class SqsConfig {
         Boolean enabled = true
-        String queue
+        String pushQueue
+        String pullQueue
     }
 }

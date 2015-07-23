@@ -1,0 +1,21 @@
+buildscript {
+    ext {
+        springBootVersion = '1.2.3.RELEASE'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+    }
+}
+
+apply from: "${rootDir}/gradle/spring-boot.gradle"
+
+mainClassName="com.mnclimbingcoop.app.LakituApp"
+
+dependencies {
+    compile 'com.amazonaws:aws-java-sdk-sqs:1.10.2'
+}
+

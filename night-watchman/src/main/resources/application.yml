@@ -2,23 +2,25 @@ spring:
   groovy.template.check-template-location: false
 server:
   context-path: ''
-  port: 8080
+  port: 6590
 management:
-  port: 8099
+  port: 6591
+apiKey: 4121
 hidEdgePro:
   username: admin
   password: S3cret?
   devices:
     coop:
       description: Main Entrance
-      url: http://10.19.4.130
+      url: http://192.169.0.1
     loadingbay:
       description: Loading Bay Door
-      url: http://10.19.4.129
+      url: http://192.169.0.2
 aws:
   region: us-east-1
   sqs:
-    queue: mncc-state
+    pushQueue: mncc-state
+    pullQueue: mncc-commands
   accessKeyId: AKIAJTIVXYYOJNW5C32A
   secretKey: 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
 

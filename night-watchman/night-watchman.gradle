@@ -1,5 +1,3 @@
-import org.gradle.api.publish.maven.MavenPublication
-
 buildscript {
     ext {
         springBootVersion = '1.2.3.RELEASE'
@@ -13,91 +11,17 @@ buildscript {
     }
 }
 
-apply plugin: "spring-boot"
-apply plugin: "application"
-apply plugin: "maven-publish"
-apply plugin: "com.jfrog.bintray"
+apply from: "${rootDir}/gradle/spring-boot.gradle"
 
 mainClassName="com.mnclimbingcoop.app.DoorWatchmanApp"
 
-run {
-    // support passing system properties via command line to override -Dspring.profiles.active=deployed
-    jvmArgs = ["-Dspring.profiles.active=${System.properties['spring.profiles.active'] ?: 'dev'}"]
-}
-
 dependencies {
 
-    compile project(':hid-api')
-
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "com.squareup.okhttp:okhttp-urlconnection:${okhttpVersion}"
     compile "com.squareup.okhttp:okhttp:${okhttpVersion}"
-
     compile "com.squareup.retrofit:converter-jackson:${retrofitVersion}"
     compile("com.squareup.retrofit:retrofit:${retrofitVersion}") {
         exclude group: 'com.google.guava', module: 'guava'
     }
 
-    compile 'javax.annotation:javax.annotation-api:1.2'
-    compile 'javax.inject:javax.inject:1'
-    compile 'com.amazonaws:aws-java-sdk-sqs:1.10.2'
-
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    description "An archive of the source code for Maven Central"
-    classifier "sources"
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    description "An archive of the JavaDocs for Maven Central"
-    classifier "javadoc"
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar, javadocJar
-}
-
-publish.dependsOn assemble
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
-
-bintray {
-
-    user = project.hasProperty('bintrayUsername') ? project.getProperty('bintrayUsername') : ''
-    key = project.hasProperty('bintrayApiKey') ? project.getProperty('bintrayApiKey') : ''
-
-    publications = [ 'mavenJava' ]
-
-    dryRun = false
-    publish = true
-
-    pkg {
-        repo = 'maven'
-        name = 'night-watchman'
-        userOrg = 'mnclimbingcoop'
-        desc = 'An app to gather and publish information about HID EdgePro / EVO units.'
-        websiteUrl = 'https://github.com/mnclimbingcoop/night-watchman'
-        issueTrackerUrl = 'https://github.com/mnclimbingcoop/night-watchman/issues'
-        vcsUrl = 'https://github.com/mnclimbingcoop/night-watchman.git'
-        licenses = [ 'Apache-2.0' ]
-        labels = [ 'hid', 'edge', 'evo' ]
-        publicDownloadNumbers = true
-        version {
-            name = "${project.version}"
-            vcsTag = "${version}"
-        }
-    }
 }

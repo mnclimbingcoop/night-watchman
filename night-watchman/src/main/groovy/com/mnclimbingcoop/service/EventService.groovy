@@ -1,5 +1,6 @@
 package com.mnclimbingcoop.service
 
+import com.mnclimbingcoop.domain.EdgeSoloState
 import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
@@ -40,7 +41,6 @@ class EventService {
                     VertXResponse response = hidService.get(name, latestEvents)
                     if (response.eventMessages?.eventMessages) {
 
-                        assert response.eventMessages.
                         // Add new events
                         hidService.hidStates[name].events.addAll(response.eventMessages.eventMessages)
                         // Push events to the cloud
@@ -61,7 +61,7 @@ class EventService {
     // add inventory builder, or only keep last 100 events?
 
     void sync(String door, EventMessages overview, List<EventMessage> messages) {
-        EdgeSoloState state = new EdgeSoloState(doorName: door, eventOverview: overview, events: messages)
+        EdgeSoloState state = new EdgeSoloState(doorName: door, eventOverview: overview, events: messages.toSet())
         state.events.addAll(messages)
         hidService.sync(state)
     }

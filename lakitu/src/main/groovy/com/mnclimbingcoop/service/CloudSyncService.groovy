@@ -14,7 +14,7 @@ import javax.inject.Named
 @CompileStatic
 @Named
 @Slf4j
-class CloudSyncService extends AbstractCloudSyncService<EdgeSoloState, VertXRequest> {
+class CloudSyncService extends AbstractCloudSyncService<VertXRequest, EdgeSoloState> {
 
     @Inject
     CloudSyncService(ObjectMapper objectMapper,
@@ -23,8 +23,8 @@ class CloudSyncService extends AbstractCloudSyncService<EdgeSoloState, VertXRequ
     }
 
     @Override
-    VertXRequest convert(String data) {
-        return objectMapper.readValue(data, VertXRequest)
+    EdgeSoloState convert(String data) {
+        return objectMapper.readValue(data, EdgeSoloState)
     }
 
 }

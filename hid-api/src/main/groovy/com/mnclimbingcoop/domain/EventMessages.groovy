@@ -7,7 +7,7 @@ import com.mnclimbingcoop.domain.type.Action
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class EventMessages extends AbstractEntityCollection implements Comparable<EventMessage> {
+class EventMessages extends AbstractEntityCollection implements Comparable<EventMessages> {
 
     @JacksonXmlProperty(isAttribute=true)
     Integer eventsInUse

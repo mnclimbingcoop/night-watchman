@@ -2,6 +2,7 @@ package com.mnclimbingcoop.service
 
 import com.mnclimbingcoop.domain.Door
 import com.mnclimbingcoop.domain.Doors
+import com.mnclimbingcoop.domain.EdgeSoloState
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
 import com.mnclimbingcoop.request.DoorRequest

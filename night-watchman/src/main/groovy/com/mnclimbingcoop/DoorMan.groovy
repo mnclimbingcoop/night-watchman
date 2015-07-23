@@ -21,11 +21,9 @@ class DoorMan {
     }
 
     /** Check the doors every minute */
-    //@Scheduled(cron = '0 * * * * *')
+    @Scheduled(cron = '0 * * * * *')
     void secure() {
-        // This should probably be checked more often (every 20 sec?)
         doorService.list()
-        // listen via SQS
     }
 
 }
