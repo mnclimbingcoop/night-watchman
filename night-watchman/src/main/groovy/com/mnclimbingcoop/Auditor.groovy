@@ -23,7 +23,6 @@ class Auditor {
     /** Check for events every 3 seconds */
     @Scheduled(cron = '*/3 * * * * *')
     void monitor() {
-        // This should probably be checked more often (every 3 sec?)
         eventService.poll()
     }
 

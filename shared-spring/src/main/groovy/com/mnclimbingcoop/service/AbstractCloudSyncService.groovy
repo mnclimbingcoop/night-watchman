@@ -33,6 +33,8 @@ abstract class AbstractCloudSyncService<T,R> {
     protected AmazonSQS sqs
     protected String pushQueueUrl
     protected String pullQueueUrl
+    protected boolean flushCommands = false
+    protected Integer maxNumberOfMessages = 10
 
     Set<String> received = new ConcurrentSkipListSet<String>()
 
@@ -67,7 +69,7 @@ abstract class AbstractCloudSyncService<T,R> {
         log.info "Using SQS queues: push=${pushQueueUrl} pull=${pullQueueUrl}"
     }
 
-    void sendSqsMessage(T send) {
+    SendMessageResult sendSqsMessage(T send) {
         String payload = objectMapper.writeValueAsString(send)
         String gzipped = StringCompressor.compress(payload)
         Long payloadSize = gzipped.size()
@@ -77,6 +79,7 @@ abstract class AbstractCloudSyncService<T,R> {
         }
         SendMessageResult result = sqs.sendMessage(new SendMessageRequest(pushQueueUrl, gzipped))
         log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
+        return result
     }
 
     List<R> receiveSqsMessages() {
@@ -84,6 +87,7 @@ abstract class AbstractCloudSyncService<T,R> {
 
         // get the messages
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(pullQueueUrl)
+        receiveMessageRequest.maxNumberOfMessages = maxNumberOfMessages
         sqs.receiveMessage(receiveMessageRequest).messages.each{ Message message ->
 
             try {
@@ -95,11 +99,14 @@ abstract class AbstractCloudSyncService<T,R> {
                     String json = StringCompressor.decompress(message.body)
                     messages << convert(json)
 
-                    // Delete the message
+                    // Delete the message or mark it as ignore
                     String messageRecieptHandle = message.receiptHandle
-                    //sqs.deleteMessage(new DeleteMessageRequest(pullQueueUrl, messageRecieptHandle))
-                    log.warn "Not deleting message=${messageRecieptHandle}"
-                    received << messageId
+                    if (flushCommands) {
+                        sqs.deleteMessage(new DeleteMessageRequest(pullQueueUrl, messageRecieptHandle))
+                    } else {
+                        log.warn "Not deleting message=${messageRecieptHandle}"
+                        received << messageId
+                    }
                 }
             } catch (Exception ex) {
                 log.error('Got exception: {}', ex)

@@ -18,6 +18,8 @@ import javax.inject.Named
 @Slf4j
 class DoorService {
 
+    // TODO:  Support "Unlock Until" command states that ensure door is unlocked
+
     protected final HidService hidService
 
     @Inject

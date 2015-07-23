@@ -47,7 +47,7 @@ class Surveyor {
     }
 
     /** Wait 12 hours before each execution */
-    //@Scheduled(cron = '0 0 */12 * * *')
+    @Scheduled(cron = '0 0 */12 * * *')
     void survey() {
 
         // Really only update these once...

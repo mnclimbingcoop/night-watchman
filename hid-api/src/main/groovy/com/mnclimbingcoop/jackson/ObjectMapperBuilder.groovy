@@ -24,6 +24,7 @@ class ObjectMapperBuilder {
                     .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
                     .configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true)
                     .configure(SerializationFeature.INDENT_OUTPUT, true)
+                    .setSerializationInclusion(Include.NON_NULL)
 
         return objectMapper
     }
@@ -38,8 +39,7 @@ class ObjectMapperBuilder {
                     .configure(SerializationFeature.INDENT_OUTPUT, true)
                     .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS , false)
                     .configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, true)
-
-        objectMapper.setSerializationInclusion(Include.NON_NULL)
+                    .setSerializationInclusion(Include.NON_NULL)
 
         return objectMapper
 
