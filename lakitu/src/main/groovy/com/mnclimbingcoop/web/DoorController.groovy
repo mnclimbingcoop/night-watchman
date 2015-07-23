@@ -54,6 +54,7 @@ class DoorController {
         return doorService.grantAccess(door)
     }
 
+    // TODO: Stop alarm(s)
 
 }
 
