@@ -1,0 +1,14 @@
+spring:
+  groovy.template.check-template-location: false
+server:
+  context-path: ''
+  port: 8080
+management:
+  port: 8181
+apiKey: 4121
+aws:
+  region: us-east-1
+  sqs:
+    pushQueue: mncc-commands
+    pullQueue: mncc-state
+

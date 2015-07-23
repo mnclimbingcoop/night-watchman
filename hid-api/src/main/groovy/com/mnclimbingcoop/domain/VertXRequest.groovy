@@ -9,6 +9,10 @@ import groovy.transform.CompileStatic
 @JacksonXmlRootElement(localName='VertXMessage')
 class VertXRequest {
 
+    /** Used for remote requests */
+    @JacksonXmlProperty(isAttribute=true)
+    String doorName
+
     @JacksonXmlProperty(localName='hid:AlertActions')
     AlertActions alerts
 

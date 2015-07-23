@@ -24,7 +24,7 @@ class EventMessage implements Comparable<EventMessage> {
             4043,
             4044,
             4045
-    ].asSet().asImmutable()
+    ].toSet().asImmutable()
 
     @JacksonXmlProperty(isAttribute=true)
     Integer cardholderID
