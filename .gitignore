@@ -3,6 +3,7 @@ build/
 .java-version
 application.properties
 application.local.yml
+.night-watchman/*.jar
 *.swp
 .idea/
 *.iml

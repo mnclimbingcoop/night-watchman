@@ -4,6 +4,8 @@ if [ -d .git ]; then
     git pull
 fi
 
+LOCAL_INSTALL_PATH=`dirname $0`
+
 REPO=https://bintray.com/artifact/download/mnclimbingcoop/maven
 
 ARTIFACT=night-watchman
@@ -13,8 +15,8 @@ VERSION=0.1.0
 GROUP_PATH=${GROUP/\./\/}
 JAR=${ARTIFACT}-${VERSION}.jar
 
-LOCAL_FOLDER=${HOME}/.${ARTIFACT}
-INSTALL_PATH=${LOCAL_FOLDER}/${JAR}
+LOCAL_FOLDER=${LOCAL_INSTALL_PATH}/.${ARTIFACT}
+JAR_PATH=${LOCAL_FOLDER}/${JAR}
 
 JAVA_OPTS='-server -Xms512m -Xmx512m'
 
@@ -31,9 +33,9 @@ if [ ! -d ${LOCAL_FOLDER} ]; then
     mkdir -p ${LOCAL_FOLDER}
 fi
 
-if [ ! -r ${INSTALL_PATH} ]; then
-    echo "Downloading ${REPO}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} to ${INSTALL_PATH}"
-    curl -L ${REPO}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} > ${INSTALL_PATH}
+if [ ! -r ${JAR_PATH} ]; then
+    echo "Downloading ${REPO}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} to ${JAR_PATH}"
+    curl -L ${REPO}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} > ${JAR_PATH}
 fi
 
 if [ ! -f ${LOCAL_FOLDER}/application.properties ]; then
@@ -45,18 +47,18 @@ if [ ! -f ${LOCAL_FOLDER}/application.properties ]; then
     echo "" 1>&2
 fi
 
-if [ -r ${INSTALL_PATH} ]; then
-    echo "Executing: java -jar ${INSTALL_PATH}"
-    pushd ${LOCAL_FOLDER}
+if [ -r ${JAR_PATH} ]; then
+    echo "Executing: java -jar ${JAR_PATH}"
+    pushd ${LOCAL_INSTALL_PATH}
     if [ "${LOG_FILE}" == "&1" ]; then
-        java ${JAVA_OPTS} -jar ${INSTALL_PATH}
+        java ${JAVA_OPTS} -jar ${JAR_PATH}
     else
         echo "Logging output to $LOG_FILE"
-        java ${JAVA_OPTS} -jar ${INSTALL_PATH} >> ${LOG_FILE} 2>&1
+        java ${JAVA_OPTS} -jar ${JAR_PATH} >> ${LOG_FILE} 2>&1
     fi
     popd
     echo $?
 else
-    echo "Unable to find ${INSTALL_PATH}" 1>&2
+    echo "Unable to find ${JAR_PATH}" 1>&2
 fi
 
