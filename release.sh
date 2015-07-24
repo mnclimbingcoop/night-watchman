@@ -1,2 +1,6 @@
+#!/bin/bash
 
-gradle -DRELEASE_SCOPE=MAJOR -Prelease.stage=final -Prelease.scope=MAJOR clean build release bintrayUpload
+#SCOPE=MAJOR
+SCOPE=MINOR
+
+gradle -DRELEASE_SCOPE=${SCOPE} -Prelease.stage=final -Prelease.scope=${SCOPE} clean build release bintrayUpload
