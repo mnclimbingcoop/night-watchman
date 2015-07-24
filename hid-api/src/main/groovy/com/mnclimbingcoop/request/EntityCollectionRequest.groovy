@@ -8,7 +8,7 @@ interface EntityCollectionRequest<S,T> {
 
     abstract S list(Integer offset, Integer count)
 
-    abstract S show(Integer id, ResponseFormat responseFormat)
+    abstract S show(String id, ResponseFormat responseFormat)
 
     abstract S create(T item)
 

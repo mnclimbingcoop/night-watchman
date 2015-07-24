@@ -24,6 +24,9 @@ class VertXResponse {
     @JacksonXmlProperty(localName='Doors')
     Doors doors
 
+    @JacksonXmlProperty(localName='Error')
+    Error error
+
     @JacksonXmlProperty(localName='EventMessages')
     EventMessages eventMessages
 

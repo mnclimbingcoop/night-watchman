@@ -6,6 +6,9 @@ import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.DoorCommand
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class DoorRequest extends VertXRequest implements SimpleEntityRequest<DoorRequest> {
 
     DoorRequest() {

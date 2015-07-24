@@ -4,6 +4,9 @@ import com.mnclimbingcoop.domain.AlertActions
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class AlertRequest extends VertXRequest implements SimpleEntityRequest<AlertRequest> {
 
     AlertRequest() {

@@ -1,5 +1,7 @@
 package com.mnclimbingcoop.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.mnclimbingcoop.ObjectMapperBuilder
 import com.mnclimbingcoop.domain.EdgeSoloState
 
 import groovy.transform.CompileStatic
@@ -17,6 +19,7 @@ class DoorStateService {
 
     Map<String, EdgeSoloState> hidStates = new ConcurrentHashMap<String, EdgeSoloState>()
     protected final CloudSyncService cloudSyncService
+    protected final ObjectMapper objectMapper = new ObjectMapperBuilder().build()
 
     @Inject
     DoorStateService(CloudSyncService cloudSyncService) {
@@ -25,8 +28,10 @@ class DoorStateService {
 
     void buildState() {
         List<EdgeSoloState> stateUpdates = cloudSyncService.receiveSqsMessages()
+        if (!stateUpdates) { log.debug "nothing on the queue..." }
         stateUpdates.each { EdgeSoloState state ->
             EdgeSoloState doorState = getOrCreate(state.doorName)
+            log.debug('received state: {}', objectMapper.writeValueAsString(doorState))
             doorState.merge(state)
         }
     }

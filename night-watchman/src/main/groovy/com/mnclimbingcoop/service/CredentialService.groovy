@@ -40,13 +40,13 @@ class CredentialService {
     Credentials list(String name, Integer offset, Integer count) {
         VertXRequest request = new CredentialRequest().list(offset, count)
         Credentials credentials = hidService.get(name, request)?.credentials
-        if (credentials) {
+        if (credentials?.credentials) {
             hidService.hidStates[name].credentials.addAll(credentials.credentials)
         }
         return credentials
     }
 
-    Credential show(String name, Integer id) {
+    Credential show(String name, String id) {
         VertXRequest request = new CredentialRequest().show(id)
         Credential credential =  hidService.get(name, request)?.credentials?.credential
         if (credential) {

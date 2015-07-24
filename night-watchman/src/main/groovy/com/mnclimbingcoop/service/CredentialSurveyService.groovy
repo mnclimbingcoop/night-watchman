@@ -31,7 +31,7 @@ class CredentialSurveyService {
             // initialize list
             while (offset <= inUse) {
                 Credentials credentials = service.list(doorName, offset, PAGE_SIZE)
-                credentials.credentials.each{ Credential credential ->
+                credentials?.credentials?.each{ Credential credential ->
                     log.debug " + adding [#${credential.rawCardNumber}]: ${credential.cardNumber} ${credential.formatName}, owner: ${credential.cardholderID}"
                     added++
                 }

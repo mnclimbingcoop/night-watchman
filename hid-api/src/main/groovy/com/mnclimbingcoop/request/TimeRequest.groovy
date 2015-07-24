@@ -4,13 +4,16 @@ import com.mnclimbingcoop.domain.Time
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
+import groovy.transform.CompileStatic
+
 import org.joda.time.DateTime
 
+@CompileStatic
 class TimeRequest extends VertXRequest {
 
     // Default to central standard time
-    static String TZ = 'CST6CDT,M3.2.0/2,M11.1.0/2'
-    static String TZ_CODE = '062'
+    static final String TZ = 'CST6CDT,M3.2.0/2,M11.1.0/2'
+    static final String TZ_CODE = '062'
 
     TimeRequest() {
         time = new Time(action: Action.DESCRIBE_RECORDS)
@@ -25,14 +28,14 @@ class TimeRequest extends VertXRequest {
         DateTime now = DateTime.now()
         time = new Time(
             action: Action.UPDATE_DATA,
-            month: now.monthValue,
+            month: now.monthOfYear,
             dayOfMonth: now.dayOfMonth,
             year: now.year,
-            hour: now.hour,
-            minute: now.minute,
-            second: now.second,
-            TZ: TZ,
-            TZCode: TZ_CODE
+            hour: now.hourOfDay,
+            minute: now.minuteOfHour,
+            second: now.secondOfMinute,
+            tz: TZ,
+            tzCode: TZ_CODE
         )
         return this
     }

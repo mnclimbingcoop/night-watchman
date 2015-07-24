@@ -88,8 +88,8 @@ abstract class AbstractCloudSyncService<T,R> {
         // get the messages
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(pullQueueUrl)
         receiveMessageRequest.maxNumberOfMessages = maxNumberOfMessages
+        log.trace "checking for messages at ${pullQueueUrl} (max ${maxNumberOfMessages})"
         sqs.receiveMessage(receiveMessageRequest).messages.each{ Message message ->
-
             try {
                 String messageId = message.messageId
                 if (messageId in received) {

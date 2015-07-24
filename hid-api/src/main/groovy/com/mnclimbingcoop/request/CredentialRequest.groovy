@@ -6,8 +6,11 @@ import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
+import groovy.transform.CompileStatic
+
 import org.joda.time.LocalDateTime
 
+@CompileStatic
 class CredentialRequest extends VertXRequest implements EntityCollectionRequest<CredentialRequest, Credential> {
 
     CredentialRequest() {
@@ -37,12 +40,12 @@ class CredentialRequest extends VertXRequest implements EntityCollectionRequest<
         return this
     }
 
-    CredentialRequest show(Integer rawCardNumber) {
+    CredentialRequest show(String rawCardNumber) {
         return show(rawCardNumber, ResponseFormat.EXPANDED)
     }
 
     @Override
-    CredentialRequest show(Integer rawCardNumber, ResponseFormat responseFormat) {
+    CredentialRequest show(String rawCardNumber, ResponseFormat responseFormat) {
         credentials = new Credentials(
             action: Action.LIST_RECORDS,
             responseFormat: responseFormat,

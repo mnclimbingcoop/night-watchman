@@ -15,6 +15,7 @@ enum Action {
     RESPONSE_DATA('RD', 'Response Data'),
     LIST_RECORDS('LR', 'List Records'),
     RESPONSE_LIST('RL', 'Response List'),
+    RECORD_SET('RS', 'Record Set'),
     UPDATE_DATA('UD', 'Update Data')
 
     final String xmlValue
