@@ -23,7 +23,13 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 @Configuration
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-@ComponentScan(basePackages = [ 'com.mnclimbingcoop' ])
+@ComponentScan(basePackages = [
+    'com.mnclimbingcoop',
+    'com.mnclimbingcoop.app',
+    'com.mnclimbingcoop.config',
+    'com.mnclimbingcoop.service',
+    'com.mnclimbingcoop.web'
+])
 @Slf4j
 class LakituApp {
 

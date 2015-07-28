@@ -5,7 +5,9 @@ server:
   port: 6590
 management:
   port: 6591
-apiKey: 4121
+api:
+  keys:
+    ALL: enabled
 hidEdgePro:
   username: admin
   password: S3cret?

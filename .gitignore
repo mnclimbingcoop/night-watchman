@@ -10,3 +10,4 @@ application.local.yml
 *.ipr
 *.iws
 data/
+application.properties.*

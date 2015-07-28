@@ -5,16 +5,18 @@ server:
   port: 8080
 management:
   port: 8181
-apiKey: 4121
-schedule:
-  state:
-    rate: 5000 # 5 seconds in MS.
-    initialDelay: 5000 # 5 seconds
+api:
+  keys:
+    ALL: enabled
 aws:
   region: us-east-1
   sqs:
     pushQueue: mncc-commands
     pullQueue: mncc-state
+schedule:
+  state:
+    rate: 5000 # 5 seconds in MS.
+    initialDelay: 10000 # 10 seconds
 logging:
   level:
-    com.mnclimbingcoop.service: DEBUG
+    com.mnclimbingcoop: DEBUG

@@ -24,7 +24,7 @@ class CloudSyncService extends AbstractCloudSyncService<VertXRequest, EdgeSoloSt
 
     @Override
     EdgeSoloState convert(String data) {
-        log.info "converting ${data}"
+        log.trace "converting ${data}"
         return objectMapper.readValue(data, EdgeSoloState)
     }
 
