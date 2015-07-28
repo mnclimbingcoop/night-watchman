@@ -1,6 +1,9 @@
 package com.mnclimbingcoop.filter
 
+import com.mnclimbingcoop.config.ApiKeyConfiguration
+
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
 import javax.inject.Named
@@ -13,19 +16,19 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import org.springframework.beans.factory.annotation.Value
-
 @CompileStatic
 @Named
+@Slf4j
 class ApiKeyFilter implements Filter {
 
-    private final String apiKey
+    private final Map<String, String> apiKeys
 
     @Inject
-    ApiKeyFilter(@Value('${apiKey}') String apiKey) {
-        this.apiKey = apiKey
+    ApiKeyFilter(ApiKeyConfiguration apiConfig) {
+        this.apiKeys = apiConfig.keys
     }
 
+    @Override
     void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) req
@@ -38,16 +41,30 @@ class ApiKeyFilter implements Filter {
         }
         String requestToken = request.getParameter('access_token')
 
-        if (headerToken != apiKey && requestToken != apiKey) {
+        String keyHolder = getHolder(headerToken, requestToken)
+
+        if (!keyHolder) {
             response.setContentLength(0)
             response.sendError(403, 'Invalid API Token')
         } else {
+            log.info "Access granted to ${keyHolder}"
             chain.doFilter(req, res)
         }
     }
 
+    protected String getHolder(String headerToken, String requestToken) {
+        if (apiKeys['ALL'] == 'enabled') { return '*' }
+        String keyHolder = apiKeys[headerToken]
+        if (!keyHolder) {
+            keyHolder = apiKeys[requestToken]
+        }
+        return keyHolder
+    }
+
+    @Override
     void init(FilterConfig filterConfig) {}
 
+    @Override
     void destroy() {}
 
 }

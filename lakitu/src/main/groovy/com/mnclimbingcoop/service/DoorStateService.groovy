@@ -20,6 +20,7 @@ class DoorStateService {
     Map<String, EdgeSoloState> hidStates = new ConcurrentHashMap<String, EdgeSoloState>()
     protected final CloudSyncService cloudSyncService
     protected final ObjectMapper objectMapper = new ObjectMapperBuilder().build()
+    protected final DoorMerger doorMerger = new DoorMerger()
 
     @Inject
     DoorStateService(CloudSyncService cloudSyncService) {
@@ -30,18 +31,20 @@ class DoorStateService {
         List<EdgeSoloState> stateUpdates = cloudSyncService.receiveSqsMessages()
         if (!stateUpdates) { log.debug "nothing on the queue..." }
         stateUpdates.each { EdgeSoloState state ->
-            EdgeSoloState doorState = getOrCreate(state.doorName)
-            log.debug('received state: {}', objectMapper.writeValueAsString(doorState))
-            doorState.merge(state)
+            if (state.doorName) {
+                EdgeSoloState doorState = getOrCreate(state.doorName)
+                log.trace('received state: {}', objectMapper.writeValueAsString(state))
+                doorMerger.merge(doorState, state)
+            }
         }
     }
 
     EdgeSoloState getOrCreate(String doorName) {
-        EdgeSoloState doorState = hidStates[doorName]
-        if (!doorState) {
-            doorState = new EdgeSoloState(doorName: doorName)
-            hidStates[doorName] = doorState
-        }
+        if (hidStates.containsKey(doorName)) { return hidStates[doorName] }
+        log.info "Found new door"
+
+        EdgeSoloState doorState = new EdgeSoloState(doorName: doorName)
+        hidStates[doorName] = doorState
         return doorState
     }
 

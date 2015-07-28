@@ -93,7 +93,7 @@ abstract class AbstractCloudSyncService<T,R> {
             try {
                 String messageId = message.messageId
                 if (messageId in received) {
-                    log.debug "skipping message that has already been processed"
+                    log.trace "skipping message that has already been processed"
                 } else {
                     log.info "Received Message id=${messageId} md5=${message.getMD5OfBody()}"
                     String json = StringCompressor.decompress(message.body)
@@ -104,7 +104,7 @@ abstract class AbstractCloudSyncService<T,R> {
                     if (flushCommands) {
                         sqs.deleteMessage(new DeleteMessageRequest(pullQueueUrl, messageRecieptHandle))
                     } else {
-                        log.warn "Not deleting message=${messageRecieptHandle}"
+                        log.trace "Not deleting message=${messageRecieptHandle}"
                         received << messageId
                     }
                 }
