@@ -4,6 +4,8 @@
 
 [![Circle CI](https://circleci.com/gh/mnclimbingcoop/night-watchman/tree/master.svg?style=svg)](https://circleci.com/gh/mnclimbingcoop/night-watchman/tree/master)
 
+[![Snap CI](https://snap-ci.com/mnclimbingcoop/night-watchman/branch/master/build_image)](https://snap-ci.com/mnclimbingcoop/night-watchman/branch/master)
+
 ## To use
 
 ### First:
