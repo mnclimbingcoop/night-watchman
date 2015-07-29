@@ -3,9 +3,6 @@ package com.mnclimbingcoop.domain
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
-import groovy.transform.CompileStatic
-
-@CompileStatic
 @JacksonXmlRootElement(localName='VertXMessage')
 class VertXResponse {
 

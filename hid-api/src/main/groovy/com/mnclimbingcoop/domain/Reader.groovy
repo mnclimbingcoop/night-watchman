@@ -2,9 +2,6 @@ package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
-import groovy.transform.CompileStatic
-
-@CompileStatic
 class Reader implements Comparable<Reader> {
 
     @JacksonXmlProperty(isAttribute=true)

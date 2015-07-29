@@ -2,11 +2,8 @@ package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
-import groovy.transform.CompileStatic
+import joda.time.LocalTime
 
-import java.time.LocalTime
-
-@CompileStatic
 class DayOfWeekInterval {
 
     @JacksonXmlProperty(isAttribute=true)
