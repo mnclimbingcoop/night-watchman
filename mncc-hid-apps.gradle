@@ -27,6 +27,10 @@ subprojects {
         testCompile 'org.objenesis:objenesis:2.1'
     }
 
+    test {
+        jvmArgs '-Duser.timezone=UTC'
+    }
+
 }
 
 release {
