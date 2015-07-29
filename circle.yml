@@ -5,7 +5,12 @@ machine:
   java:
     version: oraclejdk8
 
+# setup gradle dependencies and cache libs
+dependencies:
+  override:
+    - ./gradlew clean dependencies compileGroovy compileTestGroovy
+
 ## Customize test commands
 test:
   override:
-    - ./gradlew build
+    - ./gradlew clean build
