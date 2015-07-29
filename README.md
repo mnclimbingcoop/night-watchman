@@ -1,6 +1,8 @@
 # HID Door Survey Service
 
-[ ![Download](https://api.bintray.com/packages/mnclimbingcoop/maven/lakitu/images/download.svg) ](https://bintray.com/mnclimbingcoop/maven/lakitu/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/mnclimbingcoop/maven/lakitu/images/download.svg)](https://bintray.com/mnclimbingcoop/maven/lakitu/_latestVersion)
+
+[![Circle CI](https://circleci.com/gh/mnclimbingcoop/night-watchman/tree/master.svg?style=svg)](https://circleci.com/gh/mnclimbingcoop/night-watchman/tree/master)
 
 ## To use
 
