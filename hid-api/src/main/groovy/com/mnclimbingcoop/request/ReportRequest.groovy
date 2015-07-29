@@ -5,9 +5,6 @@ import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ReportType
 
-import groovy.transform.CompileStatic
-
-@CompileStatic
 class ReportRequest extends VertXRequest {
 
     ReportRequest() {

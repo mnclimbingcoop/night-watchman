@@ -4,9 +4,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.mnclimbingcoop.domain.type.Action
 
-import groovy.transform.CompileStatic
-
-@CompileStatic
 class Readers {
 
     @JacksonXmlProperty(isAttribute=true)

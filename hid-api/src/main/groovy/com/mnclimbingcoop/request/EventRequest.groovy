@@ -4,11 +4,8 @@ import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
-import groovy.transform.CompileStatic
-
 import org.joda.time.LocalDateTime
 
-@CompileStatic
 class EventRequest extends VertXRequest {
 
     EventRequest() {

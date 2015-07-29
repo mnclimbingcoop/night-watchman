@@ -5,9 +5,6 @@ import com.mnclimbingcoop.domain.Readers
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
-import groovy.transform.CompileStatic
-
-@CompileStatic
 class ReaderRequest extends VertXRequest implements SimpleEntityRequest<ReaderRequest> {
 
     static final Integer READER_ID = 1
