@@ -1,0 +1,11 @@
+## Customize the test machine
+machine:
+  timezone:
+    America/Chicago # Set the timezone
+  java:
+    version: oraclejdk8
+
+## Customize test commands
+test:
+  override:
+    - ./gradlew build
