@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VertXMessage xmlns:hid="http://www.hidcorp.com/VertX">
+    <hid:Doors action="RD" >
+        <hid:Door doorName="zirbes"
+            doorType="2"
+            doorUnlockScheduleID="0"
+            doorUnlockGuardTime="5"
+            guardTimeFlag="set"
+            tamperAlarmState="set"
+            acAlarmState="unset"
+            batteryAlarmState="unset"
+            doorHeldAlarmState="unset"
+            doorForcedAlarmState="set"
+            relayState="unset"
+            auxRelayState="set"
+            currentDateTime="2015-08-03T20:02:06"
+            relayAlertState="set" >
+        </hid:Door>
+    </hid:Doors>
+</VertXMessage>
