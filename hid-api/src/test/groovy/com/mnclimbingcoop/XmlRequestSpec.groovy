@@ -1,11 +1,10 @@
 package com.mnclimbingcoop
 
+import com.mnclimbingcoop.request.ControlRequest
 import com.mnclimbingcoop.request.DoorRequest
 import com.mnclimbingcoop.request.EventRequest
 
 import org.joda.time.LocalDateTime
-
-import spock.lang.IgnoreRest
 
 class XmlRequestSpec extends XmlSpecification {
 
@@ -43,6 +42,11 @@ class XmlRequestSpec extends XmlSpecification {
     void 'grant access to door'() {
         expect:
         xmlFromFixture('request/door/open-door') == toXML(new DoorRequest().grantAccess())
+    }
+
+    void 'stop alarm '() {
+        expect:
+        xmlFromFixture('request/door/stop-alarm') == toXML(new ControlRequest().stopAlarm())
     }
 
 }

@@ -16,6 +16,9 @@ class VertXRequest {
     @JacksonXmlProperty(localName='hid:CardFormats')
     CardFormats cardFormats
 
+    @JacksonXmlProperty(localName='hid:ControlVariables')
+    ControlVariables controlVariables
+
     @JacksonXmlProperty(localName='hid:Cardholders')
     Cardholders cardholders
 
