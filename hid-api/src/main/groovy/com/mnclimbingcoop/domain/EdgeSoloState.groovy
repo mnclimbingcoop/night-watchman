@@ -1,9 +1,7 @@
 package com.mnclimbingcoop.domain
 
-import groovy.transform.CompileStatic
 import java.util.concurrent.ConcurrentSkipListSet
 
-@CompileStatic
 class EdgeSoloState {
 
     String doorName

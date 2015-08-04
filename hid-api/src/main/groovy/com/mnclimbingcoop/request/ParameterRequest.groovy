@@ -4,9 +4,6 @@ import com.mnclimbingcoop.domain.EdgeSoloParameters
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
-import groovy.transform.CompileStatic
-
-@CompileStatic
 class ParameterRequest extends VertXRequest {
 
     ParameterRequest() {

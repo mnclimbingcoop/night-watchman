@@ -1,13 +1,9 @@
 package com.mnclimbingcoop.compresssion
 
-import groovy.transform.CompileStatic
-
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-@CompileStatic
 class StringCompressor {
-
 
     static String decompress(String input) {
         if (!input) { return input }
