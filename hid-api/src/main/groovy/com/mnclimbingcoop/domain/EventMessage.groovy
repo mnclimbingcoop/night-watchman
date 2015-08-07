@@ -23,6 +23,10 @@ class EventMessage implements Comparable<EventMessage> {
             4045
     ].toSet().asImmutable()
 
+    /** Not part of HID API */
+    @JacksonXmlProperty(isAttribute=true)
+    String door
+
     @JacksonXmlProperty(isAttribute=true)
     Integer cardholderID
 

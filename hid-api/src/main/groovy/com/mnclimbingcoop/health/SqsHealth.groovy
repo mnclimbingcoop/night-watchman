@@ -10,7 +10,8 @@ class SqsHealth {
     LocalDateTime lastQueueCheck
     int messagesReceived = 0
     int messagesSent = 0
-    boolean sqsOk = false
+    boolean sqsReadOk = false
+    boolean sqsWriteOk = false
 
     boolean isOk() {
 
@@ -19,7 +20,7 @@ class SqsHealth {
 
         return (
             lastQueueCheck > minCheckTime &&
-            sqsOk
+            sqsReadOk && sqsWriteOk
         )
     }
 

@@ -17,7 +17,7 @@ class DoorManSpec extends Specification {
 
     void 'secure checks doors'() {
         when:
-        doorMan.secure()
+        doorMan.knock()
 
         then:
         1 * doorService.list()

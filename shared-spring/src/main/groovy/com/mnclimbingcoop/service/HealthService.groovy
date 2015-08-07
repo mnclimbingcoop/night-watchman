@@ -45,20 +45,31 @@ class HealthService {
         return health
     }
 
-    void checkedMessage(int n, boolean ok) {
+    void checkedMessages(int n) {
         LocalDateTime now = LocalDateTime.now()
         health.sqsHealth.lastQueueCheck = now
         if (n > 0) {
             health.sqsHealth.messagesReceived += n
             health.sqsHealth.lastQueueRead = now
         }
-        health.sqsHealth.sqsOk = ok
+        health.sqsHealth.sqsReadOk = true
+    }
+
+    void checkMessagesFailed() {
+        LocalDateTime now = LocalDateTime.now()
+        health.sqsHealth.lastQueueCheck = now
+        health.sqsHealth.sqsReadOk = false
     }
 
     void sentMessage() {
         LocalDateTime now = LocalDateTime.now()
         health.sqsHealth.messagesSent++
         health.sqsHealth.lastQueueWritten = now
+        health.sqsHealth.sqsWriteOk = true
+    }
+
+    void sendMessageFailed() {
+        health.sqsHealth.sqsWriteOk = false
     }
 
     void initDoor(String name, String address) {

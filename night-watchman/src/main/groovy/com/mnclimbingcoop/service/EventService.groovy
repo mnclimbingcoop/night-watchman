@@ -7,11 +7,18 @@ import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
 import com.mnclimbingcoop.request.EventRequest
 
+import java.util.concurrent.TimeUnit
+
+import org.springframework.scheduling.annotation.Async
+
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
 import javax.inject.Named
+
+import rx.Observable
+import rx.Subscriber
 
 @CompileStatic
 @Named
@@ -27,55 +34,80 @@ class EventService {
         this.hidService = hidService
     }
 
-    Map<String, EventMessages> poll() {
+    @Async
+    void watch() {
 
-        // Check the overview status for each door
-        VertXRequest request = new EventRequest().overview()
-        hidService.getAll(request) { String name, VertXResponse resp ->
-            if (resp.eventMessages) {
-                EventMessages overview = resp.eventMessages
-                EventMessages last = hidService.hidStates[name].eventOverview
+        log.info "preparing to watch for events."
+        Thread.sleep(2000) // Wait 2s before starting
+        log.info "watching for events."
 
-                // If the overview has changed since last we checked...
-                if (overview != last) {
-                    log.debug 'Events not up to date, requesting latest events.'
-                    VertXRequest latestEvents = new EventRequest().fromOverview(overview).since(last)
-                    VertXResponse response = hidService.get(name, latestEvents)
-                    if (response.eventMessages?.eventMessages) {
+        List<Observable> observables = hidService.doors.collect{
+            observeEvents(it).buffer(1, TimeUnit.SECONDS)
+        }
 
-                        // Add new events
-                        hidService.hidStates[name].events.addAll(response.eventMessages.eventMessages)
-                        // Push events to the cloud
-                        sync(name, overview, response.eventMessages.eventMessages)
-                        healthService.updatedEvents(name)
-                    }
+        Observable.merge(observables).subscribe(
+            { List<EventMessage> events ->
+                events.each{ EventMessage event ->
+                    // credentials are already added to the state via the CredentialService
+                    log.debug "Event: timestamp: ${event.timestamp} eventType: ${event.eventType} " +
+                              "commandStatus: ${event.commandStatus} " +
+                              "cardholderID: ${event.cardholderID} " +
+                              "forename: ${event.forename} surname: ${event.surname}"
                 }
 
-                // Update the state so it knows that we have the latest overview info now
-                hidService.hidStates[name].eventOverview = overview
-
-                return [ name, overview ]
-                healthService.checkedEvents(name)
-            } else {
-                return [ name, null ]
+                if (events) {
+                    sync(events)
+                }
+            }, { Throwable t ->
+                log.error "Error while reading events ${t.class}", t
+            }, {
+                log.info "Event stream stop."
             }
-        }
+        )
     }
 
-    // add inventory builder, or only keep last 100 events?
+    protected Observable<EventMessage> observeEvents(String door) {
+        return Observable.create({ Subscriber<EventMessage> subscriber ->
+            Thread.start {
+                VertXRequest request = new EventRequest().overview()
+                EventMessages last = null
+                while (!subscriber.unsubscribed) {
+                    EventMessages overview = hidService.get(door, request)?.eventMessages
 
-    void sync(String door, EventMessages overview, List<EventMessage> messages) {
+                    // If the overview has changed since last we checked...
+                    if (overview && overview != last) {
+                        VertXRequest latestEvents = new EventRequest().fromOverview(overview).since(last)
+                        EventMessages latest = hidService.get(door, latestEvents)?.eventMessages
+                        healthService.checkedEvents(door)
+                        if (latest?.eventMessages) {
+                            for (EventMessage eventMessage : latest.eventMessages) {
+                                if (subscriber.unsubscribed) { break }
+                                eventMessage.door = door
+                                subscriber.onNext(eventMessage)
+                            }
+                            healthService.updatedEvents(door)
+                        }
+                        last = overview
+                    } else {
+                        // If we found events that we need to get, only wait 1/2 second before checking again
+                        Thread.sleep(500)
+                    }
+
+                    // Else wait 2 seconds
+                    Thread.sleep(2000)
+                }
+            }
+        } as Observable.OnSubscribe<EventMessage>)
+    }
+
+    void sync(List<EventMessage> messages) {
+        String door = messages[0].door
         EdgeSoloState state = new EdgeSoloState(
-            doorName:      door,
-            eventOverview: overview,
-            events:        messages.toSet()
+            doorName: door,
+            events:   messages.toSet()
         )
         state.events.addAll(messages)
         hidService.sync(state)
-    }
-
-    void sync() {
-        hidService.sync()
     }
 
 }

@@ -47,7 +47,6 @@ class AdminController {
 
     @RequestMapping(value = '/state/{door}', method = RequestMethod.GET, produces = 'application/json')
     EdgeSoloState getState(@PathVariable door) {
-        log.info "getting state for '${door}'"
         return hidService.hidStates.get(door)
     }
 

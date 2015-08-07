@@ -9,6 +9,9 @@ import groovy.util.logging.Slf4j
 import javax.inject.Inject
 import javax.inject.Named
 
+import rx.Observable
+import rx.Subscriber
+
 @CompileStatic
 @Named
 @Slf4j
@@ -16,40 +19,55 @@ class CardholderSurveyService {
 
     static final Integer PAGE_SIZE = 10
     protected final CardholderService service
+    protected final HidService hidService
 
     @Inject
-    CardholderSurveyService(CardholderService cardholderService) {
+    CardholderSurveyService(CardholderService cardholderService, HidService hidService) {
         this.service = cardholderService
+        this.hidService = hidService
     }
 
     void survey() {
-        // Loop through all card members for each door
-        counts.each{ String doorName, Integer inUse ->
-            log.info "Found ${inUse} card holders for ${doorName}"
-            Integer offset = 0
-            Integer added = 0
-            // initialize list
-            while (offset <= inUse) {
-                Cardholders cardholders = service.list(doorName, offset, PAGE_SIZE)
-                cardholders?.cardholders?.each{ Cardholder cardholder ->
-                    log.debug " + adding [#${cardholder.cardholderID}]: ${cardholder.forename} ${cardholder.surname}"
-                    added++
+        hidService.doors.each{ String door ->
+            log.info 'Starting carholder observable'
+            observeCardholders(door).subscribe(
+                { Cardholder cardholder ->
+                    // cardholders are already added to the state via the CardholderService
+                    log.info " + adding [#${cardholder.cardholderID}]: ${cardholder.forename} ${cardholder.surname}"
+                }, { Throwable t ->
+                    log.error "Error while reading card holders ${t.class} ${t.message}"
+                }, {
+                    log.info "Done retrieving card holders."
+                    service.sync()
                 }
-                offset += PAGE_SIZE
-                log.info " ? retrieved ${offset} out of ${inUse} card holders for door ${doorName}."
-            }
-            log.info "Done retrieving ${added} cardholders for ${doorName} door."
+            )
         }
-        service.sync()
     }
 
-    protected Map<String, Integer> getCounts() {
-        Map<String, Integer> counts = [:]
-        Map<String, Cardholders> metaData = service.overview()
-        metaData.each{ String doorName, Cardholders cardholders ->
-            counts[doorName] = cardholders.inUse
-        }
-        return counts
+    protected Observable<Cardholder> observeCardholders(String door) {
+        return Observable.create({ Subscriber<Cardholder> subscriber ->
+            Thread.start {
+                Cardholders metaData = service.overview(door)
+                Integer inUse = metaData.inUse
+                log.info "discovered ${inUse} cardholders"
+                Integer offset = 0
+                while (offset <= inUse && !subscriber.unsubscribed) {
+                    Cardholders cardholders = service.list(door, offset, PAGE_SIZE)
+                    if (cardholders.cardholders) {
+                        for (Cardholder cardholder : cardholders.cardholders) {
+                            if (subscriber.unsubscribed) { break }
+                            subscriber.onNext(cardholder)
+                        }
+                    }
+                    Thread.sleep(100)
+                    offset += PAGE_SIZE
+                }
+
+                if (!subscriber.unsubscribed) {
+                    subscriber.onCompleted()
+                }
+            }
+        } as Observable.OnSubscribe<Cardholder>)
     }
 
 }

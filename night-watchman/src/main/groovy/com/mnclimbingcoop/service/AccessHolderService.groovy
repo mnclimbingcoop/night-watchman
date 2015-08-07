@@ -1,4 +1,3 @@
-
 package com.mnclimbingcoop.service
 
 import com.amazonaws.services.sqs.model.SendMessageResult

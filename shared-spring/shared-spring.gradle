@@ -5,6 +5,8 @@ dependencies {
         //exclude "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
+    compile 'io.reactivex:rxjava:1.0.13'
+
     compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}"
 

@@ -71,14 +71,6 @@ class HidService {
         cloudSyncService.sendSqsMessage(state)
     }
 
-    void pull() {
-        List<VertXRequest> requests = cloudSyncService.receiveSqsMessages()
-        requests.each{ VertXRequest request ->
-            getAll(request)
-        }
-    }
-
-
     Set<String> getDoors() {
         apis.keySet()
     }
