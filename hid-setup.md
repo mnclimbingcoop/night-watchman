@@ -1,7 +1,10 @@
 # Setting up a new Edge EVO Solo device:
 
 ## Open Browser
-* Login via IP to: https://192.168.1.116/html/index.html
+
+You'll have to figure out what IP address your device was assigned via DHCP
+
+* Login via IP to: https://?.?.?.?/html/index.html
 * username: admin
 * password: (blank)
 
