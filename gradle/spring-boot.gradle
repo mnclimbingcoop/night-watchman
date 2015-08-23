@@ -14,12 +14,6 @@ dependencies {
     compile project(':hid-api')
     compile project(':shared-spring')
 
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-
-    compile 'javax.annotation:javax.annotation-api:1.2'
-    compile 'javax.inject:javax.inject:1'
-
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 

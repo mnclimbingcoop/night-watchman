@@ -1,8 +1,12 @@
 dependencies {
     compile project(':hid-api')
 
-    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+        //exclude "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
     compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}"
 
     compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'javax.inject:javax.inject:1'
