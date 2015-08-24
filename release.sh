@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #SCOPE=MAJOR
-SCOPE=MINOR
+#SCOPE=MINOR
+SCOPE=PATCH
 
 gradle -DRELEASE_SCOPE=${SCOPE} -Prelease.stage=final -Prelease.scope=${SCOPE} clean build release bintrayUpload

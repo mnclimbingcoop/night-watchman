@@ -39,9 +39,7 @@ class OrchestratorService {
         Meta meta = request.meta
 
         // Currently will only orchestrate adding/updating an access holder
-        if (meta.accessHolder) {
-            orchestrate door, accessHolder
-        }
+        if (meta.accessHolder) { orchestrate door, meta.accessHolder }
     }
 
     void orchestrate(String door, AccessHolder accessHolder) {
@@ -287,7 +285,7 @@ class OrchestratorService {
             }
             if (cardholders.size() == 1) {
                 cardholder = cardholders[0]
-            } else {
+            } else if (cardholders.size() > 1) {
                 log.error("Too many card holders found. {}", cardholders)
             }
         }
