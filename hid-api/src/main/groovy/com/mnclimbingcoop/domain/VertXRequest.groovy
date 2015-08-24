@@ -49,6 +49,9 @@ class VertXRequest {
     @JacksonXmlProperty(localName='hid:Time')
     Time time
 
+    /** Not actually sent to door, but used for cloud to local */
+    AccessHolder accessHolder
+
     VertXRequest forDoor(String door) {
         this.doorName = door
         return this
