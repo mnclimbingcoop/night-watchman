@@ -3,6 +3,7 @@ package com.mnclimbingcoop.service
 
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.mnclimbingcoop.domain.AccessHolder
+import com.mnclimbingcoop.domain.Meta
 import com.mnclimbingcoop.domain.VertXRequest
 
 import groovy.transform.CompileStatic
@@ -39,7 +40,7 @@ class AccessHolderService {
 
     protected VertXRequest request(String door, AccessHolder accessHolder) {
         VertXRequest request = new VertXRequest().forDoor(door)
-        request.accessHolder = accessHolder
+        request.meta = new Meta(accessHolder: accessHolder)
         return request
     }
 

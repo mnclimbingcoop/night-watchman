@@ -40,6 +40,9 @@ class VertXRequest {
     @JacksonXmlProperty(localName='hid:Reports')
     Reports reports
 
+    @JacksonXmlProperty(localName='hid:RoleSet')
+    RoleSet roleSet
+
     @JacksonXmlProperty(localName='hid:Schedules')
     Schedules schedules
 
@@ -50,7 +53,7 @@ class VertXRequest {
     Time time
 
     /** Not actually sent to door, but used for cloud to local */
-    AccessHolder accessHolder
+    Meta meta
 
     VertXRequest forDoor(String door) {
         this.doorName = door
