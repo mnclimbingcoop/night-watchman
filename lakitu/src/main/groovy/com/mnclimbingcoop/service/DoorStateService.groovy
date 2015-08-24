@@ -29,7 +29,6 @@ class DoorStateService {
 
     void buildState() {
         List<EdgeSoloState> stateUpdates = cloudSyncService.receiveSqsMessages()
-        if (!stateUpdates) { log.debug "nothing on the queue..." }
         stateUpdates.each { EdgeSoloState state ->
             if (state.doorName) {
                 EdgeSoloState doorState = getOrCreate(state.doorName)
@@ -41,7 +40,7 @@ class DoorStateService {
 
     EdgeSoloState getOrCreate(String doorName) {
         if (hidStates.containsKey(doorName)) { return hidStates[doorName] }
-        log.info "Found new door"
+        log.info "Found new door '${doorName}'"
 
         EdgeSoloState doorState = new EdgeSoloState(doorName: doorName)
         hidStates[doorName] = doorState

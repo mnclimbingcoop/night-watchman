@@ -33,10 +33,4 @@ class DoorRequest extends VertXRequest implements SimpleEntityRequest<DoorReques
         return this
     }
 
-    DoorRequest stopAlarm() {
-        // TODO
-        // doors = new Doors(action: Action.COMMAND_MODE, command: DoorCommand.GRANT)
-        return this
-    }
-
 }

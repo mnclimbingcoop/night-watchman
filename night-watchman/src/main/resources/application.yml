@@ -10,14 +10,14 @@ api:
     ALL: enabled
 hidEdgePro:
   username: admin
-  password: S3cret?
-  devices:
-    coop:
-      description: Main Entrance
-      url: http://192.169.0.1
-    loadingbay:
-      description: Loading Bay Door
-      url: http://192.169.0.2
+# password: S3cret?
+# devices:
+#   coop:
+#     description: Main Entrance
+#     url: http://192.169.0.1
+#   loadingbay:
+#     description: Loading Bay Door
+#     url: http://192.169.0.2
 schedule:
   survey:
     rate: 21600000 # 6 hours in MS.
@@ -26,16 +26,16 @@ schedule:
     rate: 10000 # 10 seconds in MS.
     initialDelay: 3000 # 3 seconds
   events:
-    rate: 2000 # 2 seconds in MS.
+    rate: 1500 # 1.5 seconds in MS.
     initialDelay: 10000 # 5 seconds
   commands:
-    rate: 5000 # 5 seconds in MS.
+    rate: 1000 # 1 seconds in MS.
     initialDelay: 7000 # 7 seconds
 aws:
   region: us-east-1
-  sqs:
-    pushQueue: mncc-state
-    pullQueue: mncc-commands
+# sqs:
+#   pushQueue: mncc-state
+#   pullQueue: mncc-commands
 logging:
   level:
     com.mnclimbingcoop.service: DEBUG
