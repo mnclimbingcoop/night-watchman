@@ -20,7 +20,6 @@ class DoorMan {
         this.doorService = doorService
     }
 
-    /** Check the doors every minute */
     @Scheduled(fixedDelayString = '${schedule.door.rate}', initialDelayString = '${schedule.door.initialDelay}')
     void secure() {
         doorService.list()

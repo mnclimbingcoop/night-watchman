@@ -94,7 +94,7 @@ class CredentialRequest extends VertXRequest implements EntityCollectionRequest<
         return this
     }
 
-    CredentialRequest updateCardHolder(String rawCardNumber, Integer cardholderID) {
+    CredentialRequest updateCardholder(String rawCardNumber, Integer cardholderID) {
         credentials = new Credentials(
             action: Action.UPDATE_DATA,
             rawCardNumber: rawCardNumber,

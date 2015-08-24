@@ -2,8 +2,11 @@ package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
+import groovy.transform.ToString
+
 import org.joda.time.LocalDateTime
 
+@ToString
 class Credential implements Comparable<Credential> {
 
     @JacksonXmlProperty(isAttribute=true)

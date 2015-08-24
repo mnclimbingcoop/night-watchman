@@ -61,7 +61,11 @@ class EventService {
     // add inventory builder, or only keep last 100 events?
 
     void sync(String door, EventMessages overview, List<EventMessage> messages) {
-        EdgeSoloState state = new EdgeSoloState(doorName: door, eventOverview: overview, events: messages.toSet())
+        EdgeSoloState state = new EdgeSoloState(
+            doorName:      door,
+            eventOverview: overview,
+            events:        messages.toSet()
+        )
         state.events.addAll(messages)
         hidService.sync(state)
     }

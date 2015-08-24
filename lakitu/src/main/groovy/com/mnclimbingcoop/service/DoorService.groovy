@@ -2,6 +2,7 @@ package com.mnclimbingcoop.service
 
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.mnclimbingcoop.domain.VertXRequest
+import com.mnclimbingcoop.request.ControlRequest
 import com.mnclimbingcoop.request.DoorRequest
 
 import groovy.transform.CompileStatic
@@ -22,36 +23,54 @@ class DoorService {
         this.doorStateService = doorStateService
     }
 
-    List<SendMessageResult> lock() {
-        List<SendMessageResult> results = []
-        doorStateService.doorNames.each{ String door ->
-            results << cloudSyncService.sendSqsMessage(request(door).lock())
-        }
-        return results
-    }
-
     SendMessageResult lock(String door) {
         return cloudSyncService.sendSqsMessage(request(door).lock())
     }
 
-    List<SendMessageResult> unlock() {
-        List<SendMessageResult> results = []
-        doorStateService.doorNames.each{ String door ->
-            results << cloudSyncService.sendSqsMessage(request(door).unlock())
-
-        }
-        return results
+    List<SendMessageResult> lock() {
+        return requestAll{ String door -> request(door).lock()}
     }
 
     SendMessageResult unlock(String door) {
         return cloudSyncService.sendSqsMessage(request(door).unlock())
     }
 
+    List<SendMessageResult> unlock() {
+        return requestAll{ String door -> request(door).unlock()}
+    }
+
     SendMessageResult grantAccess(String door) {
         return cloudSyncService.sendSqsMessage(request(door).grantAccess())
     }
 
-    DoorRequest request(String door) {
+    List<SendMessageResult> grantAccess() {
+        return requestAll{ String door -> request(door).grantAccess()}
+    }
+
+    SendMessageResult stopAlarm(String door) {
+        return cloudSyncService.sendSqsMessage(requestControl(door).stopAlarm())
+    }
+
+    List<SendMessageResult> stopAlarm() {
+        return requestAll{ String door -> requestControl(door).stopAlarm()}
+    }
+
+    //~ BEGIN PROTECTED METHODS ===============================================
+
+    protected List<SendMessageResult> requestAll(Closure<VertXRequest> cls) {
+        List<SendMessageResult> results = []
+        doorStateService.doorNames.each{ String door ->
+            results << cloudSyncService.sendSqsMessage(cls(door))
+
+        }
+        return results
+    }
+
+    protected ControlRequest requestControl(String door) {
+        return (ControlRequest) new ControlRequest().forDoor(door)
+    }
+
+    protected DoorRequest request(String door) {
         return (DoorRequest) new DoorRequest().forDoor(door)
     }
 
