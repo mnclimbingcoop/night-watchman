@@ -12,3 +12,4 @@ application.*.yml
 data/
 application.properties.*
 configs/
+configs
