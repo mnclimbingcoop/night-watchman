@@ -59,7 +59,7 @@ class OrchestratorService {
             }
 
         } else {
-            lot.error "Door '${door}' not found."
+            log.error "Door '${door}' not found."
         }
     }
 
@@ -86,7 +86,10 @@ class OrchestratorService {
                 // Find or create credential
                 credential = findCredential(card, formatID, cardholder.credentials)
                 if (!credential) { credential = findCredential(card, formatID, state.credentials) }
-                if (!credential) { credential = findCredential(card, formatID, (state.cardholders*.credentials)?.flatten()) }
+                if (!credential) {
+                    List<Credential> creds = (List<Credential>) (state.cardholders*.credentials)?.flatten() ?: []
+                    credential = findCredential(card, formatID, creds)
+                }
                 if (!credential) { credential = createCredential(door, card, accessHolder.endTime, formatID) }
             }
 
@@ -105,24 +108,27 @@ class OrchestratorService {
         if (!(credential.rawCardNumber in cardholder.credentials*.rawCardNumber)) {
             log.info "Assigning card ${credential.rawCardNumber} to card holder ${cardholder.cardholderID}"
             VertXRequest request = new CredentialRequest()
-                    .forDoor(door)
                     .updateCardholder(credential.rawCardNumber, cardholder.cardholderID)
+                    .forDoor(door)
             hidService.get(door, request)
         }
 
         if (credential.endTime != endTime) {
             log.info "Assigning expiration ${endTime} to card card ${credential.rawCardNumber}"
             VertXRequest request = new CredentialRequest()
-                    .forDoor(door)
                     .updateExpiration(credential.rawCardNumber, endTime)
+                    .forDoor(door)
             hidService.get(door, request)
 
         }
 
     }
 
+    protected Credential findCredential(AccessCard card, Integer formatID, Set<Credential> credentials) {
+        return findCredential(card, formatID, credentials as List)
+    }
 
-    protected Credential findCredential(AccessCard card, Integer formatID, Collection<Credential> credentials) {
+    protected Credential findCredential(AccessCard card, Integer formatID, List<Credential> credentials) {
         if (credentials) {
             // Find or create credential
             Collection<Credential> creds = credentials.findAll{ Credential cred ->
@@ -151,7 +157,7 @@ class OrchestratorService {
             isCard:        true,
             rawCardNumber: card.rawCardNumber
         )
-        CredentialRequest request = new CredentialRequest().forDoor(door).create(credential)
+        VertXRequest request = new CredentialRequest().create(credential).forDoor(door)
         VertXResponse response = hidService.get(door, request)
         if (response?.credentials?.credentials) {
             return response.credentials.credentials[0]
@@ -174,7 +180,7 @@ class OrchestratorService {
             isCard:        true,
             rawCardNumber: card.rawCardNumber
         )
-        CredentialRequest request = new CredentialRequest().forDoor(door).create(cred)
+        VertXRequest request = new CredentialRequest().create(cred).forDoor(door)
         VertXResponse response = hidService.get(door, request)
         if (response?.credentials?.credentials) {
             return response.credentials.credentials[0]
@@ -191,7 +197,7 @@ class OrchestratorService {
             return
         }
 
-        Set<Integer> scheduleIDs = (cardholder.roles*.scheduleID)?.flatten()
+        Set<Integer> scheduleIDs = (cardholder.roles*.scheduleID)?.flatten() as Set
         if (schedule.scheduleID in scheduleIDs) { return }
 
         Role role = new Role(roleID: cardholder.cardholderID, scheduleID: schedule.scheduleID, resourceID: 0)

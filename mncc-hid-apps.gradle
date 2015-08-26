@@ -31,6 +31,12 @@ subprojects {
         jvmArgs '-Duser.timezone=UTC'
     }
 
+    compileGroovy {
+        configure(groovyOptions) {
+            configurationScript = file("$rootDir/gradle/compiler-config.groovy")
+        }
+    }
+
 }
 
 release {

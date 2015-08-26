@@ -30,6 +30,7 @@ abstract class AbstractCloudSyncService<T,R> {
 
     protected final ObjectMapper objectMapper
     protected final AwsConfiguration awsConfig
+    protected final HealthService healthService
     protected AmazonSQS sqs
     protected String pushQueueUrl
     protected String pullQueueUrl
@@ -40,10 +41,13 @@ abstract class AbstractCloudSyncService<T,R> {
 
     static final Long MAX_DATA_BYTES = 1024 * 256
 
-    AbstractCloudSyncService(ObjectMapper objectMapper,
-                             AwsConfiguration awsConfig) {
+    AbstractCloudSyncService(AwsConfiguration awsConfig,
+                             HealthService healthService,
+                             ObjectMapper objectMapper) {
+
         this.objectMapper = objectMapper
         this.awsConfig = awsConfig
+        this.healthService = healthService
     }
 
     @PostConstruct
@@ -88,6 +92,7 @@ abstract class AbstractCloudSyncService<T,R> {
         // get the messages
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(pullQueueUrl)
         receiveMessageRequest.maxNumberOfMessages = maxNumberOfMessages
+        boolean sqsOk = true
         log.trace "checking for messages at ${pullQueueUrl} (max ${maxNumberOfMessages})"
         sqs.receiveMessage(receiveMessageRequest).messages.each{ Message message ->
             try {
@@ -109,9 +114,11 @@ abstract class AbstractCloudSyncService<T,R> {
                     }
                 }
             } catch (Exception ex) {
+                sqsOk = false
                 log.error('Got exception: {}', ex)
             }
         }
+        healthService.checkedMessage(messages.size(), sqsOk)
         return messages
 
     }

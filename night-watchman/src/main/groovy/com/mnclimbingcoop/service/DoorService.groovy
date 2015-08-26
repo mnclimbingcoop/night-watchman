@@ -21,10 +21,12 @@ class DoorService {
     // TODO:  Support "Unlock Until" command states that ensure door is unlocked
 
     protected final HidService hidService
+    protected final HealthService healthService
 
     @Inject
-    DoorService(HidService hidService) {
+    DoorService(HealthService healthService, HidService hidService) {
         this.hidService = hidService
+        this.healthService = healthService
     }
 
     Map<String, Doors> list() {
@@ -47,10 +49,14 @@ class DoorService {
     }
 
     void updateState(String name, Doors doors) {
+        healthService.checkedDoor(name)
         // Only 1 door to support
         Door current = doors.doors[0]
         Door last = hidService.hidStates[name].doors[0]
-        if (current.changed(last)) { sync(name, current) }
+        if (current.changed(last)) {
+            sync(name, current)
+            healthService.updatedDoor(name)
+        }
         hidService.hidStates[name].doors.addAll(current)
     }
 
