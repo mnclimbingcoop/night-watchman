@@ -1,11 +1,12 @@
 hidEdgePro.username: admin
 hidEdgePro.password: Password1
-hidEdgePro.devices.test.enabled: false
-hidEdgePro.devices.coop.description: Main Entrance
-hidEdgePro.devices.coop.url: http://192.168.1.33
-hidEdgePro.devices.loadingbay.description: Loading Bay Door
+hidEdgePro.devices.frontdoor.description: Front Door
+hidEdgePro.devices.frontdoor.url: http://192.168.1.33
+hidEdgePro.devices.sidedoor.description: Side Entrance
+hidEdgePro.devices.sidedoor.url: http://192.168.1.44
+hidEdgePro.devices.loadingbay.description: Loading bay entrance
 hidEdgePro.devices.loadingbay.url: http://192.168.1.44
 aws.region: us-east-1
-aws.sqs.state.push: hiddoorstate
-aws.sqs.control.push: hidcmdresponse
-aws.sqs.control.pull: hidcmdrequest
+aws.sqs.pushQueue: hid-state
+aws.sqs.pullQueue: hid-commands
+aws.sqs.healthQueue: hid-health
