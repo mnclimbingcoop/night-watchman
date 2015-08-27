@@ -47,7 +47,7 @@ class CredentialSurveyService {
         Map<String, Integer> counts = [:]
         Map<String, Credentials> metaData = service.overview()
         metaData.each{ String doorName, Credentials credentials ->
-            counts[doorName] = credentials.inUse
+            counts[doorName] = credentials.unassignedCredentials
         }
         return counts
     }
