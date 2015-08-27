@@ -106,6 +106,7 @@ class HidService {
             log.error "Error requesting XML: ${xml}"
             log.error "Error details: ${response.error}"
             healthService.getFailed(name, request, response.error.toString())
+            throw new HidRemoteErrorException(response.error.toString())
         } else {
             healthService.getSucceded(name, request)
         }

@@ -74,14 +74,15 @@ abstract class AbstractCloudSyncService<T,R> {
         sqs = new AmazonSQSClient(creds)
         sqs.region = Region.getRegion(Regions.fromName(region))
 
-        assert pullQueue || pullQueue
+        assert region
+        assert pullQueue || pushQueue
 
         createQueues()
     }
 
     protected void createQueues() {
-        if (pullQueue) {
-            CreateQueueRequest createQueueRequest = new CreateQueueRequest(pullQueue)
+        if (pushQueue) {
+            CreateQueueRequest createQueueRequest = new CreateQueueRequest(pushQueue)
             pushQueueUrl = sqs.createQueue(createQueueRequest).queueUrl
         }
 
@@ -107,6 +108,7 @@ abstract class AbstractCloudSyncService<T,R> {
         }
         SendMessageResult result = sqs.sendMessage(new SendMessageRequest(pushQueueUrl, gzipped))
         log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
+        healthService.sentMessage()
         return result
     }
 

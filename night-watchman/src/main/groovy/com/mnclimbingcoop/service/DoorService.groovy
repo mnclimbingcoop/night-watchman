@@ -54,6 +54,7 @@ class DoorService {
         Door current = doors.doors[0]
         Door last = hidService.hidStates[name].doors[0]
         if (current.changed(last)) {
+            log.info "Door state changed, sending"
             sync(name, current)
             healthService.updatedDoor(name)
         }

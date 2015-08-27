@@ -20,7 +20,7 @@ class CommandSlurper {
         this.commandRelayService = commandRelayService
     }
 
-    @Scheduled(fixedDelayString = '${schedule.health.rate}', initialDelayString = '${schedule.health.initialDelay}')
+    @Scheduled(fixedDelayString = '${schedule.commands.rate}', initialDelayString = '${schedule.commands.initialDelay}')
     void relay() {
         commandRelayService.processCommands()
     }
