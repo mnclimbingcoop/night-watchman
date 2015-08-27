@@ -38,7 +38,7 @@ class CredentialService {
     }
 
     Credentials list(String name, Integer offset, Integer count) {
-        VertXRequest request = new CredentialRequest().list(offset, count)
+        VertXRequest request = new CredentialRequest().list(offset, count, null)
         Credentials credentials = hidService.get(name, request)?.credentials
         if (credentials?.credentials) {
             hidService.hidStates[name].credentials.addAll(credentials.credentials)

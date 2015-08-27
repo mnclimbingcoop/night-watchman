@@ -42,6 +42,13 @@ class CardholderService {
         Cardholders cardholders = hidService.get(name, request)?.cardholders
         if (cardholders?.cardholders) {
             hidService.hidStates[name].cardholders.addAll(cardholders.cardholders)
+
+            cardholders.cardholders.each{ Cardholder cardholder ->
+                if (cardholder.credentials) {
+                    hidService.hidStates[name].credentials.addAll(cardholder.credentials)
+                }
+            }
+
         }
         return cardholders
     }
