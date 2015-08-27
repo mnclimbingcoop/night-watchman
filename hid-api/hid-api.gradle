@@ -10,9 +10,3 @@ dependencies {
 
     compile "org.codehaus.woodstox:woodstox-core-asl:${woodstoxVersion}"
 }
-
-compileGroovy {
-    configure(groovyOptions) {
-        configurationScript = file("$rootDir/gradle/compiler-config.groovy")
-    }
-}

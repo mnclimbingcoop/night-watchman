@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
-
 @RestController
 @Slf4j
 class AdminController {
@@ -49,20 +48,23 @@ class AdminController {
     @RequestMapping(value = '/state/{door}', method = RequestMethod.GET, produces = 'application/json')
     EdgeSoloState getState(@PathVariable door) {
         log.info "getting state for '${door}'"
-        return hidService.hidStates[door]
+        return hidService.hidStates.get(door)
     }
 
     /** will seed cardholders with a predefined list */
     @RequestMapping(value = '/cardholders', method = RequestMethod.POST, produces = 'application/json')
     Integer createCardholders(@RequestBody Map<String, Set<Cardholder>> allCardholders) {
+        Integer created = 0
         allCardholders.each{ String name, Set<Cardholder> cardholders ->
             EdgeSoloState state = hidService.hidStates[name]
             if (state) {
                 cardholders.each{ Cardholder cardholder ->
                     state.cardholders << cardholder
+                    created++
                 }
             }
         }
+        return created
     }
 
 

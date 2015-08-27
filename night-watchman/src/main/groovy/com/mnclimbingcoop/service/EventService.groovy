@@ -18,10 +18,12 @@ import javax.inject.Named
 @Slf4j
 class EventService {
 
+    protected final HealthService healthService
     protected final HidService hidService
 
     @Inject
-    EventService(HidService hidService) {
+    EventService(HealthService healthService, HidService hidService) {
+        this.healthService = healthService
         this.hidService = hidService
     }
 
@@ -45,6 +47,7 @@ class EventService {
                         hidService.hidStates[name].events.addAll(response.eventMessages.eventMessages)
                         // Push events to the cloud
                         sync(name, overview, response.eventMessages.eventMessages)
+                        healthService.updatedEvents(name)
                     }
                 }
 
@@ -52,6 +55,7 @@ class EventService {
                 hidService.hidStates[name].eventOverview = overview
 
                 return [ name, overview ]
+                healthService.checkedEvents(name)
             } else {
                 return [ name, null ]
             }

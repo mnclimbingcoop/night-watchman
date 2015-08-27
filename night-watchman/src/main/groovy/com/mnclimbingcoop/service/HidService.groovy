@@ -22,21 +22,24 @@ import javax.inject.Named
 @Slf4j
 class HidService {
 
+    protected final CloudSyncService cloudSyncService
     protected final DoorConfiguration config
+    protected final HealthService healthService
     protected final Map<String, HidEdgeProApi> apis = new ConcurrentHashMap<String, HidEdgeProApi>()
     protected final XmlMapper objectMapper
-    protected final CloudSyncService cloudSyncService
 
     // Stores the state of all HID edge units
     Map<String, EdgeSoloState> hidStates = new ConcurrentHashMap<String, EdgeSoloState>()
 
     @Inject
-    HidService(DoorConfiguration config,
-               CloudSyncService cloudSyncService,
+    HidService(CloudSyncService cloudSyncService,
+               DoorConfiguration config,
+               HealthService healthService,
                XmlMapper objectMapper) {
 
         this.cloudSyncService = cloudSyncService
         this.config = config
+        this.healthService = healthService
         this.objectMapper = objectMapper
     }
 
@@ -54,6 +57,7 @@ class HidService {
                                                 .withAuthentication(username, password)
                                                 .build(HidEdgeProApi)
                 hidStates[name] = new EdgeSoloState(doorName: name)
+                healthService.initDoor(name, device.url)
             }
         }
 
@@ -96,16 +100,21 @@ class HidService {
     }
 
     VertXResponse get(String name, VertXRequest request) {
-        return get(name, wrap(request))
-    }
-
-    VertXResponse get(String name, String xml) {
-        VertXResponse response = apis[name].get(xml)
+        VertXResponse response = get(name, wrap(request))
         if (response?.error) {
+            String xml = wrap(request)
             log.error "Error requesting XML: ${xml}"
             log.error "Error details: ${response.error}"
+            healthService.getFailed(name, request, response.error.toString())
+            throw new HidRemoteErrorException(response.error.toString())
+        } else {
+            healthService.getSucceded(name, request)
         }
         return response
+    }
+
+    protected VertXResponse get(String name, String xml) {
+        return apis[name].get(xml)
     }
 
     protected String wrap(VertXRequest request) {

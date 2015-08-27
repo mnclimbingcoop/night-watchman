@@ -78,8 +78,10 @@ class Surveyor {
         log.info "discovering cardholder info"
         cardholderSurveyService.survey()
 
+        // TODO Build from credentials remaining
         log.info "discovering credential info"
         credentialSurveyService.survey()
+
 
     }
 

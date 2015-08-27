@@ -17,9 +17,10 @@ import javax.inject.Named
 class CloudSyncService extends AbstractCloudSyncService<VertXRequest, EdgeSoloState> {
 
     @Inject
-    CloudSyncService(ObjectMapper objectMapper,
-                     AwsConfiguration awsConfig) {
-        super(objectMapper, awsConfig)
+    CloudSyncService(AwsConfiguration awsConfig,
+                     HealthService healthService,
+                     ObjectMapper objectMapper) {
+        super(awsConfig, healthService, objectMapper)
     }
 
     @Override
