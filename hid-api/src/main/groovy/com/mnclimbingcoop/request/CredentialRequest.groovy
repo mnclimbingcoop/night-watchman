@@ -34,6 +34,7 @@ class CredentialRequest extends VertXRequest implements EntityCollectionRequest<
             recordOffset: offset,
             recordCount: count
         )
+        if (!responseFormat) { credentials.cardholderID = '' }
         return this
     }
 

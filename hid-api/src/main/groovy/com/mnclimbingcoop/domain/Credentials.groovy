@@ -22,6 +22,9 @@ class Credentials extends AbstractEntityCollection {
     @JacksonXmlProperty(isAttribute=true)
     Integer unassignedCredentials
 
+    @JacksonXmlProperty(isAttribute=true)
+    String cardholderID
+
     @Override
     Integer getInUse() { credentialsInUse }
 
