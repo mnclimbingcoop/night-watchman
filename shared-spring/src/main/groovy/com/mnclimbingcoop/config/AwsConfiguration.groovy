@@ -19,5 +19,6 @@ public class AwsConfiguration {
         Boolean enabled = true
         String pushQueue
         String pullQueue
+        String healthQueue
     }
 }

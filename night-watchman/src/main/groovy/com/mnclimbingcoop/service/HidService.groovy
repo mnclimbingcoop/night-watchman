@@ -100,9 +100,7 @@ class HidService {
     }
 
     VertXResponse get(String name, VertXRequest request) {
-        //return get(name, wrap(request))
-
-        VertXResponse response = apis[name].get(request)
+        VertXResponse response = get(name, wrap(request))
         if (response?.error) {
             String xml = wrap(request)
             log.error "Error requesting XML: ${xml}"
@@ -112,17 +110,10 @@ class HidService {
             healthService.getSucceded(name, request)
         }
         return response
-
     }
 
-    @Deprecated
     protected VertXResponse get(String name, String xml) {
-        VertXResponse response = apis[name].get(xml)
-        if (response?.error) {
-            log.error "Error requesting XML: ${xml}"
-            log.error "Error details: ${response.error}"
-        }
-        return response
+        return apis[name].get(xml)
     }
 
     protected String wrap(VertXRequest request) {

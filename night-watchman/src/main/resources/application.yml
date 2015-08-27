@@ -31,11 +31,15 @@ schedule:
   commands:
     rate: 1000 # 1 seconds in MS.
     initialDelay: 7000 # 7 seconds
+  health:
+    rate: 10000 # 10 seconds in MS.
+    initialDelay: 30000 # 30 seconds
 aws:
   region: us-east-1
 # sqs:
-#   pushQueue: mncc-state
-#   pullQueue: mncc-commands
+#   pushQueue:   mncc-state
+#   pullQueue:   mncc-commands
+#   healthQueue: mncc-health
 logging:
   level:
     com.mnclimbingcoop.service: DEBUG

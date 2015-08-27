@@ -7,11 +7,11 @@ import com.mnclimbingcoop.health.Health
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
-import org.springframework.beans.factory.annotation.Value
-
+import javax.inject.Inject
 import javax.inject.Named
 
 import org.joda.time.LocalDateTime
+import org.springframework.beans.factory.annotation.Value
 
 @CompileStatic
 @Named
@@ -26,7 +26,8 @@ class HealthService {
             '127.0.0.1'
     ] as Set
 
-    HealthService(@Value('${local.server.port}') Integer serverPort) {
+    @Inject
+    HealthService(@Value('${server.port}') Integer serverPort) {
         // Set port
         health.port = serverPort
 
@@ -77,6 +78,7 @@ class HealthService {
 
     void updatedDoor(String name) {
         LocalDateTime now = LocalDateTime.now()
+        health.doors[name].lastDoorCheck = now
         health.doors[name].lastDoorMessage = now
         health.doors[name].doorOk = true
     }
@@ -84,13 +86,14 @@ class HealthService {
     void checkedEvents(String name) {
         LocalDateTime now = LocalDateTime.now()
         health.doors[name].lastEventCheck = now
-        health.doors[name].doorOk = true
+        health.doors[name].eventOk = true
     }
 
     void updatedEvents(String name) {
         LocalDateTime now = LocalDateTime.now()
+        health.doors[name].lastEventCheck = now
         health.doors[name].lastEvent = now
-        health.doors[name].doorOk = true
+        health.doors[name].eventOk = true
     }
 
     void getFailed(String name, VertXRequest request, String message) {
@@ -105,7 +108,11 @@ class HealthService {
     }
 
     void getSucceded(String name, VertXRequest request) {
-        if (!request.doors && !request.eventMessages) {
+        if (request.doors) {
+            health.doors[name].doorOk = true
+        } else if (request.eventMessages) {
+            health.doors[name].eventOk = true
+        } else {
             health.doors[name].otherOk = true
         }
     }

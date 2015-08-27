@@ -29,7 +29,6 @@ import javax.annotation.PostConstruct
 abstract class AbstractCloudSyncService<T,R> {
 
     protected final ObjectMapper objectMapper
-    protected final AwsConfiguration awsConfig
     protected final HealthService healthService
     protected AmazonSQS sqs
     protected String pushQueueUrl
@@ -37,17 +36,35 @@ abstract class AbstractCloudSyncService<T,R> {
     protected boolean flushCommands = false
     protected Integer maxNumberOfMessages = 10
 
+    protected String region
+    protected String pushQueue
+    protected String pullQueue
+
     Set<String> received = new ConcurrentSkipListSet<String>()
 
     static final Long MAX_DATA_BYTES = 1024 * 256
+
+    AbstractCloudSyncService(String region,
+                             String pushQueue,
+                             HealthService healthService,
+                             ObjectMapper objectMapper) {
+
+        this.objectMapper = objectMapper
+        this.healthService = healthService
+        this.pushQueue = pushQueue
+        this.region = region
+
+    }
 
     AbstractCloudSyncService(AwsConfiguration awsConfig,
                              HealthService healthService,
                              ObjectMapper objectMapper) {
 
         this.objectMapper = objectMapper
-        this.awsConfig = awsConfig
         this.healthService = healthService
+        this.pushQueue = awsConfig.sqs.pushQueue
+        this.pullQueue = awsConfig.sqs.pullQueue
+        this.region = awsConfig.region
     }
 
     @PostConstruct
@@ -55,25 +72,32 @@ abstract class AbstractCloudSyncService<T,R> {
         AWSCredentialsProvider credProvider = new DefaultAWSCredentialsProviderChain()
         AWSCredentials creds = credProvider.credentials
         sqs = new AmazonSQSClient(creds)
-        sqs.region = Region.getRegion(Regions.fromName(awsConfig.region))
+        sqs.region = Region.getRegion(Regions.fromName(region))
 
-        assert awsConfig.sqs.pushQueue != null
-        assert awsConfig.sqs.pullQueue != null
+        assert pullQueue || pullQueue
 
-        createQueue()
+        createQueues()
     }
 
-    protected void createQueue() {
-        CreateQueueRequest createQueueRequest = new CreateQueueRequest(awsConfig.sqs.pushQueue)
-        pushQueueUrl = sqs.createQueue(createQueueRequest).queueUrl
+    protected void createQueues() {
+        if (pullQueue) {
+            CreateQueueRequest createQueueRequest = new CreateQueueRequest(pullQueue)
+            pushQueueUrl = sqs.createQueue(createQueueRequest).queueUrl
+        }
 
-        createQueueRequest = new CreateQueueRequest(awsConfig.sqs.pullQueue)
-        pullQueueUrl = sqs.createQueue(createQueueRequest).queueUrl
+        if (pullQueue) {
+            CreateQueueRequest createQueueRequest = new CreateQueueRequest(pullQueue)
+            pullQueueUrl = sqs.createQueue(createQueueRequest).queueUrl
+        }
 
         log.info "Using SQS queues: push=${pushQueueUrl} pull=${pullQueueUrl}"
     }
 
     SendMessageResult sendSqsMessage(T send) {
+        if (!pushQueueUrl) {
+            log.error "No PUSH queue defined."
+            return null
+        }
         String payload = objectMapper.writeValueAsString(send)
         String gzipped = StringCompressor.compress(payload)
         Long payloadSize = gzipped.size()
@@ -88,6 +112,11 @@ abstract class AbstractCloudSyncService<T,R> {
 
     List<R> receiveSqsMessages() {
         List<R> messages = []
+
+        if (!pullQueueUrl) {
+            log.error "No PULL queue defined."
+            return messages
+        }
 
         // get the messages
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(pullQueueUrl)
