@@ -28,12 +28,13 @@ class DoorStateService {
     }
 
     void buildState() {
-        List<EdgeSoloState> stateUpdates = cloudSyncService.receiveSqsMessages()
-        stateUpdates.each { EdgeSoloState state ->
+        cloudSyncService.observable.subscribe{ EdgeSoloState state ->
             if (state.doorName) {
                 EdgeSoloState doorState = getOrCreate(state.doorName)
                 log.trace('received state: {}', objectMapper.writeValueAsString(state))
                 doorMerger.merge(doorState, state)
+            } else {
+                log.error('door name missing from incoming state data! {}', objectMapper.writeValueAsString(state))
             }
         }
     }

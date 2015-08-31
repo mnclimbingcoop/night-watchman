@@ -21,7 +21,7 @@ class DoorMan {
     }
 
     @Scheduled(fixedDelayString = '${schedule.door.rate}', initialDelayString = '${schedule.door.initialDelay}')
-    void secure() {
+    void knock() {
         doorService.list()
     }
 

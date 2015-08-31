@@ -16,13 +16,18 @@ import com.amazonaws.services.sqs.model.SendMessageResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mnclimbingcoop.compresssion.StringCompressor
 import com.mnclimbingcoop.config.AwsConfiguration
+import com.mnclimbingcoop.observables.MessageObservableFactory
 
-import java.util.concurrent.ConcurrentSkipListSet
+import org.apache.http.NoHttpResponseException
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
+import java.util.concurrent.ConcurrentSkipListSet
+
 import javax.annotation.PostConstruct
+
+import rx.Observable
 
 @CompileStatic
 @Slf4j
@@ -85,7 +90,6 @@ abstract class AbstractCloudSyncService<T,R> {
             CreateQueueRequest createQueueRequest = new CreateQueueRequest(pushQueue)
             pushQueueUrl = sqs.createQueue(createQueueRequest).queueUrl
         }
-
         if (pullQueue) {
             CreateQueueRequest createQueueRequest = new CreateQueueRequest(pullQueue)
             pullQueueUrl = sqs.createQueue(createQueueRequest).queueUrl
@@ -94,6 +98,7 @@ abstract class AbstractCloudSyncService<T,R> {
         log.info "Using SQS queues: push=${pushQueueUrl} pull=${pullQueueUrl}"
     }
 
+    /** Push a message to SQS */
     SendMessageResult sendSqsMessage(T send) {
         if (!pushQueueUrl) {
             log.error "No PUSH queue defined."
@@ -106,52 +111,33 @@ abstract class AbstractCloudSyncService<T,R> {
             log.warn "payload size=${payloadSize} exceeds the ${MAX_DATA_BYTES} byte maximum " +
                      "size for an SQS message! (it will probably fail)"
         }
-        SendMessageResult result = sqs.sendMessage(new SendMessageRequest(pushQueueUrl, gzipped))
-        log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
-        healthService.sentMessage()
-        return result
+        try {
+            SendMessageResult result = sqs.sendMessage(new SendMessageRequest(pushQueueUrl, gzipped))
+            healthService.sentMessage()
+            log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
+            return result
+        } catch ( NoHttpResponseException ex) {
+            log.error "Failed to send ${payloadSize} byte message: ${payload}"
+            healthService.sendMessageFailed()
+        }
+        return null
     }
 
-    List<R> receiveSqsMessages() {
-        List<R> messages = []
-
-        if (!pullQueueUrl) {
-            log.error "No PULL queue defined."
-            return messages
-        }
-
-        // get the messages
-        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(pullQueueUrl)
-        receiveMessageRequest.maxNumberOfMessages = maxNumberOfMessages
-        boolean sqsOk = true
-        log.trace "checking for messages at ${pullQueueUrl} (max ${maxNumberOfMessages})"
-        sqs.receiveMessage(receiveMessageRequest).messages.each{ Message message ->
-            try {
-                String messageId = message.messageId
-                if (messageId in received) {
-                    log.trace "skipping message that has already been processed"
-                } else {
-                    log.info "Received Message id=${messageId} md5=${message.getMD5OfBody()}"
-                    String json = StringCompressor.decompress(message.body)
-                    messages << convert(json)
-
-                    // Delete the message or mark it as ignore
-                    String messageRecieptHandle = message.receiptHandle
-                    if (flushCommands) {
-                        sqs.deleteMessage(new DeleteMessageRequest(pullQueueUrl, messageRecieptHandle))
-                    } else {
-                        log.trace "Not deleting message=${messageRecieptHandle}"
-                        received << messageId
-                    }
-                }
-            } catch (Exception ex) {
-                sqsOk = false
-                log.error('Got exception: {}', ex)
+    /** Returns an obserable that streams SQS messages */
+    Observable<R> getObservable() {
+        MessageObservableFactory messageFactory = new MessageObservableFactory(sqs, healthService, pullQueueUrl, maxNumberOfMessages)
+        messageFactory.getSqsObservable().distinct{ Message message ->
+            return message.messageId
+        }.map{ Message message ->
+            log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
+            String json = StringCompressor.decompress(message.body)
+            R item =  convert(json)
+            if (flushCommands) {
+                String messageRecieptHandle = message.receiptHandle
+                sqs.deleteMessage(new DeleteMessageRequest(pullQueueUrl, messageRecieptHandle))
             }
+            return item
         }
-        healthService.checkedMessage(messages.size(), sqsOk)
-        return messages
-
     }
 
     // return objectMapper.readValue(json, R)

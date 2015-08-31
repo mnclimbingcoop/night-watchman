@@ -9,6 +9,9 @@ import groovy.util.logging.Slf4j
 import javax.inject.Inject
 import javax.inject.Named
 
+import rx.Observable
+import rx.Subscriber
+
 @CompileStatic
 @Named
 @Slf4j
@@ -16,40 +19,55 @@ class CredentialSurveyService {
 
     static final Integer PAGE_SIZE = 10
     protected final CredentialService service
+    protected final HidService hidService
 
     @Inject
-    CredentialSurveyService(CredentialService credentialService) {
+    CredentialSurveyService(CredentialService credentialService, HidService hidService) {
         this.service = credentialService
+        this.hidService = hidService
     }
 
     void survey() {
-        // Loop through all card members for each door
-        counts.each{ String doorName, Integer inUse ->
-            log.info "Found ${inUse} credentials for ${doorName}"
-            Integer offset = 0
-            Integer added = 0
-            // initialize list
-            while (offset <= inUse) {
-                Credentials credentials = service.list(doorName, offset, PAGE_SIZE)
-                credentials?.credentials?.each{ Credential credential ->
-                    log.debug " + adding [#${credential.rawCardNumber}]: ${credential.cardNumber} ${credential.formatName}, owner: ${credential.cardholderID}"
-                    added++
-                }
-                offset += PAGE_SIZE
-                log.info " ? retrieved ${offset} out of ${inUse} credentials for door ${doorName}."
+        List<Observable> observables = hidService.doors.collect{ observeCredentials(it) }
+
+        Observable.merge(observables).subscribe(
+            { Credential credential ->
+                // credentials are already added to the state via the CredentialService
+                log.debug " + adding [#${credential.rawCardNumber}]: " +
+                          "${credential.cardNumber} ${credential.formatName}, owner: ${credential.cardholderID}"
+            }, { Throwable t ->
+                log.error "Error while reading credentials ${t.class} ${t.message}"
+            }, {
+                log.info "Done retrieving credentials."
+                service.sync()
             }
-            log.info "Done retrieving ${added} credentials for ${doorName} door."
-        }
-        service.sync()
+        )
     }
 
-    protected Map<String, Integer> getCounts() {
-        Map<String, Integer> counts = [:]
-        Map<String, Credentials> metaData = service.overview()
-        metaData.each{ String doorName, Credentials credentials ->
-            counts[doorName] = credentials.unassignedCredentials
-        }
-        return counts
+    protected Observable<Credential> observeCredentials(String door) {
+        return Observable.create({ Subscriber<Credential> subscriber ->
+            Thread.start {
+                Credentials metaData = service.overview(door)
+                Integer unassignedCredentials = metaData.unassignedCredentials
+                log.info "discovered ${unassignedCredentials} unassigned credentials"
+                Integer offset = 0
+                while (offset <= unassignedCredentials && !subscriber.unsubscribed) {
+                    Credentials credentials = service.list(door, offset, PAGE_SIZE)
+                    if (credentials.credentials) {
+                        for (Credential credential : credentials.credentials) {
+                            if (subscriber.unsubscribed) { break }
+                            subscriber.onNext(credential)
+                        }
+                    }
+                    Thread.sleep(100)
+                    offset += PAGE_SIZE
+                }
+
+                if (!subscriber.unsubscribed) {
+                    subscriber.onCompleted()
+                }
+            }
+        } as Observable.OnSubscribe<Credential>)
     }
 
 }

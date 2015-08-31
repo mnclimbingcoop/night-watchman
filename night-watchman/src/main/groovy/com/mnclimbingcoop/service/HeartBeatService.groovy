@@ -28,6 +28,7 @@ class HeartBeatService extends AbstractCloudSyncService<Health, String> {
 
     @Scheduled(fixedDelayString = '${schedule.health.rate}', initialDelayString = '${schedule.health.initialDelay}')
     void breath() {
+        log.info "Heartbeat."
         sendSqsMessage(healthService.health)
     }
 
