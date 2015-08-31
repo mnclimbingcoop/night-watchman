@@ -1,5 +1,6 @@
 package com.mnclimbingcoop.service
 
+import com.mnclimbingcoop.Surveyor
 import com.mnclimbingcoop.domain.AccessCard
 import com.mnclimbingcoop.domain.AccessHolder
 import com.mnclimbingcoop.domain.Cardholder
@@ -28,10 +29,12 @@ import org.joda.time.LocalDateTime
 class OrchestratorService {
 
     protected final HidService hidService
+    protected final Surveyor surveyor
 
     @Inject
-    OrchestratorService(HidService hidService) {
+    OrchestratorService(HidService hidService, Surveyor surveyor) {
         this.hidService = hidService
+        this.surveyor = surveyor
     }
 
     void orchestrate(VertXRequest request) {
@@ -39,7 +42,13 @@ class OrchestratorService {
         Meta meta = request.meta
 
         // Currently will only orchestrate adding/updating an access holder
-        if (meta.accessHolder) { orchestrate door, meta.accessHolder }
+        if (meta.refresh) { refresh() }
+        if (meta.accessHolder) { orchestrate(door, meta.accessHolder) }
+    }
+
+    void refresh() {
+        log.info 'refreshing all door data'
+        surveyor.survey()
     }
 
     void orchestrate(String door, AccessHolder accessHolder) {

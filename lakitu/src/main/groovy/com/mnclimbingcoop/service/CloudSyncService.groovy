@@ -21,6 +21,9 @@ class CloudSyncService extends AbstractCloudSyncService<VertXRequest, EdgeSoloSt
                      HealthService healthService,
                      ObjectMapper objectMapper) {
         super(awsConfig, healthService, objectMapper)
+        flushCommands = true
+        // Writing to this queue is optional, so default health to true
+        healthService.health.sqsHealth.sqsWriteOk = true
     }
 
     @Override

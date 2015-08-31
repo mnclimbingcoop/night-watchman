@@ -51,12 +51,14 @@ abstract class AbstractCloudSyncService<T,R> {
 
     AbstractCloudSyncService(String region,
                              String pushQueue,
+                             String pullQueue,
                              HealthService healthService,
                              ObjectMapper objectMapper) {
 
         this.objectMapper = objectMapper
         this.healthService = healthService
         this.pushQueue = pushQueue
+        this.pullQueue = pullQueue
         this.region = region
 
     }

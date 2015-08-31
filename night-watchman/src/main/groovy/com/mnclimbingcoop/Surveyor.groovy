@@ -2,15 +2,14 @@ package com.mnclimbingcoop
 
 import com.mnclimbingcoop.service.*
 
-import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
 import javax.inject.Named
 
+import org.springframework.scheduling.annotation.Async
 import org.springframework.scheduling.annotation.Scheduled
 
-@CompileStatic
 @Named
 @Slf4j
 class Surveyor {
@@ -52,6 +51,11 @@ class Surveyor {
     }
 
     @Scheduled(fixedDelayString = '${schedule.survey.rate}', initialDelayString = '${schedule.survey.initialDelay}')
+    void periodicSurvey() {
+        survey()
+    }
+
+    @Async
     void survey() {
 
         // Really only update these once...

@@ -12,10 +12,12 @@ class Health {
     // Door Check Status
     Map<String, DoorHealth> doors = [:]
 
+    Health dependentHealth
+
     boolean isOk() {
         return (
+            (doors.size() > 0 || dependentHealth.ok) &&
             sqsHealth.ok &&
-            doors.size() > 0 &&
             doors.every{ k, v -> v.ok }
         )
     }

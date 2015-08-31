@@ -5,6 +5,7 @@ import com.mnclimbingcoop.config.ApiKeyConfiguration
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
+import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
 import javax.servlet.Filter
@@ -28,6 +29,13 @@ class ApiKeyFilter implements Filter {
         this.apiKeys = apiConfig.keys
     }
 
+    @PostConstruct
+    void setup() {
+        apiKeys.each{ k, v ->
+            log.info "adding api key $k for $v"
+        }
+    }
+
     @Override
     void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
@@ -44,6 +52,7 @@ class ApiKeyFilter implements Filter {
         String keyHolder = getHolder(headerToken, requestToken)
 
         if (!keyHolder) {
+            log.warn "Access denied to: ${headerToken}, ${requestToken}"
             response.setContentLength(0)
             response.sendError(403, 'Invalid API Token')
         } else {

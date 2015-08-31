@@ -45,6 +45,10 @@ class HealthService {
         return health
     }
 
+    void updateDependentHealth(Health depHealth) {
+        health.dependentHealth = depHealth
+    }
+
     void checkedMessages(int n) {
         LocalDateTime now = LocalDateTime.now()
         health.sqsHealth.lastQueueCheck = now
