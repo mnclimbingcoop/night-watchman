@@ -31,7 +31,7 @@ class HealthController {
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/plain')
     String getHealth() {
-        if (!healthService.health.ok) {
+        if (!healthService.currentHealth.ok) {
             throw new HealthCheckFailureException()
         }
         return 'OK'
@@ -39,7 +39,7 @@ class HealthController {
 
     @RequestMapping(value = '/status', method = RequestMethod.GET, produces = 'application/json')
     Health getStatus() {
-        return healthService.health
+        return healthService.currentHealth
     }
 
     @ExceptionHandler(HealthCheckFailureException)

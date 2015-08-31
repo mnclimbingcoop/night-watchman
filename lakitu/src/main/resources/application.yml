@@ -13,10 +13,7 @@ aws:
   sqs:
     pushQueue: mncc-commands
     pullQueue: mncc-state
-schedule:
-  state:
-    rate: 5000 # 5 seconds in MS.
-    initialDelay: 10000 # 10 seconds
+    healthQueue: mncc-health
 logging:
   level:
     com.mnclimbingcoop: DEBUG

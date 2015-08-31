@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class HelloController {
+class PingController {
 
     @RequestMapping(value = '/ping', method = RequestMethod.GET, produces = 'application/json')
     Map ping() {

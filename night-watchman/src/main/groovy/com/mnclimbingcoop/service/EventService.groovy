@@ -73,12 +73,12 @@ class EventService {
                 EventMessages last = null
                 while (!subscriber.unsubscribed) {
                     EventMessages overview = hidService.get(door, request)?.eventMessages
+                    healthService.checkedEvents(door)
 
                     // If the overview has changed since last we checked...
                     if (overview && overview != last) {
                         VertXRequest latestEvents = new EventRequest().fromOverview(overview).since(last)
                         EventMessages latest = hidService.get(door, latestEvents)?.eventMessages
-                        healthService.checkedEvents(door)
                         if (latest?.eventMessages) {
                             for (EventMessage eventMessage : latest.eventMessages) {
                                 if (subscriber.unsubscribed) { break }
