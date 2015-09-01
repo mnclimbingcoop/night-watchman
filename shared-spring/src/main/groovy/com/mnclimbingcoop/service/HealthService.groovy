@@ -21,8 +21,9 @@ class HealthService {
     protected final Health health = new Health()
 
     Set<String> LOCALHOST_ADDRESSES = [
-            'fe80:0:0:0:0:0:0:1%lo0',
             '0:0:0:0:0:0:0:1',
+            '0:0:0:0:0:0:0:1%lo',
+            'fe80:0:0:0:0:0:0:1%lo0',
             '127.0.0.1'
     ] as Set
 
