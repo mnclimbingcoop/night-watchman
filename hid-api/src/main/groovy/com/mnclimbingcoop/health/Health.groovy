@@ -16,9 +16,9 @@ class Health {
 
     boolean isOk() {
         return (
-            (doors.size() > 0 || dependentHealth.ok) &&
-            sqsHealth.ok &&
-            doors.every{ k, v -> v.ok }
+            (doors.size() > 0 || dependentHealth?.ok) &&
+            sqsHealth?.ok &&
+            doors?.every{ k, v -> v?.ok }
         )
     }
 }
