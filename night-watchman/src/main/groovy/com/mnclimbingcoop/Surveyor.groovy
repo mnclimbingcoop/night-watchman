@@ -25,6 +25,8 @@ class Surveyor {
     protected final ScheduleService scheduleService
     protected final SystemService systemService
 
+    static final int MAX_TRIES = 3
+
     @Inject
     Surveyor(AlertService alertService,
              CardFormatService cardFormatService,
@@ -59,33 +61,61 @@ class Surveyor {
     void survey() {
 
         // Really only update these once...
-        log.info "discovering alert info"
-        alertService.list()
-        log.info "discovering card format info"
-        cardFormatService.list()
-        log.info "discovering parameter info"
-        parameterService.get()
+        safeRetry("discovering alert info") {
+            alertService.list()
+        }
+        safeRetry("discovering card format info") {
+            cardFormatService.list()
+        }
+        safeRetry("discovering parameter info") {
+            parameterService.get()
+        }
 
-        log.info "discovering door info"
-        doorService.list()
-        log.info "discovering reader info"
-        readerService.list()
-        log.info "discovering schedule info"
-        scheduleService.list()
-        log.info "discovering system info"
-        systemService.get()
+        safeRetry("discovering door info") {
+            doorService.list()
+        }
+        safeRetry("discovering reader info") {
+            readerService.list()
+        }
+        safeRetry("discovering schedule info") {
+            scheduleService.list()
+        }
+        safeRetry("discovering system info") {
+            systemService.get()
+        }
 
-        // Send via SQS
+        // Send state to SQS
         hidService.sync()
 
         // Update user inventory.  Once? Daily?
-        log.info "discovering cardholder info"
-        cardholderSurveyService.survey()
+        safeRetry("discovering cardholder info") {
+            cardholderSurveyService.survey()
+        }
 
         // TODO Build from credentials remaining
-        log.info "discovering credential info"
-        credentialSurveyService.survey()
+        safeRetry("discovering credential info") {
+            credentialSurveyService.survey()
+        }
 
+    }
+
+    void safeRetry(String reason, Closure cls) {
+        int tries = 0
+        boolean success = false
+        while (tries < MAX_TRIES && !success) {
+            try {
+                log.info reason
+                cls()
+                success = true
+            } catch (HidRemoteErrorException ex) {
+                tries++
+                log.error "Attempt #${tries} failed while ${reason}, retrying in 3s"
+                Thread.sleep(3000)
+            }
+        }
+        if (tries == MAX_TRIES) {
+            log.error "Gave up.  Max tries reached while ${reason}"
+        }
 
     }
 

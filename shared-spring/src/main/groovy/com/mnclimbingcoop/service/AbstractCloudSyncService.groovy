@@ -43,17 +43,13 @@ abstract class AbstractCloudSyncService<T,R> {
 
     protected String pushQueueUrl
     protected String pullQueueUrl
-    protected boolean flushCommands = false
     protected final Integer maxNumberOfMessages = 10
 
     protected final String region
     protected final String pushQueue
     protected final String pullQueue
 
-    protected AmazonSQS sqs
     protected AwsService awsService
-
-    Set<String> received = new ConcurrentSkipListSet<String>()
 
     static final Long MAX_DATA_BYTES = 1024 * 256
 
@@ -90,29 +86,7 @@ abstract class AbstractCloudSyncService<T,R> {
         assert pullQueue || pushQueue
 
         credentialsProvider = new DefaultAWSCredentialsProviderChain()
-        sqs = awsService.getSqsClient()
         createQueues()
-    }
-
-    protected void createQueues() {
-        pushQueueUrl = createQueue(pushQueue)
-        pullQueueUrl = createQueue(pullQueue)
-        log.info "Using SQS queues: push=${pushQueueUrl} pull=${pullQueueUrl}"
-    }
-
-    protected String createQueue(String queueName) {
-        String queueUrl = null
-        while (queueName && !queueUrl) {
-            try {
-                CreateQueueRequest createQueueRequest = new CreateQueueRequest(queueName)
-                queueUrl = sqs.createQueue(createQueueRequest).queueUrl
-            } catch (SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
-                log.error 'error creating SQS queue {}', ex
-                Thread.sleep(5000)
-                sqs = awsService.getSqsClient()
-            }
-        }
-        return queueUrl
     }
 
     /** Push a message to SQS */
@@ -128,7 +102,7 @@ abstract class AbstractCloudSyncService<T,R> {
             log.warn "payload size=${payloadSize} exceeds the ${MAX_DATA_BYTES} byte maximum " +
                      "size for an SQS message! (it will probably fail)"
         }
-        SendMessageResult result = sendMessage(gzipped)
+        SendMessageResult result = sendMessageWithRetry(gzipped)
         if (result) {
             healthService.sentMessage()
             log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
@@ -140,33 +114,10 @@ abstract class AbstractCloudSyncService<T,R> {
         return null
     }
 
-    protected SendMessageResult sendMessage(String message) {
-        int MAX_TRIES = 5
-        int tried = 0
-        SendMessageResult result
-        while (!result && tried < MAX_TRIES) {
-            try {
-                result = sqs.sendMessage(new SendMessageRequest(pushQueueUrl, message))
-            } catch ( SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
-                log.error 'Error sending SQS message {}', ex
-                Thread.sleep(5000)
-                sqs = awsService.getSqsClient()
-            }
-            tried++
-
-            if (tried > 1) {
-                if (result) {
-                    log.info "Resend / Reauthenticatiion Successful."
-                } else {
-                    log.error 'Gave up sending message. Max retries reached {}', MAX_TRIES
-                }
-            }
-        }
-        return result
-    }
 
     /** Returns an obserable that streams SQS messages */
     Observable<R> getObservable() {
+        AwsRetryService awsRetry = new AwsRetryService<Boolean>(awsService)
         MessageObservableFactory messageFactory = new MessageObservableFactory(
             awsService, healthService, pullQueueUrl, maxNumberOfMessages
         )
@@ -176,11 +127,37 @@ abstract class AbstractCloudSyncService<T,R> {
             log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
             String json = StringCompressor.decompress(message.body)
             R item =  convert(json)
-            if (flushCommands) {
-                String messageRecieptHandle = message.receiptHandle
-                sqs.deleteMessage(new DeleteMessageRequest(pullQueueUrl, messageRecieptHandle))
+
+            DeleteMessageRequest request = new DeleteMessageRequest(pullQueueUrl, message.receiptHandle)
+            awsRetry.withRetry('deleting SQS message', 5) { AmazonSQS sqs ->
+                sqs.deleteMessage(request)
+                return true
             }
+
             return item
+        }
+    }
+
+    protected void createQueues() {
+        pushQueueUrl = createQueue(pushQueue)
+        pullQueueUrl = createQueue(pullQueue)
+        log.info "Using SQS queues: push=${pushQueueUrl} pull=${pullQueueUrl}"
+    }
+
+    protected SendMessageResult sendMessageWithRetry(String message) {
+        SendMessageRequest request = new SendMessageRequest(pushQueueUrl, message)
+        AwsRetryService awsRetry = new AwsRetryService<SendMessageResult>(awsService)
+        return awsRetry.withRetry('sending SQS message', 5) { AmazonSQS sqs ->
+            sqs.sendMessage(request)
+        }
+    }
+
+    protected String createQueue(String queueName) {
+        if (!queueName) { return null }
+        CreateQueueRequest createQueueRequest = new CreateQueueRequest(queueName)
+        AwsRetryService awsRetry = new AwsRetryService<String>(awsService)
+        return awsRetry.withRetry('creating SQS queue') { AmazonSQS sqs ->
+            sqs.createQueue(createQueueRequest).queueUrl
         }
     }
 

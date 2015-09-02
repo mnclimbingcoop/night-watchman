@@ -23,6 +23,10 @@ class MessageObservableFactory {
     final Integer maxNumberOfMessages
     protected final HealthService healthService
     protected final AwsService awsService
+    protected int connectionRefreshMs = 5000
+    protected int moreMessagesMs = 100
+    protected int noMessagesMs = 1500
+    protected boolean shutdown = false
 
     MessageObservableFactory(String queueUrl) {
         this.queueUrl = queueUrl
@@ -49,26 +53,34 @@ class MessageObservableFactory {
                 AmazonSQS sqs = awsService.getSqsClient()
 
                 while(!subscriber.unsubscribed) {
+
                     int lastPass = 0
+                    boolean lastCheckErrored = false
                     try {
+                        // if last attempt failed, reconnect.
                         for (Message message : sqs.receiveMessage(receiveMessageRequest).messages) {
                             log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
                             if (subscriber.unsubscribed) { break }
                             subscriber.onNext(message)
                             lastPass++
                         }
+                        healthService.checkedMessages(lastPass)
                     } catch (SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
-                        log.error 'error creading from SQS queue {}', ex
-                        Thread.sleep(5000)
+                        log.error 'error checking messages from SQS queue', ex
+                        Thread.sleep(connectionRefreshMs)
+                        lastCheckErrored = true
+                        healthService.checkMessagesFailed()
+                        log.error 'Refreshing credentials and getting new AWS SQS client.'
                         sqs = awsService.getSqsClient()
                     }
-                    healthService.checkedMessages(lastPass)
                     if (lastPass) {
-                        Thread.sleep(100)
+                        Thread.sleep(moreMessagesMs)
                     } else {
-                        Thread.sleep(1500)
+                        Thread.sleep(noMessagesMs)
                     }
+
                     // This stream never ends as long as the subscriber is subscribed
+                    if (shutdown) { subscriber.unsubscribe() }
                 }
             }
         } as Observable.OnSubscribe<Message>)

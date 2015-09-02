@@ -95,10 +95,11 @@ class HidService {
         VertXResponse response = get(name, wrap(request))
         if (response?.error) {
             String xml = wrap(request)
+            String details = response.error.toString()
             log.error "Error requesting XML: ${xml}"
-            log.error "Error details: ${response.error}"
-            healthService.getFailed(name, request, response.error.toString())
-            throw new HidRemoteErrorException(response.error.toString())
+            log.error "Error details: ${details}"
+            healthService.getFailed(name, request, details)
+            throw new HidRemoteErrorException(details)
         } else {
             healthService.getSucceded(name, request)
         }
