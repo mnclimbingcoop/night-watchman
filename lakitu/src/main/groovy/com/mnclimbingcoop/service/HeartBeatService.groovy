@@ -22,7 +22,6 @@ class HeartBeatService extends AbstractCloudSyncService<String, Health> {
                      HealthService healthService,
                      ObjectMapper objectMapper) {
         super(awsConfig.region, null, awsConfig.sqs.healthQueue, healthService, objectMapper)
-        flushCommands = true
     }
 
     @Override

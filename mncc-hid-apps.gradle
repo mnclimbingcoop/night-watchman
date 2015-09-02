@@ -29,6 +29,7 @@ subprojects {
 
     test {
         jvmArgs '-Duser.timezone=UTC'
+        testLogging.showStandardStreams = true
     }
 
     compileGroovy {

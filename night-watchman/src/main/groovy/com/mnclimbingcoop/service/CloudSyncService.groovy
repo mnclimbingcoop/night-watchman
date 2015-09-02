@@ -21,7 +21,6 @@ class CloudSyncService extends AbstractCloudSyncService<EdgeSoloState, VertXRequ
                      HealthService healthService,
                      ObjectMapper objectMapper) {
         super(awsConfig, healthService, objectMapper)
-        flushCommands = true
     }
 
     @Override
