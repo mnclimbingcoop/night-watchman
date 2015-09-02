@@ -106,11 +106,9 @@ abstract class AbstractCloudSyncService<T,R> {
             try {
                 CreateQueueRequest createQueueRequest = new CreateQueueRequest(queueName)
                 queueUrl = sqs.createQueue(createQueueRequest).queueUrl
-            } catch (AmazonServiceException ex) {
+            } catch (SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
                 log.error 'error creating SQS queue {}', ex
-                log.warn "retrying in 5 seconds"
                 Thread.sleep(5000)
-                log.warn "Re-authenticating to AWS"
                 sqs = awsService.getSqsClient()
             }
         }
@@ -149,7 +147,7 @@ abstract class AbstractCloudSyncService<T,R> {
         while (!result && tried < MAX_TRIES) {
             try {
                 result = sqs.sendMessage(new SendMessageRequest(pushQueueUrl, message))
-            } catch ( NoHttpResponseException | AmazonServiceException ex) {
+            } catch ( SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
                 log.error 'Error sending SQS message {}', ex
                 Thread.sleep(5000)
                 sqs = awsService.getSqsClient()

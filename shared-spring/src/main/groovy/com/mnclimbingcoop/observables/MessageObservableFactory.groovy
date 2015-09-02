@@ -10,6 +10,8 @@ import com.mnclimbingcoop.service.HealthService
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
+import org.apache.http.NoHttpResponseException
+
 import rx.Observable
 import rx.Subscriber
 
@@ -55,7 +57,7 @@ class MessageObservableFactory {
                             subscriber.onNext(message)
                             lastPass++
                         }
-                    } catch (AmazonServiceException ex) {
+                    } catch (SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
                         log.error 'error creading from SQS queue {}', ex
                         Thread.sleep(5000)
                         sqs = awsService.getSqsClient()
