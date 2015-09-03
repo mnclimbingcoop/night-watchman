@@ -14,6 +14,8 @@ import groovy.util.logging.Slf4j
 import javax.inject.Inject
 import javax.inject.Named
 
+import rx.schedulers.Schedulers
+
 @CompileStatic
 @Named
 @Slf4j
@@ -42,7 +44,7 @@ class CommandRelayService {
         // Wait 10s before starting
         Thread.sleep(10000)
         log.info "processing commands."
-        cloudSyncService.observable.cast(VertXRequest).subscribe(
+        cloudSyncService.observable.cast(VertXRequest).subscribeOn(Schedulers.io()).subscribe(
             { VertXRequest request ->
                 if (request.meta) {
                     orchestrator.orchestrate(request)

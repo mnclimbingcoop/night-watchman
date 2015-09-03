@@ -2,7 +2,7 @@ package com.mnclimbingcoop.health
 
 import org.joda.time.LocalDateTime
 
-class DoorHealth {
+class DoorHealth extends AbstractHealth {
 
     String name
     String address
@@ -18,9 +18,28 @@ class DoorHealth {
     String errorMessage
     boolean otherOk = false
 
+    LocalDateTime now() {
+        return LocalDateTime.now()
+    }
+
+    String getDoorCheckDrift() {
+        getDrift(lastDoorCheck)
+    }
+
+    String getDoorMessageDrift() {
+        getDrift(lastDoorMessage)
+    }
+
+    String getEventCheckDrift() {
+        getDrift(lastEventCheck)
+    }
+
+    String getEventDrift() {
+        getDrift(lastEvent)
+    }
+
     boolean isOk() {
-        LocalDateTime now = LocalDateTime.now()
-        LocalDateTime minCheckTime = now.minusMinutes(1)
+        LocalDateTime minCheckTime = now().minusMinutes(1)
 
         return (
             lastDoorCheck > minCheckTime &&

@@ -13,6 +13,8 @@ import org.springframework.scheduling.annotation.Async
 import javax.inject.Inject
 import javax.inject.Named
 
+import rx.schedulers.Schedulers
+
 @Named
 @Slf4j
 class HeartBeatService extends AbstractCloudSyncService<String, Health> {
@@ -33,7 +35,7 @@ class HeartBeatService extends AbstractCloudSyncService<String, Health> {
     @Async
     void takePulse() {
         log.info "taking pulse of night watchman health."
-        observable.cast(Health).subscribe(
+        observable.cast(Health).subscribeOn(Schedulers.io()).subscribe(
             { Health health ->
                 healthService.updateDependentHealth(health)
                 log.debug "Received heart beat."

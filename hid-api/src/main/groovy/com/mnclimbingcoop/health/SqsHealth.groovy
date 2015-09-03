@@ -2,7 +2,7 @@ package com.mnclimbingcoop.health
 
 import org.joda.time.LocalDateTime
 
-class SqsHealth {
+class SqsHealth extends AbstractHealth {
 
     // SQS Checks
     LocalDateTime lastQueueRead
@@ -13,10 +13,22 @@ class SqsHealth {
     boolean sqsReadOk = false
     boolean sqsWriteOk = false
 
+    String getQueueReadDrift() {
+        getDrift(lastQueueRead)
+    }
+
+    String getQueueCheckDrift() {
+        getDrift(lastQueueCheck)
+    }
+
+    String getQueueWriteDrift() {
+        getDrift(lastQueueWritten)
+    }
+
+    @Override
     boolean isOk() {
 
-        LocalDateTime now = LocalDateTime.now()
-        LocalDateTime minCheckTime = now.minusMinutes(1)
+        LocalDateTime minCheckTime = now().minusMinutes(1)
 
         return (
             lastQueueCheck > minCheckTime &&

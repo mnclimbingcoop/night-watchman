@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Named
 
+import rx.schedulers.Schedulers
+
 @CompileStatic
 @Named
 @Slf4j
@@ -34,7 +36,7 @@ class DoorStateService {
     @Async
     void buildState() {
         log.info "taking pulse."
-        cloudSyncService.observable.subscribe(
+        cloudSyncService.observable.subscribeOn(Schedulers.io())subscribe(
             { EdgeSoloState state ->
                 if (state.doorName) {
                     EdgeSoloState doorState = getOrCreate(state.doorName)

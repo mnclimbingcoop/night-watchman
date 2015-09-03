@@ -31,7 +31,7 @@ class CardholderSurveyService {
     void survey() {
         List<Observable> observables = hidService.doors.collect{ observeCardholders(it).observeOn(Schedulers.io()) }
 
-        Observable.merge(observables).subscribe(
+        Observable.merge(observables).subscribeOn(Schedulers.io()).subscribe(
             { Cardholder cardholder ->
                 // cardholders are already added to the state via the CardholderService
                 log.info " + adding [#${cardholder.cardholderID}]: ${cardholder.forename} ${cardholder.surname}"

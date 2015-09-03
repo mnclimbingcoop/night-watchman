@@ -31,7 +31,7 @@ class CredentialSurveyService {
     void survey() {
         List<Observable> observables = hidService.doors.collect{ observeCredentials(it).observeOn(Schedulers.io()) }
 
-        Observable.merge(observables).subscribe(
+        Observable.merge(observables).subscribeOn(Schedulers.io()).subscribe(
             { Credential credential ->
                 // credentials are already added to the state via the CredentialService
                 log.info " + adding [#${credential.rawCardNumber}]: " +
