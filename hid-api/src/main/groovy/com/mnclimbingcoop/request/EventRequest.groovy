@@ -1,11 +1,13 @@
 package com.mnclimbingcoop.request
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
 import org.joda.time.LocalDateTime
 
+@JacksonXmlRootElement(localName='VertXMessage')
 class EventRequest extends VertXRequest {
 
     EventRequest() {

@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentSkipListSet
 import javax.annotation.PostConstruct
 
 import rx.Observable
+import rx.schedulers.Schedulers
 
 @CompileStatic
 @Slf4j
@@ -126,7 +127,7 @@ abstract class AbstractCloudSyncService<T,R> {
         MessageObservableFactory messageFactory = new MessageObservableFactory(
             awsService, healthService, pullQueueUrl, maxNumberOfMessages
         )
-        messageFactory.getSqsObservable().distinct{ Message message ->
+        messageFactory.getSqsObservable().observeOn(Schedulers.io()).distinct{ Message message ->
             return message.messageId
         }.map{ Message message ->
             if (quiet) {

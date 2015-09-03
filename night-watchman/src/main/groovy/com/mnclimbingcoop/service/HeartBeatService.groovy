@@ -23,7 +23,7 @@ class HeartBeatService extends AbstractCloudSyncService<Health, String> {
                      HealthService healthService,
                      ObjectMapper objectMapper) {
         super(awsConfig.region, awsConfig.sqs.healthQueue, null, healthService, objectMapper)
-        quiet = true
+        //quiet = true
     }
 
     @Scheduled(fixedDelayString = '${schedule.health.rate}', initialDelayString = '${schedule.health.initialDelay}')
