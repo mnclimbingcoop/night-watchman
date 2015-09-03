@@ -24,11 +24,11 @@ class HeartBeatService extends AbstractCloudSyncService<String, Health> {
                      HealthService healthService,
                      ObjectMapper objectMapper) {
         super(awsConfig.region, null, awsConfig.sqs.healthQueue, healthService, objectMapper)
+        quiet = true
     }
 
     @Override
     Health convert(String data) {
-        log.trace "converting ${data}"
         return objectMapper.readValue(data, Health)
     }
 
@@ -37,10 +37,10 @@ class HeartBeatService extends AbstractCloudSyncService<String, Health> {
         log.info "taking pulse of night watchman health."
         observable.cast(Health).subscribeOn(Schedulers.io()).subscribe(
             { Health health ->
+                healthService.heartbeat()
                 healthService.updateDependentHealth(health)
-                log.debug "Received heart beat."
             }, { Throwable t ->
-                log.error "Error while heartbeat from night watchman ${t.message}", t
+                log.error "Error while taking heartbeat from night watchman ${t.message}", t
                 healthService.checkMessagesFailed()
             }, {
                 log.error 'Health check stream stopped!'

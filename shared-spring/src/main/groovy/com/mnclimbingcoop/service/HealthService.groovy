@@ -52,6 +52,8 @@ class HealthService {
 
     void updateDependentHealth(Health depHealth) {
         health.dependentHealth = depHealth
+        // Null out doors once we have dependentHealth
+        health.doors = null
     }
 
     void checkedMessages(int n) {

@@ -24,7 +24,7 @@ class AwsService {
         credentialsProvider = new DefaultAWSCredentialsProviderChain()
     }
 
-    protected AmazonSQS getSqsClient() {
+    AmazonSQS getSqsClient() {
         AWSCredentials credentials = credentialsProvider.credentials
         AmazonSQS client = new AmazonSQSClient(credentials)
         client.region = Region.getRegion(Regions.fromName(region))

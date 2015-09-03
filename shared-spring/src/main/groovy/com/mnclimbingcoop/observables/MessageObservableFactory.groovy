@@ -23,15 +23,6 @@ class MessageObservableFactory {
     final Integer maxNumberOfMessages
     protected final HealthService healthService
     protected final AwsService awsService
-    protected int connectionRefreshMs = 5000
-    protected int moreMessagesMs = 100
-    protected int noMessagesMs = 1500
-    protected boolean shutdown = false
-
-    MessageObservableFactory(String queueUrl) {
-        this.queueUrl = queueUrl
-        this.maxNumberOfMessages = 10
-    }
 
     MessageObservableFactory(AwsService awsService,
                              HealthService healthService,
@@ -45,19 +36,16 @@ class MessageObservableFactory {
 
     Observable<Message> getSqsObservable() {
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl)
+        receiveMessageRequest.waitTimeSeconds = 10 // Long Poll
         receiveMessageRequest.maxNumberOfMessages = maxNumberOfMessages
         log.trace "checking for messages at ${queueUrl} (max ${maxNumberOfMessages})"
         return Observable.create({ Subscriber<Message> subscriber ->
             AmazonSQS sqs = awsService.getSqsClient()
-
-            while(!subscriber.unsubscribed) {
-
+            while (!subscriber.unsubscribed) {
                 int lastPass = 0
-                boolean lastCheckErrored = false
                 try {
                     // if last attempt failed, reconnect.
                     for (Message message : sqs.receiveMessage(receiveMessageRequest).messages) {
-                        log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
                         if (subscriber.unsubscribed) { break }
                         subscriber.onNext(message)
                         lastPass++
@@ -65,21 +53,15 @@ class MessageObservableFactory {
                     healthService.checkedMessages(lastPass)
                 } catch (SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
                     log.error 'error checking messages from SQS queue', ex
-                    Thread.sleep(connectionRefreshMs)
-                    lastCheckErrored = true
                     healthService.checkMessagesFailed()
                     log.error 'Refreshing credentials and getting new AWS SQS client.'
                     sqs = awsService.getSqsClient()
                 }
-                if (lastPass) {
-                    Thread.sleep(moreMessagesMs)
-                } else {
-                    Thread.sleep(noMessagesMs)
-                }
-
-                // This stream never ends as long as the subscriber is subscribed
-                if (shutdown) { subscriber.unsubscribe() }
             }
         } as Observable.OnSubscribe<Message>)
+    }
+
+    String getQueueName() {
+        queueUrl.replaceFirst('https://sqs.us-east-1.amazonaws.com/', '')
     }
 }

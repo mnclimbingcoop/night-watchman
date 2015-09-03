@@ -29,16 +29,7 @@ class MessageObservableFactorySpec extends Specification {
         sqs = Mock()
         factory = new MessageObservableFactory(awsService, healthService, QUEUE_URL, MAX_MESSAGES)
 
-        factory.connectionRefreshMs = 30
-        factory.moreMessagesMs = 10
-        factory.noMessagesMs = 20
-
     }
-
-    void cleanup() {
-        factory.shutdown = true
-    }
-
 
     /* From Stacktrace:
 
@@ -92,8 +83,6 @@ class MessageObservableFactorySpec extends Specification {
 
         and: 'there is a little bit of give here since this is an async observable'
         (0..1) * healthService.checkedMessages(5)
-        (limitMessages..(limitMessages + 1)) * message.getMessageId() >> 'MESSAGE_ID'
-        (limitMessages..(limitMessages + 1)) * message.getMD5OfBody() >> 'MD5'
         0 * _
 
     }

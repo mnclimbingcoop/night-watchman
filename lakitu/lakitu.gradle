@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.2.5.RELEASE'
     }
     repositories {
         jcenter()
@@ -14,6 +14,10 @@ buildscript {
 apply from: "${rootDir}/gradle/spring-boot.gradle"
 
 mainClassName="com.mnclimbingcoop.app.LakituApp"
+
+run {
+    jvmArgs '-Duser.timezone=UTC'
+}
 
 dependencies {
     compile 'com.amazonaws:aws-java-sdk-sqs:1.10.2'

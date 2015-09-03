@@ -35,8 +35,6 @@ import rx.schedulers.Schedulers
 @Slf4j
 abstract class AbstractCloudSyncService<T,R> {
 
-    static final int MAX_TRIES = 5
-
     protected final ObjectMapper objectMapper
     protected final HealthService healthService
 
@@ -107,11 +105,7 @@ abstract class AbstractCloudSyncService<T,R> {
         SendMessageResult result = sendMessageWithRetry(gzipped)
         if (result) {
             healthService.sentMessage()
-            if (quiet) {
-                log.debug "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
-            } else {
-                log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
-            }
+            logMessage "Sent ${payloadSize}b message=${result.messageId} to=", pushQueueUrl
             return result
         } else {
             log.error "Failed to send ${payloadSize} byte message: ${payload}"
@@ -121,20 +115,16 @@ abstract class AbstractCloudSyncService<T,R> {
     }
 
 
-    /** Returns an obserable that streams SQS messages */
+    /** Returns an observable that streams SQS messages */
     Observable<R> getObservable() {
         AwsRetryService awsRetry = new AwsRetryService<Boolean>(awsService)
         MessageObservableFactory messageFactory = new MessageObservableFactory(
             awsService, healthService, pullQueueUrl, maxNumberOfMessages
         )
-        messageFactory.getSqsObservable().observeOn(Schedulers.io()).distinct{ Message message ->
+        messageFactory.getSqsObservable().distinct{ Message message ->
             return message.messageId
         }.map{ Message message ->
-            if (quiet) {
-                log.debug "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
-            } else {
-                log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
-            }
+            logMessage "Received message=${message.messageId} from=", pullQueueUrl
             String json = StringCompressor.decompress(message.body)
             R item =  convert(json)
 
@@ -145,7 +135,7 @@ abstract class AbstractCloudSyncService<T,R> {
             }
 
             return item
-        }
+        }.onBackpressureBuffer()
     }
 
     protected void createQueues() {
@@ -168,6 +158,20 @@ abstract class AbstractCloudSyncService<T,R> {
         AwsRetryService awsRetry = new AwsRetryService<String>(awsService)
         return awsRetry.withRetry('creating SQS queue') { AmazonSQS sqs ->
             sqs.createQueue(createQueueRequest).queueUrl
+        }
+    }
+
+    String getQueueName(String queueUrl) {
+        if (!queueUrl) { return null }
+        queueUrl.replaceFirst('https://sqs.us-east-1.amazonaws.com/', '')
+    }
+
+    protected void logMessage(GString str, String queueUrl) {
+        String queueName = getQueueName(queueUrl)
+        if (quiet) {
+            log.debug str + queueName
+        } else {
+            log.info str + queueName
         }
     }
 

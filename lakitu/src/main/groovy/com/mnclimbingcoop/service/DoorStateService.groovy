@@ -16,6 +16,8 @@ import javax.inject.Named
 
 import rx.schedulers.Schedulers
 
+import java.util.concurrent.TimeUnit
+
 @CompileStatic
 @Named
 @Slf4j
@@ -35,7 +37,6 @@ class DoorStateService {
 
     @Async
     void buildState() {
-        log.info "taking pulse."
         cloudSyncService.observable.subscribeOn(Schedulers.io())subscribe(
             { EdgeSoloState state ->
                 if (state.doorName) {
@@ -46,7 +47,7 @@ class DoorStateService {
                     log.error('door name missing from incoming state data! {}', objectMapper.writeValueAsString(state))
                 }
             }, { Throwable t ->
-                log.error "Error while taking pulse ${t.class} ${t.message}"
+                log.error "Error while reading door state ${t.class} ${t.message}"
                 healthService.checkMessagesFailed()
             }
         )
