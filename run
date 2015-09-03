@@ -10,7 +10,7 @@ REPO=https://bintray.com/artifact/download/mnclimbingcoop/maven
 
 ARTIFACT=night-watchman
 GROUP=com.mnclimbingcoop
-VERSION=0.8.6
+VERSION=0.8.7
 
 GROUP_PATH=${GROUP/\./\/}
 JAR=${ARTIFACT}-${VERSION}.jar
