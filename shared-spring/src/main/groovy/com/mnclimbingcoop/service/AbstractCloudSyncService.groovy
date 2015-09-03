@@ -50,6 +50,7 @@ abstract class AbstractCloudSyncService<T,R> {
     protected final String pullQueue
 
     protected AwsService awsService
+    protected boolean quiet = false
 
     static final Long MAX_DATA_BYTES = 1024 * 256
 
@@ -105,7 +106,11 @@ abstract class AbstractCloudSyncService<T,R> {
         SendMessageResult result = sendMessageWithRetry(gzipped)
         if (result) {
             healthService.sentMessage()
-            log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
+            if (quiet) {
+                log.debug "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
+            } else {
+                log.info "sent ${payloadSize} byte message=${result.messageId} data to SQS queue"
+            }
             return result
         } else {
             log.error "Failed to send ${payloadSize} byte message: ${payload}"
@@ -124,7 +129,11 @@ abstract class AbstractCloudSyncService<T,R> {
         messageFactory.getSqsObservable().distinct{ Message message ->
             return message.messageId
         }.map{ Message message ->
-            log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
+            if (quiet) {
+                log.debug "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
+            } else {
+                log.info "Received Message id=${message.messageId} md5=${message.getMD5OfBody()}"
+            }
             String json = StringCompressor.decompress(message.body)
             R item =  convert(json)
 

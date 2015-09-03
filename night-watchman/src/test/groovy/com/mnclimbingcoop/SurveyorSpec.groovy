@@ -82,7 +82,7 @@ class SurveyorSpec extends Specification {
         then:
         1 * alertService.list()
         1 * cardFormatService.list()
-        3 * parameterService.get() >> { throw new HidRemoteErrorException('TEST ERROR') }
+        5 * parameterService.get() >> { throw new HidRemoteErrorException('TEST ERROR') }
         1 * doorService.list()
         1 * readerService.list()
         1 * scheduleService.list()

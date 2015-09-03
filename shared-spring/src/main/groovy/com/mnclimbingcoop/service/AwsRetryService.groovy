@@ -41,7 +41,7 @@ class AwsRetryService<R> {
                 success = true
             } catch ( SocketTimeoutException | NoHttpResponseException | AmazonServiceException ex) {
                 log.error "Error ${description}", ex
-                Thread.sleep(5000)
+                Thread.sleep(500 * tried)
                 sqs = awsService.getSqsClient()
             }
             tried++

@@ -45,7 +45,7 @@ class EventRequest extends VertXRequest {
     }
 
     EventRequest since(EventMessages lastOverview) {
-        if (lastOverview) {
+        if (lastOverview && eventMessages.historyRecordMarker && lastOverview.historyRecordMarker) {
             int count = eventMessages.historyRecordMarker - lastOverview.historyRecordMarker
             return withCount(count)
         }

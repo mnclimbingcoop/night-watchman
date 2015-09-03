@@ -46,6 +46,10 @@ class HealthService {
         return health
     }
 
+    void heartbeat() {
+        health.heartbeatCount++
+    }
+
     void updateDependentHealth(Health depHealth) {
         health.dependentHealth = depHealth
     }

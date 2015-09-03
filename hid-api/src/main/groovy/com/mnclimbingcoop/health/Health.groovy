@@ -9,6 +9,8 @@ class Health {
     // SQS Checks
     SqsHealth sqsHealth = new SqsHealth()
 
+    Integer heartbeatCount = 0
+
     // Door Check Status
     Map<String, DoorHealth> doors = [:]
 

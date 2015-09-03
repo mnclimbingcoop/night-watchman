@@ -13,7 +13,7 @@ class CloudSyncServiceSpec extends Specification {
     ObjectMapper objectMapper
     AwsConfiguration awsConfig
 
-    void setup() {
+    void 'can instantiate'() {
 
         hidService = Mock()
         objectMapper = new ObjectMapperBuilder().build()
