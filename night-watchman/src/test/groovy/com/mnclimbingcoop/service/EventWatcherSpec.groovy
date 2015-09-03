@@ -12,11 +12,11 @@ import org.joda.time.LocalDateTime
 
 import spock.lang.Specification
 
-class EventServiceSpec extends Specification {
+class EventWatcherSpec extends Specification {
 
     static final String DOOR = 'DOOR'
 
-    EventService service
+    EventWatcher service
     HealthService healthService
     HidService hidService
 
@@ -27,12 +27,12 @@ class EventServiceSpec extends Specification {
     void setup() {
         healthService = Mock()
         hidService = Mock()
-        service = new EventService(healthService, hidService)
+        service = new EventWatcher(DOOR, healthService, hidService)
     }
 
     void 'watch can survive a lot of errors'() {
         when:
-        service.observeEvents(DOOR).limit(2).toBlocking().toIterable().eachWithIndex{ EventMessage event, int i ->
+        service.observeEvents().limit(2).toBlocking().toIterable().eachWithIndex{ EventMessage event, int i ->
             println "receiving event #${i}: ${event}"
         }
 
