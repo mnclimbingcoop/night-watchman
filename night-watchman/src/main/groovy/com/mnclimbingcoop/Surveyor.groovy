@@ -25,7 +25,7 @@ class Surveyor {
     protected final ScheduleService scheduleService
     protected final SystemService systemService
 
-    static final int MAX_TRIES = 3
+    static final int MAX_TRIES = 5
 
     @Inject
     Surveyor(AlertService alertService,
@@ -88,14 +88,12 @@ class Surveyor {
         hidService.sync()
 
         // Update user inventory.  Once? Daily?
-        safeRetry("discovering cardholder info") {
-            cardholderSurveyService.survey()
-        }
+        log.info("discovering cardholder info")
+        cardholderSurveyService.survey()
 
         // TODO Build from credentials remaining
-        safeRetry("discovering credential info") {
-            credentialSurveyService.survey()
-        }
+        log.info("discovering credential info")
+        credentialSurveyService.survey()
 
     }
 
@@ -110,7 +108,7 @@ class Surveyor {
             } catch (HidRemoteErrorException ex) {
                 tries++
                 log.error "Attempt #${tries} failed while ${reason}, retrying in 3s"
-                Thread.sleep(3000)
+                Thread.sleep(500 * tries)
             }
         }
         if (tries == MAX_TRIES) {

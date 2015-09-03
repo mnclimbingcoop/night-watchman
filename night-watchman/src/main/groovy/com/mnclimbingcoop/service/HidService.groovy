@@ -28,6 +28,8 @@ class HidService {
     protected final Map<String, HidEdgeProApi> apis = new ConcurrentHashMap<String, HidEdgeProApi>()
     protected final XmlMapper objectMapper
 
+    static final int MAX_TRIES = 5
+
     // Stores the state of all HID edge units
     Map<String, EdgeSoloState> hidStates = new ConcurrentHashMap<String, EdgeSoloState>()
 
@@ -92,17 +94,28 @@ class HidService {
     }
 
     VertXResponse get(String name, VertXRequest request) {
-        VertXResponse response = get(name, wrap(request))
-        if (response?.error) {
-            String xml = wrap(request)
-            String details = response.error.toString()
-            log.error "Error requesting XML: ${xml}"
-            log.error "Error details: ${details}"
-            healthService.getFailed(name, request, details)
-            throw new HidRemoteErrorException(details)
-        } else {
-            healthService.getSucceded(name, request)
+        int tries = 0
+        String xmlRequest = wrap(request)
+        String details
+
+        VertXResponse response
+        while (tries < MAX_TRIES && (!response || response.error)) {
+            tries++
+            response = get(name, xmlRequest)
+            if (response?.error) {
+                details = response.error.toString()
+                log.error "(try ${tries} of ${MAX_TRIES}) Error requesting XML: ${xmlRequest}"
+                log.error "Error details: ${details}"
+                healthService.getFailed(name, request, details)
+                Thread.sleep(200 * tries)
+            } else if (!response) {
+                log.error "(try ${tries} of ${MAX_TRIES}) Error requesting XML: ${xmlRequest}, null response."
+            } else {
+                healthService.getSucceded(name, request)
+            }
         }
+        if (response?.error) { throw new HidRemoteErrorException(details) }
+
         return response
     }
 
@@ -113,5 +126,6 @@ class HidService {
     protected String wrap(VertXRequest request) {
         objectMapper.writeValueAsString(request)
     }
+
 
 }

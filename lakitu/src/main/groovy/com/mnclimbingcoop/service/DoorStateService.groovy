@@ -33,9 +33,6 @@ class DoorStateService {
 
     @Async
     void buildState() {
-        log.info "preparing to take pulse."
-        // Wait 2s before starting
-        Thread.sleep(2000)
         log.info "taking pulse."
         cloudSyncService.observable.subscribe(
             { EdgeSoloState state ->

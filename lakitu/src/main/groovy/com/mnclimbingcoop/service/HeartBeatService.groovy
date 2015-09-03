@@ -32,9 +32,6 @@ class HeartBeatService extends AbstractCloudSyncService<String, Health> {
 
     @Async
     void takePulse() {
-        log.info "preparing to take pulse of night watchman health."
-        // Wait 2s before starting
-        Thread.sleep(2000)
         log.info "taking pulse of night watchman health."
         observable.cast(Health).subscribe(
             { Health health ->

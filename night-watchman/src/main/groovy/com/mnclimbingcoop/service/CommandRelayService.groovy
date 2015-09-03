@@ -39,8 +39,8 @@ class CommandRelayService {
     @Async
     void processCommands() {
         log.info "preparing to process commands."
-        // Wait 2s before starting
-        Thread.sleep(2000)
+        // Wait 10s before starting
+        Thread.sleep(10000)
         log.info "processing commands."
         cloudSyncService.observable.cast(VertXRequest).subscribe(
             { VertXRequest request ->

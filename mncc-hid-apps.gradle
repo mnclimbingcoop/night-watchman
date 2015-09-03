@@ -29,7 +29,9 @@ subprojects {
 
     test {
         jvmArgs '-Duser.timezone=UTC'
-        testLogging.showStandardStreams = true
+
+        // Enable output (useful for debuging hung up rs.Observable Specs)
+        //testLogging.showStandardStreams = true
     }
 
     compileGroovy {
