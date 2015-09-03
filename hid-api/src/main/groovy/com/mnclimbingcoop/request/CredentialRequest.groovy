@@ -1,5 +1,6 @@
 package com.mnclimbingcoop.request
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.mnclimbingcoop.domain.Credential
 import com.mnclimbingcoop.domain.Credentials
 import com.mnclimbingcoop.domain.VertXRequest
@@ -8,6 +9,7 @@ import com.mnclimbingcoop.domain.type.ResponseFormat
 
 import org.joda.time.LocalDateTime
 
+@JacksonXmlRootElement(localName='VertXMessage')
 class CredentialRequest extends VertXRequest implements EntityCollectionRequest<CredentialRequest, Credential> {
 
     CredentialRequest() {

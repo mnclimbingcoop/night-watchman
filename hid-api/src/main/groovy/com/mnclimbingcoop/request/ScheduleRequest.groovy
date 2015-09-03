@@ -1,11 +1,13 @@
 package com.mnclimbingcoop.request
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.mnclimbingcoop.domain.Schedule
 import com.mnclimbingcoop.domain.Schedules
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
+@JacksonXmlRootElement(localName='VertXMessage')
 class ScheduleRequest extends VertXRequest implements SimpleEntityRequest<ScheduleRequest> {
 
     ScheduleRequest() {

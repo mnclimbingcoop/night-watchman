@@ -19,6 +19,7 @@ import javax.inject.Named
 
 import rx.Observable
 import rx.Subscriber
+import rx.schedulers.Schedulers
 
 @CompileStatic
 @Named
@@ -38,14 +39,14 @@ class EventService {
     void watch() {
 
         List<Observable> observables = hidService.doors.collect{
-            observeEvents(it).buffer(1, TimeUnit.SECONDS)
+            observeEvents(it).buffer(1, TimeUnit.SECONDS).observeOn(Schedulers.io())
         }
 
         Observable.merge(observables).subscribe(
             { List<EventMessage> events ->
                 events.each{ EventMessage event ->
                     // credentials are already added to the state via the CredentialService
-                    log.debug "Event: timestamp: ${event.timestamp} eventType: ${event.eventType} " +
+                    log.info "Event: timestamp: ${event.timestamp} eventType: ${event.eventType} " +
                               "commandStatus: ${event.commandStatus} " +
                               "cardholderID: ${event.cardholderID} " +
                               "forename: ${event.forename} surname: ${event.surname}"
@@ -62,43 +63,37 @@ class EventService {
 
     protected Observable<EventMessage> observeEvents(String door) {
         return Observable.create({ Subscriber<EventMessage> subscriber ->
-            Thread.start {
-                VertXRequest request = new EventRequest().overview()
-                EventMessages last = null
-                while (!subscriber.unsubscribed) {
-                    try {
-                        EventMessages overview = hidService.get(door, request)?.eventMessages
-                        healthService.checkedEvents(door)
+            VertXRequest request = new EventRequest().overview()
+            EventMessages last = null
+            while (!subscriber.unsubscribed) {
+                try {
+                    EventMessages overview = hidService.get(door, request)?.eventMessages
+                    healthService.checkedEvents(door)
 
-                        log.info "got overview ${overview}"
+                    // If the overview has changed since last we checked...
+                    if (overview && overview != last) {
+                        VertXRequest latestEvents = new EventRequest().fromOverview(overview).since(last)
+                        EventMessages latest = hidService.get(door, latestEvents)?.eventMessages
 
-                        // If the overview has changed since last we checked...
-                        if (overview && overview != last) {
-                            VertXRequest latestEvents = new EventRequest().fromOverview(overview).since(last)
-                            EventMessages latest = hidService.get(door, latestEvents)?.eventMessages
-
-                            log.info "got latest messages ${latest?.eventMessages}"
-
-                            if (latest?.eventMessages) {
-                                for (EventMessage eventMessage : latest.eventMessages) {
-                                    if (subscriber.unsubscribed) { break }
-                                    eventMessage.door = door
-                                    subscriber.onNext(eventMessage)
-                                }
-                                healthService.updatedEvents(door)
+                        if (latest?.eventMessages) {
+                            for (EventMessage eventMessage : latest.eventMessages) {
+                                if (subscriber.unsubscribed) { break }
+                                eventMessage.door = door
+                                subscriber.onNext(eventMessage)
                             }
-                            last = overview
-                        } else {
-                            // If we found events that we need to get, only wait 1/2 second before checking again
-                            Thread.sleep(500)
+                            healthService.updatedEvents(door)
                         }
-                        // Else wait 2 seconds between event checks
-                        Thread.sleep(2000)
-                    } catch (HidRemoteErrorException ex) {
-                        log.error 'HID Error, retrying.'
-                    } catch (Exception ex) {
-                        log.error 'Unknown Error, retrying.', ex
+                        last = overview
+                    } else {
+                        // If we found events that we need to get, only wait 1/2 second before checking again
+                        Thread.sleep(500)
                     }
+                    // Else wait 2 seconds between event checks
+                    Thread.sleep(2000)
+                } catch (HidRemoteErrorException ex) {
+                    log.error 'HID Error, retrying.'
+                } catch (Exception ex) {
+                    log.error 'Unknown Error, retrying.', ex
                 }
             }
         } as Observable.OnSubscribe<EventMessage>)

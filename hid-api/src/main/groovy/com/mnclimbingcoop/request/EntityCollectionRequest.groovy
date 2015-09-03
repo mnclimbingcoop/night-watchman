@@ -1,7 +1,9 @@
 package com.mnclimbingcoop.request
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
+@JacksonXmlRootElement(localName='VertXMessage')
 interface EntityCollectionRequest<S,T> {
 
     abstract S overview()

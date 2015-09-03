@@ -1,11 +1,13 @@
 package com.mnclimbingcoop.request
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.mnclimbingcoop.domain.Doors
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.domain.type.DoorCommand
 import com.mnclimbingcoop.domain.type.ResponseFormat
 
+@JacksonXmlRootElement(localName='VertXMessage')
 class DoorRequest extends VertXRequest implements SimpleEntityRequest<DoorRequest> {
 
     DoorRequest() {

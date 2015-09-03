@@ -11,6 +11,7 @@ import javax.inject.Named
 
 import rx.Observable
 import rx.Subscriber
+import rx.schedulers.Schedulers
 
 @CompileStatic
 @Named
@@ -28,12 +29,12 @@ class CredentialSurveyService {
     }
 
     void survey() {
-        List<Observable> observables = hidService.doors.collect{ observeCredentials(it) }
+        List<Observable> observables = hidService.doors.collect{ observeCredentials(it).observeOn(Schedulers.io()) }
 
         Observable.merge(observables).subscribe(
             { Credential credential ->
                 // credentials are already added to the state via the CredentialService
-                log.debug " + adding [#${credential.rawCardNumber}]: " +
+                log.info " + adding [#${credential.rawCardNumber}]: " +
                           "${credential.cardNumber} ${credential.formatName}, owner: ${credential.cardholderID}"
             }, { Throwable t ->
                 log.error "Error while reading credentials ${t.class} ${t.message}"
@@ -46,26 +47,24 @@ class CredentialSurveyService {
 
     protected Observable<Credential> observeCredentials(String door) {
         return Observable.create({ Subscriber<Credential> subscriber ->
-            Thread.start {
-                Credentials metaData = service.overview(door)
-                Integer unassignedCredentials = metaData.unassignedCredentials
-                log.info "discovered ${unassignedCredentials} unassigned credentials"
-                Integer offset = 0
-                while (offset <= unassignedCredentials && !subscriber.unsubscribed) {
-                    Credentials credentials = service.list(door, offset, PAGE_SIZE)
-                    if (credentials.credentials) {
-                        for (Credential credential : credentials.credentials) {
-                            if (subscriber.unsubscribed) { break }
-                            subscriber.onNext(credential)
-                        }
+            Credentials metaData = service.overview(door)
+            Integer unassignedCredentials = metaData.unassignedCredentials
+            log.info "discovered ${unassignedCredentials} unassigned credentials"
+            Integer offset = 0
+            while (offset <= unassignedCredentials && !subscriber.unsubscribed) {
+                Credentials credentials = service.list(door, offset, PAGE_SIZE)
+                if (credentials.credentials) {
+                    for (Credential credential : credentials.credentials) {
+                        if (subscriber.unsubscribed) { break }
+                        subscriber.onNext(credential)
                     }
-                    Thread.sleep(100)
-                    offset += PAGE_SIZE
                 }
+                Thread.sleep(100)
+                offset += PAGE_SIZE
+            }
 
-                if (!subscriber.unsubscribed) {
-                    subscriber.onCompleted()
-                }
+            if (!subscriber.unsubscribed) {
+                subscriber.onCompleted()
             }
         } as Observable.OnSubscribe<Credential>)
     }

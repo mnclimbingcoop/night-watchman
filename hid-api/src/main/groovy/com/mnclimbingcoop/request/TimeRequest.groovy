@@ -1,11 +1,14 @@
 package com.mnclimbingcoop.request
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+
 import com.mnclimbingcoop.domain.Time
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.type.Action
 
 import org.joda.time.DateTime
 
+@JacksonXmlRootElement(localName='VertXMessage')
 class TimeRequest extends VertXRequest {
 
     // Default to central standard time
