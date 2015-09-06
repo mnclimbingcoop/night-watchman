@@ -1,6 +1,7 @@
 package com.mnclimbingcoop.service
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.mnclimbingcoop.ObjectMapperBuilder
 import com.mnclimbingcoop.client.ClientBuilder
 import com.mnclimbingcoop.client.HidEdgeProApi
 import com.mnclimbingcoop.config.DoorConfiguration
@@ -26,7 +27,7 @@ class HidService {
     protected final DoorConfiguration config
     protected final HealthService healthService
     protected final Map<String, HidEdgeProApi> apis = new ConcurrentHashMap<String, HidEdgeProApi>()
-    protected final XmlMapper objectMapper
+    protected static final XmlMapper XML_MAPPER = ObjectMapperBuilder.buildXml()
 
     static final int MAX_TRIES = 5
 
@@ -36,13 +37,11 @@ class HidService {
     @Inject
     HidService(CloudSyncService cloudSyncService,
                DoorConfiguration config,
-               HealthService healthService,
-               XmlMapper objectMapper) {
+               HealthService healthService) {
 
         this.cloudSyncService = cloudSyncService
         this.config = config
         this.healthService = healthService
-        this.objectMapper = objectMapper
     }
 
     @PostConstruct
@@ -124,7 +123,7 @@ class HidService {
     }
 
     protected String wrap(VertXRequest request) {
-        objectMapper.writeValueAsString(request)
+        XML_MAPPER.writeValueAsString(request)
     }
 
 

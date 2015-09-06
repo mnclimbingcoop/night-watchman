@@ -23,7 +23,7 @@ class CommandRelayService {
 
     protected final CloudSyncService cloudSyncService
     protected final HidService hidService
-    protected final ObjectMapper objectMapper = new ObjectMapperBuilder().build()
+    protected final ObjectMapper objectMapper = ObjectMapperBuilder.build()
     protected final HealthService healthService
     protected final OrchestratorService orchestrator
 

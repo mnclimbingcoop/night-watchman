@@ -9,7 +9,7 @@ class XmlSpecification extends Specification {
     ObjectMapper objectMapper
 
     void setup() {
-        objectMapper = new ObjectMapperBuilder().buildXml()
+        objectMapper = ObjectMapperBuilder.buildXml()
     }
 
     protected String stripWhitespace(String str) {

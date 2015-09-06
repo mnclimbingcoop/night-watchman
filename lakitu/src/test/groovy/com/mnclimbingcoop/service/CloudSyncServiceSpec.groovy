@@ -14,7 +14,7 @@ class CloudSyncServiceSpec extends Specification {
 
     void setup() {
 
-        objectMapper = new ObjectMapperBuilder().build()
+        objectMapper = ObjectMapperBuilder.build()
         awsConfig = new AwsConfiguration(
             region: 'us-east-1',
             sqs: new AwsConfiguration.SqsConfig(queue: 'test')
