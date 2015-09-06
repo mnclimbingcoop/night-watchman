@@ -11,10 +11,9 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 
-// import com.fasterxml.jackson.datatype.jsr310.JSR310Module
 class ObjectMapperBuilder {
 
-    ObjectMapper build() {
+    static ObjectMapper build() {
         ObjectMapper objectMapper = new ObjectMapper()
 
         objectMapper.registerModule(new JodaModule())
@@ -29,7 +28,7 @@ class ObjectMapperBuilder {
         return objectMapper
     }
 
-    XmlMapper buildXml() {
+    static XmlMapper buildXml() {
 
         XmlMapper objectMapper = new XmlMapper()
 

@@ -1,7 +1,6 @@
 package com.mnclimbingcoop.app
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.mnclimbingcoop.ObjectMapperBuilder
 import com.mnclimbingcoop.client.ClientBuilder
 
@@ -29,18 +28,15 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 @Slf4j
 class DoorWatchmanApp {
 
+    static final ObjectMapper MAPPER = ObjectMapperBuilder.build()
+
     static void main(final String[] args) {
         SpringApplication.run(this, args)
     }
 
     @Bean
     ObjectMapper objectMapper() {
-        return new ObjectMapperBuilder().build()
-    }
-
-    @Bean
-    XmlMapper xmlObjectMapper() {
-        return new ObjectMapperBuilder().buildXml()
+        return MAPPER
     }
 
 }

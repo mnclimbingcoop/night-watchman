@@ -33,13 +33,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 @Slf4j
 class LakituApp {
 
+    static final ObjectMapper MAPPER = ObjectMapperBuilder.build()
+
     static void main(final String[] args) {
         SpringApplication.run(this, args)
-    }
-
-    @Bean
-    ObjectMapper objectMapper() {
-        return new ObjectMapperBuilder().build()
     }
 
 }

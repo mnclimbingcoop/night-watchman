@@ -25,7 +25,7 @@ class ClientBuilder {
     private boolean unsafeSSL = false;
 
     String uri = 'http://localhost:8080'
-    ObjectMapper objectMapper = new ObjectMapperBuilder().buildXml()
+    ObjectMapper objectMapper = ObjectMapperBuilder.buildXml()
 
     /** One of: NONE, BASIC, HEADERS, HEADERS_AND_ARGS, or FULL */
     RestAdapter.LogLevel logLevel = RestAdapter.LogLevel.BASIC

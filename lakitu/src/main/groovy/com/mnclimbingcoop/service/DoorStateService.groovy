@@ -25,7 +25,7 @@ class DoorStateService {
 
     Map<String, EdgeSoloState> hidStates = new ConcurrentHashMap<String, EdgeSoloState>()
     protected final CloudSyncService cloudSyncService
-    protected final ObjectMapper objectMapper = new ObjectMapperBuilder().build()
+    protected final ObjectMapper objectMapper = ObjectMapperBuilder.build()
     protected final DoorMerger doorMerger = new DoorMerger()
     protected final HealthService healthService
 
