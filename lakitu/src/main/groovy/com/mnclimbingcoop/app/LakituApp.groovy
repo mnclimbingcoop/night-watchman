@@ -39,4 +39,9 @@ class LakituApp {
         SpringApplication.run(this, args)
     }
 
+    @Bean
+    ObjectMapper objectMapper() {
+        return MAPPER
+    }
+
 }

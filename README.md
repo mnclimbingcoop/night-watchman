@@ -19,3 +19,8 @@ Run the app via the `run` script:
 
     bash -c "$(curl -fsSkL raw.github.com/mnclimbingcoop/night-watchman/master/run)"
 
+### Scripts!
+
+Looking for start up and run scripts?
+
+See the [scripts](https://github.com/mnclimbingcoop/night-watchman/tree/scripts) branch.
