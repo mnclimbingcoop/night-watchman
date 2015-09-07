@@ -1,0 +1,15 @@
+.gradle/
+build/
+.java-version
+application.properties
+application.*.yml
+.night-watchman/*.jar
+*.swp
+.idea/
+*.iml
+*.ipr
+*.iws
+data/
+application.properties.*
+configs/
+configs
