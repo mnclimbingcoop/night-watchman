@@ -24,7 +24,7 @@ class InitializationService {
 
     @PostConstruct
     void startup() {
-        doorStateService.buildState()
+        //doorStateService.buildState()
         heartBeatService.takePulse()
     }
 
