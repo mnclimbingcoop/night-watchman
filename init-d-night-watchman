@@ -16,36 +16,36 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
 . /lib/lsb/init-functions
 
-INSTALL_PATH=/usr/local/night-watchman
-DAEMON=java
-JAVA_OPTS="-server -Xms512m -Xmx512m -jar ${INSTALL_PATH}/night-watchman.jar"
-PIDFILE=/var/run/night-watchman.pid
+ARTIFACT=night-watchman
+INSTALL_PATH=/usr/local/${ARTIFACT}
+DAEMON=/usr/bin/java
+JAVA_OPTS="-server -Xms512m -Xmx512m -jar ${INSTALL_PATH}/.${ARTIFACT}/${ARTIFACT}.jar"
+PIDFILE=/var/run/${ARTIFACT}.pid
 
 test -x $DAEMON || exit 5
 
-if [ -r /etc/default/night-watchman ]; then
-    . /etc/default/night-watchman
+if [ -r /etc/default/${ARTIFACT} ]; then
+    . /etc/default/${ARTIFACT}
 fi
-
 
 RUNASUSER=pi
 
 case $1 in
     start)
-        log_daemon_msg "Starting Night Watchman server" "night-watchman"
+        log_daemon_msg "Starting Night Watchman server" "${ARTIFACT}"
           start-stop-daemon --start \
-                        --quiet \
                         --oknodo \
                         --chdir $INSTALL_PATH \
                         --background \
                         --pidfile $PIDFILE \
                         --make-pidfile \
+			--chuid ${RUNASUSER} \
                         --exec $DAEMON -- ${JAVA_OPTS}
         status=$?
         log_end_msg $status
         ;;
     stop)
-        log_daemon_msg "Stopping Night Watchman server" "night-watchman"
+        log_daemon_msg "Stopping Night Watchman server" "${ARTIFACT}"
           start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE
         log_end_msg $?
         rm -f $PIDFILE
@@ -71,3 +71,4 @@ case $1 in
         exit 2
         ;;
 esac
+pi@raspberrypi ~ $

@@ -38,8 +38,10 @@ else
             ln -sf ${JAR} ${ARTIFACT}.jar
             popd
 
+            # Restart service
+            echo "Restarting service..."
+            sudo service ${ARTIFACT} restart
         fi
-
     fi
 
     # Write the symlink if it's not there
