@@ -1,4 +1,4 @@
-#!/bin/bash -1
+#!/bin/bash -e
 
 ARTIFACT=night-watchman
 LOCAL_INSTALL_PATH=`dirname $0`
