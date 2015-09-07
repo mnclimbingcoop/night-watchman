@@ -33,9 +33,14 @@ RUNASUSER=pi
 case $1 in
     start)
         log_daemon_msg "Starting Night Watchman server" "night-watchman"
-          start-stop-daemon --start --quiet --oknodo \
+          start-stop-daemon --start \
+                        --quiet \
+                        --oknodo \
                         --chdir $INSTALL_PATH \
-                        --background --pidfile $PIDFILE --exec $DAEMON -- ${JAVA_OPTS}
+                        --background \
+                        --pidfile $PIDFILE \
+                        --make-pidfile \
+                        --exec $DAEMON -- ${JAVA_OPTS}
         status=$?
         log_end_msg $status
         ;;
