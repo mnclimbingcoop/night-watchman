@@ -22,9 +22,7 @@ else
     LOCAL_FOLDER=${LOCAL_INSTALL_PATH}/.${ARTIFACT}
     JAR_PATH=${LOCAL_FOLDER}/${JAR}
 
-
     JAR_SYMLINK=${LOCAL_FOLDER}/${ARTIFACT}.jar
-
 
     if [ ! -d ${LOCAL_FOLDER} ]; then
         mkdir -p ${LOCAL_FOLDER}
@@ -42,5 +40,12 @@ else
 
         fi
 
+    fi
+
+    # Write the symlink if it's not there
+    if [ -r ${JAR_PATH} ] && [ ! -r ${LOCAL_FOLDER}/${ARTIFACT}.jar ] ; then
+        pushd ${LOCAL_FOLDER}
+        ln -sf ${JAR} ${ARTIFACT}.jar
+        popd
     fi
 fi
