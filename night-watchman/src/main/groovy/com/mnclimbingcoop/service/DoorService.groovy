@@ -5,6 +5,7 @@ import com.mnclimbingcoop.domain.Doors
 import com.mnclimbingcoop.domain.EdgeSoloState
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
+import com.mnclimbingcoop.request.ControlRequest
 import com.mnclimbingcoop.request.DoorRequest
 
 import groovy.transform.CompileStatic
@@ -67,19 +68,31 @@ class DoorService {
         hidService.sync(state)
     }
 
-    void unlockDoor(String name) {
+    void unlock(String door) {
         VertXRequest request = new DoorRequest().unlock()
-        hidService.get(name, request)
+        hidService.get(door, request)
     }
 
-    void lockDoor(String name) {
+    void lock() {
+        hidService.doors.each{ String door ->
+            VertXRequest request = new DoorRequest().lock()
+            hidService.get(door, request)
+        }
+    }
+
+    void lock(String door) {
         VertXRequest request = new DoorRequest().lock()
-        hidService.get(name, request)
+        hidService.get(door, request)
     }
 
-    void openDoor(String name) {
+    void stopAlarm(String door) {
+        VertXRequest request = new ControlRequest().stopAlarm()
+        hidService.get(door, request)
+    }
+
+    void grantAccess(String door) {
         VertXRequest request = new DoorRequest().grantAccess()
-        hidService.get(name, request)
+        hidService.get(door, request)
     }
 
 }

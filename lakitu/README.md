@@ -13,13 +13,20 @@ Currently can only send door open/close/unlock commands.
  * `GET` /health
  * `GET` /health/status
  * `GET` /doors
+ * `GET` /doors/{door}
  * `GET` /credentials/{door}
  * `GET` /cardholders/{door}
- * `GET` /doors/{door}
+ * `GET` /events/{door}
  * `GET` /state/{door}
+
+# Find cardholders by name, phone, email or fob number
+
+ * `GET` /cardholders/find/{query} 
+ * `GET` /cardholders/find/{door}/{query}
 
 ### Door Actions
 
+ * `POST` /doors/lock -> (locks all doors)
  * `POST` /doors/lock/{door}
  * `POST` /doors/open/{door}
  * `POST` /doors/stop-alarm/{door}

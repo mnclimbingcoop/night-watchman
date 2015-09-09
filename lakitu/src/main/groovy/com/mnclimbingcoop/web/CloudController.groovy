@@ -35,29 +35,7 @@ class CloudController {
         return doorStateService.hidStates[door].credentials
     }
 
-    @RequestMapping(value = '/cardholders', method = RequestMethod.GET, produces = 'application/json')
-    Map<String, Set<Cardholder>> getCardholders() {
-        return doorStateService.hidStates.collectEntries{ String name, EdgeSoloState state ->
-            [ name, state.cardholders ]
-        }
-    }
-
-    @RequestMapping(value = '/cardholders/{door}', method = RequestMethod.GET, produces = 'application/json')
-    Set<Cardholder> getCardholders(@PathVariable String door) {
-        return doorStateService.hidStates[door].cardholders
-    }
-
-    @RequestMapping(value = '/doors', method = RequestMethod.GET, produces = 'application/json')
-    Map<String, Set<Door>> getDoors() {
-        return doorStateService.hidStates.collectEntries{ String name, EdgeSoloState state ->
-            [ name, state.doors ]
-        }
-    }
-
-    @RequestMapping(value = '/doors/{door}', method = RequestMethod.GET, produces = 'application/json')
-    Door getDoor(@PathVariable String door) {
-        return doorStateService.hidStates[door].doors[0]
-    }
+    // TODO: Add events
 
     @RequestMapping(value = '/state', method = RequestMethod.GET, produces = 'application/json')
     Map<String, EdgeSoloState> getState() {

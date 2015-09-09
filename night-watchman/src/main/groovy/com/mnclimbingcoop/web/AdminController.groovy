@@ -26,17 +26,16 @@ class AdminController {
         this.hidService = hidService
     }
 
+    @RequestMapping(value = '/credentials/{door}', method = RequestMethod.GET, produces = 'application/json')
+    Set<Credential> getCredentials(@PathVariable String door) {
+        return hidService.hidStates[door].credentials
+
+    }
+
     @RequestMapping(value = '/credentials', method = RequestMethod.GET, produces = 'application/json')
     Map<String, Set<Credential>> getCredentials() {
         return hidService.hidStates.collectEntries{ String name, EdgeSoloState state ->
             [ name, state.credentials ]
-        }
-    }
-
-    @RequestMapping(value = '/cardholders', method = RequestMethod.GET, produces = 'application/json')
-    Map<String, Set<Cardholder>> getCardholders() {
-        return hidService.hidStates.collectEntries{ String name, EdgeSoloState state ->
-            [ name, state.cardholders ]
         }
     }
 
@@ -45,25 +44,11 @@ class AdminController {
         return hidService.hidStates
     }
 
+    // TODO: Add events
+
     @RequestMapping(value = '/state/{door}', method = RequestMethod.GET, produces = 'application/json')
     EdgeSoloState getState(@PathVariable door) {
         return hidService.hidStates.get(door)
-    }
-
-    /** will seed cardholders with a predefined list */
-    @RequestMapping(value = '/cardholders', method = RequestMethod.POST, produces = 'application/json')
-    Integer createCardholders(@RequestBody Map<String, Set<Cardholder>> allCardholders) {
-        Integer created = 0
-        allCardholders.each{ String name, Set<Cardholder> cardholders ->
-            EdgeSoloState state = hidService.hidStates[name]
-            if (state) {
-                cardholders.each{ Cardholder cardholder ->
-                    state.cardholders << cardholder
-                    created++
-                }
-            }
-        }
-        return created
     }
 
 
