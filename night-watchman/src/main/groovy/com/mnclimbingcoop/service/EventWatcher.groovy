@@ -37,6 +37,7 @@ class EventWatcher {
         log.info "observing ${door} door for events."
         observeEvents().observeOn(Schedulers.io()).subscribeOn(Schedulers.io()).subscribe(
             { EventMessage event ->
+                hidService.hidStates[door].events << event
                 // credentials are already added to the state via the CredentialService
                 log.info("Event: door: ${event.door} " +
                          "timestamp: ${event.timestamp} " +

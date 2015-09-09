@@ -4,7 +4,7 @@ import com.amazonaws.services.sqs.model.SendMessageResult
 import com.mnclimbingcoop.domain.Door
 import com.mnclimbingcoop.domain.EdgeSoloState
 import com.mnclimbingcoop.service.DoorService
-import com.mnclimbingcoop.service.DoorStateService
+import com.mnclimbingcoop.service.HidService
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -23,26 +23,24 @@ import org.springframework.web.bind.annotation.RestController
 class DoorController {
 
     protected final DoorService doorService
-    protected final DoorStateService doorStateService
+    protected final HidService hidService
 
     @Inject
-    DoorController(DoorService doorService, DoorStateService doorStateService) {
+    DoorController(DoorService doorService, HidService hidService) {
         this.doorService = doorService
-        this.doorStateService = doorStateService
+        this.hidService = hidService
     }
 
-    /** Get list of doors and their current state */
     @RequestMapping(method = RequestMethod.GET, produces = 'application/json')
     Map<String, Door> getDoors() {
-        return doorStateService.hidStates.collectEntries{ String name, EdgeSoloState state ->
+        return hidService.hidStates.collectEntries{ String name, EdgeSoloState state ->
             [ name, state.doors[0] ]
         }
     }
 
-    /** Get the current state of a door */
     @RequestMapping(value = '/{door}', method = RequestMethod.GET, produces = 'application/json')
     Door getDoor(@PathVariable String door) {
-        return doorStateService.hidStates[door].doors[0]
+        return hidService.hidStates.get(door).doors[0]
     }
 
     /** Locks all doors */
@@ -52,14 +50,14 @@ class DoorController {
         return doorService.lock()
     }
 
-    /** Locks a given doors */
+    /** Locks all doors */
     @RequestMapping(value = '/lock/{door}', method = RequestMethod.POST, produces = 'application/json')
     SendMessageResult lock(@PathVariable String door) {
         log.info "Sending lock message to '${door}'."
         return doorService.lock(door)
     }
 
-    /** Unlocks a given door */
+    /** Unlocks all doors */
     @RequestMapping(value = '/unlock/{door}', method = RequestMethod.POST, produces = 'application/json')
     SendMessageResult unlock(@PathVariable String door) {
         log.info "Sending unlock message to '${door}'."

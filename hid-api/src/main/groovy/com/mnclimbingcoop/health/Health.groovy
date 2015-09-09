@@ -20,6 +20,6 @@ class Health {
         if (dependentHealth) {
             return dependentHealth.ok && sqsHealth?.ok
         }
-        return doors?.size() > 0 && doors?.every{ k, v -> v?.ok }
+        return sqsHealth?.ok && doors?.size() > 0 && doors?.every{ k, v -> v?.ok }
     }
 }

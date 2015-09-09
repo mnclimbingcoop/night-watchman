@@ -24,6 +24,8 @@ class ApiKeyFilter implements Filter {
 
     private final Map<String, String> apiKeys
 
+    static final Set<String> WHITELIST = [ '/health', '/favicon.ico' ].toSet()
+
     @Inject
     ApiKeyFilter(ApiKeyConfiguration apiConfig) {
         this.apiKeys = apiConfig.keys
@@ -51,13 +53,19 @@ class ApiKeyFilter implements Filter {
 
         String keyHolder = getHolder(headerToken, requestToken)
 
-        if (!keyHolder) {
-            log.warn "Access denied to: ${headerToken}, ${requestToken}"
+        String from = request.remoteAddr
+        if (request.remoteAddr != request.remoteHost) {
+            from += " [${request.remoteHost}]"
+        }
+        from += " ${request.method} ${request.requestURI}"
+
+        if (keyHolder || request.requestURI.toString() in WHITELIST) {
+            log.info "${from} :: Access granted to: ${keyHolder}"
+            chain.doFilter(req, res)
+        } else {
+            log.warn "${from} :: Access denied to: ${headerToken}, ${requestToken}"
             response.setContentLength(0)
             response.sendError(403, 'Invalid API Token')
-        } else {
-            log.info "Access granted to ${keyHolder}"
-            chain.doFilter(req, res)
         }
     }
 

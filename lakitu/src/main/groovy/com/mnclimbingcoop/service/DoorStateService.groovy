@@ -16,8 +16,6 @@ import javax.inject.Named
 
 import rx.schedulers.Schedulers
 
-import java.util.concurrent.TimeUnit
-
 @CompileStatic
 @Named
 @Slf4j

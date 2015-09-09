@@ -9,6 +9,3 @@ It also listens on an SQS queue for commands to forward to door(s) from the Laki
 
 Currently can only send door open/close/unlock commands.
 
-TODO: CRUD Cardholders
-TODO: CRUD Credentials
-
