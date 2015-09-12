@@ -1,0 +1,7 @@
+api.keys.ALL=disabled
+api.keys.MYAPIKEY1234=aaron
+api.keys.BOBSAPIKEY4567=bob
+aws.region=us-east-1
+aws.sqs.pushQueue=fun-commands
+aws.sqs.pullQueue=fun-state
+aws.sqs.healthQueue=fun-health
