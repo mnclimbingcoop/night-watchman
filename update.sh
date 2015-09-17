@@ -33,7 +33,8 @@ else
         curl -L ${DL_URL}/${GROUP_PATH}/${ARTIFACT}/${VERSION}/${JAR} > ${JAR_PATH}
 
         # If download succeeded
-        if [ -r ${JAR_PATH} ]; then
+        if (unzip -tqq ${JAR_PATH}) ; then
+            echo "Download succeded."
             pushd ${LOCAL_FOLDER}
             ln -sf ${JAR} ${ARTIFACT}.jar
             popd
@@ -41,6 +42,9 @@ else
             # Restart service
             echo "Restarting service..."
             sudo service ${ARTIFACT} restart
+        else
+            echo "Download failed. Removing ${JAR_PATH}"
+            rm -f ${JAR_PATH}
         fi
     fi
 
