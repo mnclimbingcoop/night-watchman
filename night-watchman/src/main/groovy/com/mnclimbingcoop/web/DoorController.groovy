@@ -47,35 +47,40 @@ class DoorController {
     @RequestMapping(value = '/lock', method = RequestMethod.POST, produces = 'application/json')
     List<SendMessageResult> lock() {
         log.info "Sending lock message to ALL doors."
-        return doorService.lock()
+        doorService.lock()
+        return [ new SendMessageResult() ]
     }
 
     /** Locks all doors */
     @RequestMapping(value = '/lock/{door}', method = RequestMethod.POST, produces = 'application/json')
     SendMessageResult lock(@PathVariable String door) {
         log.info "Sending lock message to '${door}'."
-        return doorService.lock(door)
+        doorService.lock(door)
+        return new SendMessageResult()
     }
 
     /** Unlocks all doors */
     @RequestMapping(value = '/unlock/{door}', method = RequestMethod.POST, produces = 'application/json')
     SendMessageResult unlock(@PathVariable String door) {
         log.info "Sending unlock message to '${door}'."
-        return doorService.unlock(door)
+        doorService.unlock(door)
+        return new SendMessageResult()
     }
 
     /** Grants access to a door */
     @RequestMapping(value = '/open/{door}', method = RequestMethod.POST, produces = 'application/json')
     SendMessageResult grantAccess(@PathVariable String door) {
         log.info "Granting access to '${door}'."
-        return doorService.grantAccess(door)
+        doorService.grantAccess(door)
+        return new SendMessageResult()
     }
 
     /** Stop alarms on a given door */
     @RequestMapping(value = '/stop-alarm/{door}', method = RequestMethod.POST, produces = 'application/json')
     SendMessageResult stopAlarm(@PathVariable String door) {
         log.info "Stop alarm on '${door}'."
-        return doorService.stopAlarm(door)
+        doorService.stopAlarm(door)
+        return new SendMessageResult()
     }
 
 }

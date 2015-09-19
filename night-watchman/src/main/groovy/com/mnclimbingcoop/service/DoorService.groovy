@@ -52,14 +52,29 @@ class DoorService {
     void updateState(String name, Doors doors) {
         healthService.checkedDoor(name)
         // Only 1 door to support
-        Door current = doors.doors[0]
-        Door last = hidService.hidStates[name].doors[0]
-        if (current.changed(last)) {
-            log.info "Door state changed, sending notification."
-            sync(name, current)
+        List<Door> currentDoors = doors.doors
+        EdgeSoloState state = hidService.hidStates[name]
+        Set<Door> lastDoors = state.doors
+        boolean detectedChange = currentDoors.any{ Door currentDoor ->
+            lastDoors.any{ Door lastDoor ->
+                if (currentDoor.changed(lastDoor)) {
+                    log.info "Door state (${currentDoor.relayState}) for [${name}] " +
+                             "changed from (${lastDoor.relayState}), sending notification."
+                    return true
+                }
+            }
+        }
+
+        // Update state with new doors
+        hidService.hidStates[name].doors.clear()
+        currentDoors.each{ Door door ->
+            hidService.hidStates[name].doors.add(door)
+        }
+
+        if (detectedChange) {
+            currentDoors.each{ Door door -> sync(name, door) }
             healthService.updatedDoor(name)
         }
-        hidService.hidStates[name].doors.addAll(current)
     }
 
     void sync(String name, Door door) {
@@ -70,29 +85,37 @@ class DoorService {
 
     void unlock(String door) {
         VertXRequest request = new DoorRequest().unlock()
-        hidService.get(door, request)
+        updateDoor(door, request)
     }
 
     void lock() {
+        List<Door> doors = []
         hidService.doors.each{ String door ->
             VertXRequest request = new DoorRequest().lock()
-            hidService.get(door, request)
+            doors << updateDoor(door, request)
         }
+        return doors
     }
 
     void lock(String door) {
         VertXRequest request = new DoorRequest().lock()
-        hidService.get(door, request)
+        updateDoor(door, request)
     }
 
     void stopAlarm(String door) {
         VertXRequest request = new ControlRequest().stopAlarm()
-        hidService.get(door, request)
+        updateDoor(door, request)
     }
 
     void grantAccess(String door) {
         VertXRequest request = new DoorRequest().grantAccess()
-        hidService.get(door, request)
+        updateDoor(door, request)
+    }
+
+    protected Door updateDoor(String door, VertXRequest request) {
+        List<Door> result = hidService.get(door, request).doors?.doors
+        if (result) { return result[0] }
+        return null
     }
 
 }
