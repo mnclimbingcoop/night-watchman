@@ -89,12 +89,10 @@ class DoorService {
     }
 
     void lock() {
-        List<Door> doors = []
         hidService.doors.each{ String door ->
             VertXRequest request = new DoorRequest().lock()
-            doors << updateDoor(door, request)
+            updateDoor(door, request)
         }
-        return doors
     }
 
     void lock(String door) {

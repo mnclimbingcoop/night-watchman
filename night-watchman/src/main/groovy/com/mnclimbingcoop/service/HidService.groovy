@@ -28,6 +28,7 @@ class HidService {
     protected final HealthService healthService
     protected final Map<String, HidEdgeProApi> apis = new ConcurrentHashMap<String, HidEdgeProApi>()
     protected static final XmlMapper XML_MAPPER = ObjectMapperBuilder.buildXml()
+    static final Set<String> SKIP_RETRY_ERRORS = [ '19', '50' ].toSet()
 
     static final int MAX_TRIES = 5
 
@@ -105,6 +106,10 @@ class HidService {
                 details = response.error.toString()
                 log.error "(try ${tries} of ${MAX_TRIES}) Error requesting XML: ${xmlRequest}"
                 log.error "Error details: ${details}"
+                if (response.error.errorCode in SKIP_RETRY_ERRORS) {
+                    // Don't retry, just throw if we got an already exists error
+                    throw new HidRemoteErrorException(details, response.error)
+                }
                 healthService.getFailed(name, request, details)
                 Thread.sleep(200 * tries)
             } else if (!response) {
@@ -113,7 +118,7 @@ class HidService {
                 healthService.getSucceded(name, request)
             }
         }
-        if (response?.error) { throw new HidRemoteErrorException(details) }
+        if (response?.error) { throw new HidRemoteErrorException(details, response.error) }
 
         return response
     }

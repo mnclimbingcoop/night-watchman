@@ -1,5 +1,6 @@
 package com.mnclimbingcoop
 
+import com.mnclimbingcoop.domain.Error
 import com.mnclimbingcoop.service.*
 
 import spock.lang.Specification
@@ -82,7 +83,7 @@ class SurveyorSpec extends Specification {
         then:
         1 * alertService.list()
         1 * cardFormatService.list()
-        5 * parameterService.get() >> { throw new HidRemoteErrorException('TEST ERROR') }
+        5 * parameterService.get() >> { throw new HidRemoteErrorException('TEST ERROR', new Error()) }
         1 * doorService.list()
         1 * readerService.list()
         1 * scheduleService.list()

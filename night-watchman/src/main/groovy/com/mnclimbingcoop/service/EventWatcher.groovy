@@ -86,7 +86,7 @@ class EventWatcher {
                     // Else wait 2 seconds between event checks
                     Thread.sleep(2000)
                 } catch (HidRemoteErrorException ex) {
-                    log.error 'HID Error, retrying.'
+                    log.error "HID Error ${ex.message}, retrying."
                 } catch (Exception ex) {
                     log.error 'Unknown Error, retrying.', ex
                 }
