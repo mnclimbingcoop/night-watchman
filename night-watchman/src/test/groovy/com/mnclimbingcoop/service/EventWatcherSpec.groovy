@@ -1,10 +1,10 @@
 package com.mnclimbingcoop.service
 
+import com.mnclimbingcoop.domain.Error
 import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
-import com.mnclimbingcoop.request.EventRequest
 
 import java.util.concurrent.atomic.AtomicLong
 
@@ -37,7 +37,7 @@ class EventWatcherSpec extends Specification {
         }
 
         then:
-        7 * hidService.get(DOOR, _ as VertXRequest) >> { throw new HidRemoteErrorException('WAT') }
+        7 * hidService.get(DOOR, _ as VertXRequest) >> { throw new HidRemoteErrorException('WAT', new Error()) }
         3 * hidService.get(DOOR, _ as VertXRequest) >> { throw new IllegalArgumentException('WAT') }
         4 * hidService.get(DOOR, _ as VertXRequest) >> { return newEventOverview() }
         2 * healthService.checkedEvents(DOOR)

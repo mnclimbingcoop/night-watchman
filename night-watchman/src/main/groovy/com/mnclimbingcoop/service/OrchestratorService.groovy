@@ -3,6 +3,7 @@ package com.mnclimbingcoop.service
 import com.mnclimbingcoop.Surveyor
 import com.mnclimbingcoop.domain.AccessCard
 import com.mnclimbingcoop.domain.AccessHolder
+import com.mnclimbingcoop.domain.CardFormat
 import com.mnclimbingcoop.domain.Cardholder
 import com.mnclimbingcoop.domain.Credential
 import com.mnclimbingcoop.domain.EdgeSoloState
@@ -16,6 +17,7 @@ import com.mnclimbingcoop.domain.VertXResponse
 import com.mnclimbingcoop.domain.type.Action
 import com.mnclimbingcoop.request.CardholderRequest
 import com.mnclimbingcoop.request.CredentialRequest
+import com.mnclimbingcoop.wiegand.WiegandEncoder
 
 import groovy.util.logging.Slf4j
 
@@ -57,9 +59,14 @@ class OrchestratorService {
 
         if (state) {
             // Find or create card holder
-            Cardholder cardholder = findOrCreateCardholer(door, state, accessHolder)
+            Cardholder cardholder = findCardholder(state, accessHolder)
+            if (!cardholder) {
+                cardholder = createCardholder(door, accessHolder)
+            } else {
+                cardholder = updateCardholder(door, accessHolder, cardholder)
+            }
+
             // Update cardholder info if changes detected
-            cardholder = updateCardholder(door, accessHolder, cardholder)
             if (cardholder) {
                 // Assign/create/update credentials
                 assignCredentials(door, state, accessHolder, cardholder)
@@ -93,11 +100,13 @@ class OrchestratorService {
                 log.error 'Card does not have a raw number or card number with format ID. {}', card
             } else {
                 // Find or create credential
-                credential = findCredential(card, formatID, cardholder.credentials)
-                if (!credential) { credential = findCredential(card, formatID, state.credentials) }
+                if (cardholder.credentials) {
+                    credential = findCredential(card, formatID, cardholder.credentials.toList())
+                }
+                if (!credential) { credential = findCredential(card, formatID, state.credentials.toList()) }
                 if (!credential) {
                     List<Credential> creds = (List<Credential>) (state.cardholders*.credentials)?.flatten() ?: []
-                    credential = findCredential(card, formatID, creds)
+                    credential = findCredential(card, formatID, creds.toList())
                 }
                 if (!credential) { credential = createCredential(door, card, accessHolder.endTime, formatID) }
             }
@@ -113,7 +122,7 @@ class OrchestratorService {
         }
     }
 
-    protected assignCredential(String door, Credential credential, LocalDateTime endTime, Cardholder cardholder) {
+    protected void assignCredential(String door, Credential credential, LocalDateTime endTime, Cardholder cardholder) {
         if (!(credential.rawCardNumber in cardholder.credentials*.rawCardNumber)) {
             log.info "Assigning card ${credential.rawCardNumber} to card holder ${cardholder.cardholderID}"
             VertXRequest request = new CredentialRequest()
@@ -123,30 +132,35 @@ class OrchestratorService {
         }
 
         if (credential.endTime != endTime) {
-            log.info "Assigning expiration ${endTime} to card card ${credential.rawCardNumber}"
+            log.info "Updating expiration ${endTime} to card card ${credential.rawCardNumber}"
             VertXRequest request = new CredentialRequest()
                     .updateExpiration(credential.rawCardNumber, endTime)
                     .forDoor(door)
             hidService.get(door, request)
-
         }
 
-    }
+        // Update State
+        credential.cardholderID = cardholder.cardholderID
+        if (!cardholder.credentials) { cardholder.credentials = [] }
+        cardholder.credentials.remove(credential)
+        cardholder.credentials.add(credential)
+        hidService.hidStates[door].cardholders.remove(cardholder)
+        hidService.hidStates[door].cardholders.add(cardholder)
 
-    protected Credential findCredential(AccessCard card, Integer formatID, Set<Credential> credentials) {
-        return findCredential(card, formatID, credentials as List)
     }
 
     protected Credential findCredential(AccessCard card, Integer formatID, List<Credential> credentials) {
-        if (credentials) {
+        if (credentials && card) {
             // Find or create credential
             Collection<Credential> creds = credentials.findAll{ Credential cred ->
-                if (formatID && card.cardNumber) {
-                    return (card.cardNumber == cred.cardNumber && formatID == cred.formatID)
-                } else if (card.rawCardNumber) {
-                    return card.rawCardNumber.equalsIgnoreCase(cred.rawCardNumber)
+                if (cred) {
+                    if (formatID && card.cardNumber) {
+                        return (card.cardNumber == cred.cardNumber && formatID == cred.formatID)
+                    } else if (card.rawCardNumber) {
+                        return card.rawCardNumber?.equalsIgnoreCase(cred.rawCardNumber)
+                    }
                 }
-            }
+            } as List
 
             if (creds.size() == 1) {
                 return creds[0]
@@ -155,6 +169,16 @@ class OrchestratorService {
                 return creds[0]
             }
         }
+    }
+
+    Integer getFacilityCode(String door, Integer formatID) {
+        CardFormat cardFormat = hidService.hidStates[door].cardFormats.find{ CardFormat format ->
+            format.formatID == formatID
+        }
+        if (cardFormat.cardFormats) {
+            return cardFormat.cardFormats[0].value
+        }
+        log.warn "Unable to find facility number for card format for formatID ${formatID}"
     }
 
     protected Credential createCredential(String door, AccessCard card, LocalDateTime endTime, Integer formatID) {
@@ -167,9 +191,29 @@ class OrchestratorService {
             rawCardNumber: card.rawCardNumber
         )
         VertXRequest request = new CredentialRequest().create(credential).forDoor(door)
-        VertXResponse response = hidService.get(door, request)
-        if (response?.credentials?.credentials) {
-            return response.credentials.credentials[0]
+        try {
+            VertXResponse response = hidService.get(door, request)
+            if (response?.credentials?.credentials) {
+                credential = response.credentials.credentials[0]
+
+                // propogate rawCardNumber if available
+                if (!credential.rawCardNumber) {
+                    Integer facilityCode = getFacilityCode(door, formatID)
+                    if (facilityCode) {
+                        Integer cardNumber = credential.cardNumber as Integer
+                        credential.rawCardNumber = WiegandEncoder.encode(facilityCode, cardNumber)
+                    }
+                }
+
+                // Add credential to state
+                hidService.hidStates[door].credentials.remove(credential)
+                hidService.hidStates[door].credentials.add(credential)
+                return credential
+            }
+        } catch (HidRemoteErrorException ex) {
+            if (ex.error.errorCode == '19' && ex.error.elementType == 'hid:Credentials') {
+                log.info "Create credential failed because it already exists?: ${ex.message}"
+            } else { throw ex }
         }
         return null
     }
@@ -179,6 +223,11 @@ class OrchestratorService {
                                           Integer formatID,
                                           LocalDateTime endTime,
                                           Credential credential) {
+
+        // Set rawCardNumber if available
+        if (!card.rawCardNumber && credential.rawCardNumber) {
+            card.rawCardNumber = credential.rawCardNumber
+        }
         if (endTime == credential.endTime) { return }
 
         log.info 'Updating credentials: {}', card
@@ -189,12 +238,19 @@ class OrchestratorService {
             isCard:        true,
             rawCardNumber: card.rawCardNumber
         )
-        VertXRequest request = new CredentialRequest().create(cred).forDoor(door)
+
+        VertXRequest request = new CredentialRequest().update(cred).forDoor(door)
         VertXResponse response = hidService.get(door, request)
         if (response?.credentials?.credentials) {
-            return response.credentials.credentials[0]
+            credential = response.credentials.credentials[0]
+            // Add credential to state
         }
-        return null
+
+        credential.endTime = endTime
+        hidService.hidStates[door].credentials.remove(credential)
+        hidService.hidStates[door].credentials.add(credential)
+
+        return credential
     }
 
 
@@ -222,16 +278,45 @@ class OrchestratorService {
         hidService.get(door, request)
     }
 
-    protected Cardholder findOrCreateCardholer(String door, EdgeSoloState state, AccessHolder accessHolder) {
-        Cardholder cardholder = findCardholder(state, accessHolder)
-        if (!cardholder) {
-            // create cardholder
-            cardholder = createCardholder(door, accessHolder)
+    protected Cardholder createCardholder(String door, AccessHolder accessHolder) {
+        Cardholder ch = fromAccessHolder(accessHolder)
+        log.info 'Creating cardholder: {}', ch
+        VertXRequest request = new CardholderRequest().create(ch)
+        VertXResponse response = hidService.get(door, request)
+        if (response?.cardholders?.cardholders) {
+            Cardholder cardholder = response.cardholders.cardholders[0]
+            // Update State
+            hidService.hidStates[door].cardholders.remove(cardholder)
+            hidService.hidStates[door].cardholders.add(cardholder)
+            return cardholder
         }
-        return cardholder
+        return null
     }
 
+    protected AccessHolder cleanAccessHolder(AccessHolder accessHolder) {
+        if (accessHolder.firstName ==~ /\s*/ )     { accessHolder.firstName = null }
+        if (accessHolder.middleInitial ==~ /\s*/ ) { accessHolder.middleInitial = null }
+        if (accessHolder.lastName ==~ /\s*/ )      { accessHolder.lastName = null }
+        if (accessHolder.emailAddress ==~ /\s*/ )  { accessHolder.emailAddress = null }
+        if (accessHolder.phoneNumber ==~ /\s*/ )   { accessHolder.phoneNumber = null }
+        if (accessHolder.custom1 ==~ /\s*/ )       { accessHolder.custom1 = null }
+        if (accessHolder.custom2 ==~ /\s*/ )       { accessHolder.custom2 = null }
+        return accessHolder
+    }
+
+    /*
+    <?xml version="1.0" encoding="UTF-8"?>
+    <VertXMessage>
+      <hid:Credentials action="UD"  rawCardNumber="03644E22"  isCard="true">
+        <hid:Credential  endTime="2015-09-22T23:59:59"/>
+      </hid:Credentials>
+    </VertXMessage>
+    */
+
     protected Cardholder updateCardholder(String door, AccessHolder accessHolder, Cardholder cardholder) {
+
+        accessHolder = cleanAccessHolder(accessHolder)
+
         if (
             cardholder.forename   == accessHolder.firstName &&
             cardholder.middleName == accessHolder.middleInitial &&
@@ -257,23 +342,32 @@ class OrchestratorService {
         ch.cardholderID = cardholder.cardholderID
 
         log.info 'Updating cardholder: {}', ch
-        VertXRequest request = new CardholderRequest().create(ch)
-        VertXResponse response = hidService.get(door, request)
-        if (response?.cardholders?.cardholders) {
-            return response.cardholders.cardholders[0]
-        }
-        return cardholder
-    }
+        VertXRequest request = new CardholderRequest().update(ch)
+        try {
+            VertXResponse response = hidService.get(door, request) // <<<<
+            if (response?.cardholders?.cardholders) {
+                cardholder = response.cardholders.cardholders[0]
+            }
 
-    protected Cardholder createCardholder(String door, AccessHolder accessHolder) {
-        Cardholder ch = fromAccessHolder(accessHolder)
-        log.info 'Creating cardholder: {}', ch
-        VertXRequest request = new CardholderRequest().create(ch)
-        VertXResponse response = hidService.get(door, request)
-        if (response?.cardholders?.cardholders) {
-            return response.cardholders.cardholders[0]
+            cardholder.forename   = accessHolder.firstName
+            cardholder.middleName = accessHolder.middleInitial
+            cardholder.surname    = accessHolder.lastName
+            cardholder.email      = accessHolder.emailAddress
+            cardholder.phone      = accessHolder.phoneNumber
+            cardholder.custom1    = accessHolder.custom1
+            cardholder.custom2    = accessHolder.custom2
+
+            // Update State
+            hidService.hidStates[door].cardholders.remove(cardholder)
+            hidService.hidStates[door].cardholders.add(cardholder)
+
+        } catch (HidRemoteErrorException ex) {
+            if (ex.error.errorCode == '19' && ex.error.elementType == 'hid:Cardholders') {
+                log.info "Update cardholder failed: ${ex.message}"
+            } else { throw ex }
         }
-        return null
+
+        return cardholder
     }
 
     protected Cardholder findCardholder(EdgeSoloState state, AccessHolder accessHolder) {
@@ -283,7 +377,7 @@ class OrchestratorService {
             Set<String> cardNumbers = accessHolder.cards.collect{ "${it.formatName}:${it.cardNumber}" } as Set
             cardNumbers.remove(':')
             cardNumbers.remove('null:null')
-            ch.credentials.any{ Credential cred ->
+            ch.credentials?.any{ Credential cred ->
                 if (cred.formatName && cred.cardNumber) {
                     return "${cred.formatName}:${cred.cardNumber}" in cardNumbers
                 } else {
@@ -295,8 +389,8 @@ class OrchestratorService {
         if (!cardholder) {
             // Next try finding by name
             Collection<Cardholder> cardholders = state.cardholders.findAll{ Cardholder ch ->
-                ch.forename.equalsIgnoreCase(accessHolder.firstName) &&
-                ch.surname.equalsIgnoreCase(accessHolder.lastName)
+                ch.forename?.equalsIgnoreCase(accessHolder.firstName) &&
+                ch.surname?.equalsIgnoreCase(accessHolder.lastName)
             }
             if (cardholders.size() == 1) {
                 cardholder = cardholders[0]

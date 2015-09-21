@@ -106,7 +106,7 @@ class Surveyor {
                 success = true
             } catch (HidRemoteErrorException ex) {
                 tries++
-                log.error "Attempt #${tries} failed while ${reason}, retrying in 3s"
+                log.error "Attempt #${tries} failed while ${reason} with ${ex.message}, retrying in 3s"
                 Thread.sleep(500 * tries)
             }
         }

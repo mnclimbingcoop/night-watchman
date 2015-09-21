@@ -83,7 +83,8 @@ abstract class AbstractCloudSyncService<T,R> {
     @PostConstruct
     void setup() {
         assert region
-        assert pullQueue || pushQueue
+
+        if (!pullQueue && !pushQueue) { log.warn 'No push or pull queue is configured.' }
 
         credentialsProvider = new DefaultAWSCredentialsProviderChain()
         createQueues()
@@ -117,6 +118,8 @@ abstract class AbstractCloudSyncService<T,R> {
 
     /** Returns an observable that streams SQS messages */
     Observable<R> getObservable() {
+        if (!pullQueueUrl) { return Observable.empty() }
+
         AwsRetryService awsRetry = new AwsRetryService<Boolean>(awsService)
         MessageObservableFactory messageFactory = new MessageObservableFactory(
             awsService, healthService, pullQueueUrl, maxNumberOfMessages
@@ -139,8 +142,8 @@ abstract class AbstractCloudSyncService<T,R> {
     }
 
     protected void createQueues() {
-        pushQueueUrl = createQueue(pushQueue)
-        pullQueueUrl = createQueue(pullQueue)
+        if (pushQueue) { pushQueueUrl = createQueue(pushQueue) }
+        if (pullQueue) { pullQueueUrl = createQueue(pullQueue) }
         log.info "Using SQS queues: push=${pushQueueUrl} pull=${pullQueueUrl}"
     }
 
