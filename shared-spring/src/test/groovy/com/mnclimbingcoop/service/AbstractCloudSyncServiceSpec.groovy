@@ -35,6 +35,9 @@ class AbstractCloudSyncServiceSpec extends Specification {
         result = Mock()
 
         service = new TestCloudSyncService(healthService, objectMapper)
+        service.pushQueueUrl = "FAKE_PUSH_URL"
+        service.pullQueueUrl = "FAKE_PULL_URL"
+
         service.awsService = awsService
     }
 
