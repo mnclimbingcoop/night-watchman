@@ -11,10 +11,6 @@ class DoorHealth extends AbstractHealth {
     LocalDateTime lastDoorMessage
     boolean doorOk = false
 
-    LocalDateTime lastEventCheck
-    LocalDateTime lastEvent
-    boolean eventOk = false
-
     String errorMessage
     boolean otherOk = false
 
@@ -30,22 +26,12 @@ class DoorHealth extends AbstractHealth {
         getDrift(lastDoorMessage)
     }
 
-    String getEventCheckDrift() {
-        getDrift(lastEventCheck)
-    }
-
-    String getEventDrift() {
-        getDrift(lastEvent)
-    }
-
     boolean isOk() {
         LocalDateTime minCheckTime = now().minusMinutes(1)
 
         return (
             lastDoorCheck > minCheckTime &&
-            lastEventCheck > minCheckTime &&
             doorOk &&
-            eventOk &&
             otherOk
         )
     }

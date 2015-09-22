@@ -2,6 +2,7 @@ package com.mnclimbingcoop.service
 
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.health.DoorHealth
+import com.mnclimbingcoop.health.EventHealth
 import com.mnclimbingcoop.health.Health
 
 import groovy.transform.CompileStatic
@@ -52,8 +53,9 @@ class HealthService {
 
     void updateDependentHealth(Health depHealth) {
         health.dependentHealth = depHealth
-        // Null out doors once we have dependentHealth
+        // Null out doors and events once we have dependentHealth
         health.doors = null
+        health.events = null
     }
 
     void checkedMessages(int n) {
@@ -84,11 +86,18 @@ class HealthService {
     }
 
     void initDoor(String name, String address) {
-        if (!health.doors[name]) {
-            health.doors[name] = new DoorHealth(name: name, address: address)
-        } else {
+        if (health.doors.containsKey(name)) {
             health.doors[name].name = name
             health.doors[name].address = address
+        } else {
+            health.doors[name] = new DoorHealth(name: name, address: address)
+        }
+
+        if (health.events.containsKey(name)) {
+            health.events[name].name = name
+            health.events[name].address = address
+        } else {
+            health.events[name] = new EventHealth(name: name, address: address)
         }
     }
 
@@ -107,22 +116,22 @@ class HealthService {
 
     void checkedEvents(String name) {
         LocalDateTime now = LocalDateTime.now()
-        health.doors[name].lastEventCheck = now
-        health.doors[name].eventOk = true
+        health.events[name].lastEventCheck = now
+        health.events[name].eventOk = true
     }
 
     void updatedEvents(String name) {
         LocalDateTime now = LocalDateTime.now()
-        health.doors[name].lastEventCheck = now
-        health.doors[name].lastEvent = now
-        health.doors[name].eventOk = true
+        health.events[name].lastEventCheck = now
+        health.events[name].lastEvent = now
+        health.events[name].eventOk = true
     }
 
     void getFailed(String name, VertXRequest request, String message) {
         if (request.doors) {
             health.doors[name].doorOk = false
         } else if (request.eventMessages) {
-            health.doors[name].eventOk = false
+            health.events[name].eventOk = false
         } else {
             health.doors[name].otherOk = false
         }
@@ -133,7 +142,7 @@ class HealthService {
         if (request.doors) {
             health.doors[name].doorOk = true
         } else if (request.eventMessages) {
-            health.doors[name].eventOk = true
+            health.events[name].eventOk = true
         } else {
             health.doors[name].otherOk = true
         }

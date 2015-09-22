@@ -1,27 +1,11 @@
 package com.mnclimbingcoop.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.mnclimbingcoop.domain.type.EventType
 
 import org.joda.time.LocalDateTime
 
 class EventMessage implements Comparable<EventMessage> {
-
-    // Stolen from the JS Source code
-    static final Set<Integer> RED_EVENTS = [
-            1022,
-            1023,
-            2024,
-            2029,
-            2036,
-            2042,
-            2043,
-            2046,
-            4041,
-            4042,
-            4043,
-            4044,
-            4045
-    ].toSet().asImmutable()
 
     /** Not part of HID API */
     @JacksonXmlProperty(isAttribute=true)
@@ -36,21 +20,38 @@ class EventMessage implements Comparable<EventMessage> {
     @JacksonXmlProperty(isAttribute=true)
     String surname
 
-    // 2020 == Access Granted
-    // 12032 == Unlock Door
-    // from en_EN.js ???
     @JacksonXmlProperty(isAttribute=true)
-    Integer eventType
+    EventType eventType
+
+    @JacksonXmlProperty(isAttribute=true)
+    String getEventDescription() {
+        eventType?.description
+    }
+
+    @JacksonXmlProperty(isAttribute=true)
+    Boolean getEventWarn() {
+        eventType?.warn
+    }
+
+    @JacksonXmlProperty(isAttribute=true)
+    Boolean getEventAlert() {
+        eventType?.alert
+    }
+
+    @JacksonXmlProperty(isAttribute=true)
+    LocalDateTime oldTime
+
+    @JacksonXmlProperty(isAttribute=true)
+    LocalDateTime newTime
 
     @JacksonXmlProperty(isAttribute=true)
     LocalDateTime timestamp
 
     @JacksonXmlProperty(isAttribute=true)
-    Boolean commandStatus
+    Integer ioState
 
-    boolean isRedEvent() {
-        return eventType in RED_EVENTS
-    }
+    @JacksonXmlProperty(isAttribute=true)
+    Boolean commandStatus
 
     @Override
     String toString() {
@@ -59,7 +60,12 @@ class EventMessage implements Comparable<EventMessage> {
         if (forename) { str += "forename=${forename} " }
         if (surname) { str += "surname=${surname} " }
         if (eventType) { str += "eventType=${eventType} " }
+        if (ioState) { str += "ioState=${ioState} " }
+        if (oldTime) { str += "oldTime=${oldTime} " }
+        if (newTime) { str += "newTime=${newTime} " }
+        if (commandStatus) { str += "commandStatus=${commandStatus} " }
         if (timestamp) { str += "timestamp=${timestamp} " }
+        if (eventType) { str += "eventDescription=${eventType.description} " }
         return str
     }
 

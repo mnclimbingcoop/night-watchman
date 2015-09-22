@@ -9,6 +9,12 @@ abstract class AbstractHealth {
 
     static final String NEVER = 'never'
 
+    final LocalDateTime startTime = LocalDateTime.now()
+
+    String getRunTime() {
+        getDrift(startTime)
+    }
+
     protected final PeriodFormatter periodPrinter = new PeriodFormatterBuilder().printZeroNever()
             .appendDays().appendSuffix(" days").appendSeparator(" ")
             .appendHours().appendSuffix(" hours").appendSeparator(" ")

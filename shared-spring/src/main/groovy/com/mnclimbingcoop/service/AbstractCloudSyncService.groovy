@@ -93,7 +93,7 @@ abstract class AbstractCloudSyncService<T,R> {
     /** Push a message to SQS */
     SendMessageResult sendSqsMessage(T send) {
         if (!pushQueueUrl) {
-            log.error "No PUSH queue defined."
+            log.debug "No PUSH queue defined."
             return null
         }
         String payload = objectMapper.writeValueAsString(send)

@@ -3,6 +3,8 @@ package com.mnclimbingcoop.service
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
+import java.util.concurrent.ConcurrentHashMap
+
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
@@ -14,25 +16,24 @@ class EventService {
 
     protected final HealthService healthService
     protected final HidService hidService
-    protected final List<EventWatcher> watchers = []
+    protected final Map<String, EventWatcher> watchers = new ConcurrentHashMap<String, EventWatcher>()
 
     @Inject
     EventService(HealthService healthService, HidService hidService) {
         this.healthService = healthService
         this.hidService = hidService
-
     }
 
     @PostConstruct
     void setup() {
         hidService.doors.each{ String door ->
             log.info "Adding event watcher for ${door} door."
-            watchers << new EventWatcher(door, healthService, hidService)
+            watchers[door] = new EventWatcher(door, healthService, hidService)
         }
     }
 
     void watch() {
-        watchers.each{ EventWatcher watcher -> watcher.watch() }
+        watchers.each{ String door, EventWatcher watcher -> watcher.watch() }
     }
 
 }
