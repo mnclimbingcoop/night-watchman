@@ -11,3 +11,7 @@ It is designed to be deployed to a [Raspberry PI 2](www.rasberypi.org) and run v
 
 (I have run it from my MacBook Pro many times while testing it out)
 
+## Logs
+
+The service expects to be able to write to`/var/log/night-watchman`
+
