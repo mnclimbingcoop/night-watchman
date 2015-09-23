@@ -3,6 +3,7 @@ spring:
 server:
   context-path: ''
   port: 6590
+
 management:
   port: 6591
 api:
@@ -35,5 +36,7 @@ aws:
 #   pullQueue:   mncc-commands
 #   healthQueue: mncc-health
 logging:
+  file: /var/log/night-watchman/night-watchman.log
+  path: /var/log/night-watchman
   level:
     com.mnclimbingcoop.service: DEBUG
