@@ -39,13 +39,7 @@ class EventWatcher {
             { EventMessage event ->
                 hidService.hidStates[door].events << event
                 // credentials are already added to the state via the CredentialService
-                log.info("Event: door: ${event.door} " +
-                         "timestamp: ${event.timestamp} " +
-                         "eventType: ${event.eventType} " +
-                         "commandStatus: ${event.commandStatus} " +
-                         "cardholderID: ${event.cardholderID} " +
-                         "forename: ${event.forename} " +
-                         "surname: ${event.surname}")
+                log.info "Event: door=${event.door} ${event}"
 
                 sync([event])
             }, { Throwable t ->

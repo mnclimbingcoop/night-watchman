@@ -26,6 +26,7 @@ class InitializationService {
     void startup() {
         commandRelayService.processCommands()
         eventService.watch()
+        log.info "Finished initialization startup"
     }
 
 }
