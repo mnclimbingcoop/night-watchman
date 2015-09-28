@@ -5,6 +5,7 @@ import com.mnclimbingcoop.domain.EventMessage
 import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.VertXRequest
 import com.mnclimbingcoop.domain.VertXResponse
+import com.mnclimbingcoop.domain.type.EventType
 
 import java.util.concurrent.atomic.AtomicLong
 
@@ -21,7 +22,7 @@ class EventWatcherSpec extends Specification {
     HidService hidService
 
     AtomicLong start = new AtomicLong(LocalDateTime.now().toDate().time)
-    AtomicLong eventType = new AtomicLong(1)
+    AtomicLong eventType = new AtomicLong(0)
     AtomicLong historyRecordMarker = new AtomicLong(1000)
 
     void setup() {
@@ -49,12 +50,14 @@ class EventWatcherSpec extends Specification {
     protected VertXResponse newEventOverview() {
         long time = start.incrementAndGet()
         println "getting new overview ${time}"
+        Integer eventId = eventType.incrementAndGet()
+        EventType eventType = EventType.values().getAt(eventId)
         new VertXResponse(
             eventMessages: new EventMessages(
                 currentTimestamp: time,
                 historyTimestamp: time,
                 historyRecordMarker: historyRecordMarker.incrementAndGet(),
-                eventMessages: [ new EventMessage(eventType: eventType.incrementAndGet()) ]
+                eventMessages: [ new EventMessage(eventType: eventType) ]
             )
         )
     }

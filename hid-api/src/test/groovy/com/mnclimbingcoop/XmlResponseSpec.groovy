@@ -5,6 +5,7 @@ import com.mnclimbingcoop.domain.EventMessages
 import com.mnclimbingcoop.domain.State
 import com.mnclimbingcoop.domain.VertXResponse
 import com.mnclimbingcoop.domain.type.Action
+import com.mnclimbingcoop.domain.type.EventType
 import com.mnclimbingcoop.domain.type.State
 
 import org.joda.time.LocalDateTime
@@ -40,7 +41,7 @@ class XmlResponseSpec extends XmlSpecification {
                         cardholderID: 1,
                         forename: 'Aaron',
                         surname: 'Zirbes',
-                        eventType: 2020,
+                        eventType: EventType.GRANTED_ACCESS,
                         timestamp: LocalDateTime.parse('2015-04-08T20:02:37')
                     )
                 ]
